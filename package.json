@@ -11,7 +11,8 @@
     "generate": "nuxt generate",
     "export": "node scripts/export-site.mjs",
     "preview:static": "node scripts/preview-static.mjs",
-    "validate:content": "node scripts/validate-content.mjs",
+    "sync:icons": "node scripts/sync-wiki-icons.mjs",
+    "validate:content": "node scripts/validate-content.mjs && node scripts/validate-wiki-data.mjs",
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {

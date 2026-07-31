@@ -8,7 +8,7 @@ const assetPath = useAssetPath()
 
 <template>
   <NuxtLink class="content-card paper-card" :to="entryPath(entry)">
-    <div class="content-card__image">
+    <div class="content-card__image" :class="{ 'content-card__image--icon': entry.kind === 'wiki' }">
       <img :src="assetPath(entry.image)" :alt="entry.imageAlt" loading="lazy" width="900" height="506">
     </div>
     <div class="content-card__body">

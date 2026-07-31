@@ -1,11 +1,13 @@
 ﻿import type { ContentKind, GuideEntry } from '~/types/content'
 
+import { wikiEntries } from './wiki'
+
 const common = {
   updatedAt: '2026-07-31',
   version: '2026.07'
 }
 
-export const guideEntries: GuideEntry[] = [
+const legacyGuideEntries: GuideEntry[] = [
   {
     ...common,
     slug: 'first-day',
@@ -515,6 +517,28 @@ export const guideEntries: GuideEntry[] = [
     image: '/images/official/hero.jpg',
     imageAlt: '饥荒联机版草原环境'
   }
+]
+
+export const guideEntries: GuideEntry[] = [
+  ...legacyGuideEntries.filter(entry => entry.kind !== 'wiki'),
+  ...wikiEntries.map(entry => ({
+    slug: entry.slug,
+    title: entry.title,
+    english: entry.english,
+    kind: 'wiki' as const,
+    description: entry.summary,
+    stage: entry.stage,
+    tags: [
+      entry.category,
+      ...entry.tags.filter(tag => tag !== entry.category),
+      ...(entry.dish ? ['四格食谱', '烹饪锅'] : [])
+    ],
+    aliases: entry.aliases,
+    image: entry.image.path,
+    imageAlt: entry.image.alt,
+    updatedAt: entry.verifiedAt,
+    version: entry.version
+  }))
 ]
 
 export const kindLabels: Record<ContentKind, string> = {

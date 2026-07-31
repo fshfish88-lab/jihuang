@@ -14,19 +14,33 @@ export type EntrySeed = Omit<WikiEntry, 'image' | 'version' | 'verifiedAt' | 'so
   prefab: string
 }
 
+const imageSourceOverrides: Record<string, string> = {
+  hound: 'https://dontstarve.wiki.gg/wiki/Special:Redirect/file/Hound.png',
+  pigman: 'https://dontstarve.wiki.gg/images/Happy_Pigman_Profile_Icon.png?82354d&20230728040734',
+  frog: 'https://dontstarve.wiki.gg/wiki/Special:Redirect/file/Frog.png',
+  'clockwork-knight': 'https://dontstarve.wiki.gg/wiki/Special:Redirect/file/Clockwork_Knight.png',
+  'pig-king': 'https://dontstarve.wiki.gg/wiki/Special:Redirect/file/Pig_King.png',
+  koalefant: 'https://dontstarve.wiki.gg/wiki/Special:Redirect/file/Koalefant.png',
+  'touch-stone': 'https://dontstarve.wiki.gg/wiki/Special:Redirect/file/Touch_Stone.png',
+  onion: 'https://dontstarve.wiki.gg/wiki/Special:Redirect/file/Onion.png',
+  chest: 'https://dontstarve.wiki.gg/wiki/Special:Redirect/file/Chest.png'
+}
+
 function wikiPage(english: string): string {
   return `https://dontstarve.wiki.gg/wiki/${encodeURIComponent(english.replaceAll(' ', '_'))}/DST`
 }
 
 export function createEntry(seed: EntrySeed): WikiEntry {
-  const sourceUrl = `https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items/${seed.prefab}.png`
+  const sourceUrl = imageSourceOverrides[seed.slug]
+    || `https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items/${seed.prefab}.png`
   return {
     ...seed,
     image: {
       path: `/images/wiki/${seed.slug}.png`,
       alt: `《饥荒联机版》${seed.title}物品图标`,
       sourceUrl,
-      sourcePage: `https://github.com/fankimm/dst-craft/blob/main/public/images/game-items/${seed.prefab}.png`,
+      sourcePage: imageSourceOverrides[seed.slug]
+        || `https://github.com/fankimm/dst-craft/blob/main/public/images/game-items/${seed.prefab}.png`,
       owner: 'Klei Entertainment',
       verifiedAt: VERIFIED_AT
     },

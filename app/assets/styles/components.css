@@ -116,6 +116,27 @@
   transition: transform 300ms var(--ease-paper);
 }
 
+.content-card__image--icon {
+  display: grid;
+  height: 11rem;
+  place-items: center;
+  background:
+    radial-gradient(circle, rgba(255,255,255,.36) 0 33%, transparent 34%),
+    repeating-linear-gradient(45deg, rgba(23,23,20,.035) 0 1px, transparent 1px 9px),
+    var(--paper-2);
+}
+
+.content-card__image--icon img {
+  width: 8rem;
+  height: 8rem;
+  object-fit: contain;
+  filter: drop-shadow(3px 5px 0 rgba(23,23,20,.2));
+}
+
+.content-card:hover .content-card__image--icon img {
+  transform: scale(1.08) rotate(-2deg);
+}
+
 .content-card:hover .content-card__image img {
   transform: scale(1.035);
 }
@@ -257,6 +278,551 @@
 
 .prose th {
   background: var(--paper-2);
+}
+
+.wiki-back-link {
+  display: inline-flex;
+  margin-bottom: 1rem;
+  font: 800 .8rem/1.2 var(--font-sans);
+  text-decoration: none;
+}
+
+.wiki-dossier {
+  display: grid;
+  grid-template-columns: 15rem minmax(0, 1fr) minmax(13rem, .42fr);
+  gap: 2rem;
+  align-items: center;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  overflow: hidden;
+}
+
+.wiki-icon {
+  display: grid;
+  margin: 0;
+  place-items: center;
+}
+
+.wiki-icon__frame {
+  position: relative;
+  display: grid;
+  width: 13rem;
+  height: 13rem;
+  place-items: center;
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 42% 35%, rgba(255,255,255,.48), transparent 48%),
+    var(--paper-2);
+  box-shadow: 5px 6px 0 rgba(23,23,20,.24);
+}
+
+.wiki-icon__frame::after {
+  content: "";
+  position: absolute;
+  inset: .6rem;
+  border: 1px dashed rgba(23,23,20,.35);
+  border-radius: inherit;
+}
+
+.wiki-icon img {
+  z-index: 1;
+  width: 9.5rem;
+  height: 9.5rem;
+  object-fit: contain;
+  filter: drop-shadow(3px 5px 0 rgba(23,23,20,.2));
+}
+
+.wiki-dossier__topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.35rem;
+  color: var(--ash);
+  font: 700 .68rem/1.2 var(--font-mono);
+}
+
+.wiki-dossier h1 {
+  margin: .2rem 0 0;
+  font-size: clamp(2.7rem, 5vw, 5rem);
+}
+
+.wiki-dossier__english {
+  margin: .15rem 0 .9rem;
+  color: var(--blood);
+  font: 800 .85rem/1.3 var(--font-sans);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.wiki-dossier__summary {
+  max-width: 43rem;
+  margin: 0 0 1rem;
+  color: var(--ink-soft);
+  font-size: 1.08rem;
+}
+
+.wiki-facts {
+  display: grid;
+  gap: .65rem;
+  margin: 0;
+}
+
+.wiki-facts__item {
+  display: grid;
+  grid-template-columns: minmax(4.5rem, .75fr) 1fr;
+  gap: .75rem;
+  padding: .65rem .75rem;
+  border-bottom: 1px solid var(--line);
+  background: rgba(255,255,255,.18);
+}
+
+.wiki-facts dt {
+  color: var(--ash);
+  font: 700 .7rem/1.4 var(--font-sans);
+}
+
+.wiki-facts dd {
+  margin: 0;
+  font: 800 .8rem/1.4 var(--font-sans);
+  text-align: right;
+}
+
+.wiki-detail__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 17rem;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.wiki-detail__main {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.wiki-section {
+  padding: 1.5rem;
+}
+
+.wiki-section__header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  margin-bottom: 1.25rem;
+  border-bottom: 2px solid var(--ink);
+}
+
+.wiki-section__header h2,
+.wiki-brief h2 {
+  margin: 0;
+  font-size: clamp(1.55rem, 2.5vw, 2.2rem);
+}
+
+.wiki-section__header .eyebrow,
+.wiki-brief .eyebrow {
+  margin-bottom: .25rem;
+}
+
+.wiki-section__badge {
+  padding: .35rem .65rem;
+  border: 1px solid var(--blood);
+  color: var(--blood);
+  font: 800 .7rem/1.2 var(--font-sans);
+}
+
+.recipe-route {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(12rem, .42fr);
+  gap: 1rem;
+  align-items: center;
+}
+
+.recipe-route__ingredients,
+.dish-slots {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(6.4rem, 1fr));
+  gap: .7rem;
+}
+
+.ingredient-chip {
+  position: relative;
+  display: grid;
+  min-width: 0;
+  place-items: center;
+  padding: .7rem .5rem .55rem;
+  border: 1px solid var(--line);
+  color: var(--ink);
+  background: rgba(255,255,255,.22);
+  text-align: center;
+  text-decoration: none;
+}
+
+.ingredient-chip:hover {
+  border-color: var(--blood);
+  color: var(--blood);
+  transform: translateY(-2px);
+}
+
+.ingredient-chip__icon {
+  display: grid;
+  width: 4rem;
+  height: 4rem;
+  place-items: center;
+}
+
+.ingredient-chip__icon img {
+  width: 3.5rem;
+  height: 3.5rem;
+  object-fit: contain;
+  filter: drop-shadow(2px 3px 0 rgba(23,23,20,.16));
+}
+
+.ingredient-chip__name {
+  overflow: hidden;
+  width: 100%;
+  margin-top: .25rem;
+  font: 700 .7rem/1.3 var(--font-sans);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ingredient-chip__amount {
+  position: absolute;
+  top: .35rem;
+  right: .35rem;
+  min-width: 2rem;
+  padding: .15rem .3rem;
+  color: var(--paper-0);
+  background: var(--ink);
+  font: 800 .65rem/1.2 var(--font-sans);
+}
+
+.recipe-route__arrow {
+  color: var(--blood);
+  font-size: 2rem;
+  font-weight: 900;
+}
+
+.recipe-result {
+  display: grid;
+  gap: .75rem;
+  margin: 0;
+}
+
+.recipe-result div {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: .5rem;
+  border-bottom: 1px dashed var(--line);
+}
+
+.recipe-result dt {
+  color: var(--ash);
+  font: 700 .72rem/1.4 var(--font-sans);
+}
+
+.recipe-result dd {
+  margin: 0;
+  font: 800 .78rem/1.4 var(--font-sans);
+  text-align: right;
+}
+
+.wiki-note-list,
+.wiki-callout {
+  margin: 1rem 0 0;
+  padding: .8rem 1rem .8rem 2rem;
+  border-left: 3px solid var(--moss);
+  background: rgba(91,96,66,.1);
+}
+
+.acquisition-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.acquisition-card {
+  padding: 1rem;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.18);
+}
+
+.acquisition-card__type {
+  color: var(--blood);
+  font: 900 .68rem/1.2 var(--font-sans);
+  letter-spacing: .12em;
+}
+
+.acquisition-card h3 {
+  margin: .35rem 0 .75rem;
+}
+
+.acquisition-card ol,
+.dish-rules ul,
+.wiki-brief ul {
+  padding-left: 1.25rem;
+  margin: 0;
+}
+
+.dish-stats {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: .5rem;
+  margin-bottom: 1.25rem;
+}
+
+.dish-stats div {
+  display: grid;
+  min-height: 5rem;
+  align-content: center;
+  padding: .6rem;
+  border: 1px solid var(--line);
+  text-align: center;
+}
+
+.dish-stats span {
+  color: var(--ash);
+  font: 700 .68rem/1.4 var(--font-sans);
+}
+
+.dish-stats strong {
+  color: var(--moss);
+  font: 900 1.05rem/1.4 var(--font-sans);
+}
+
+.dish-stats strong.negative {
+  color: var(--blood);
+}
+
+.dish-example {
+  padding: 1rem;
+  border: 2px solid var(--ink);
+  background: rgba(255,255,255,.17);
+}
+
+.dish-example h3 {
+  margin: 0 0 .8rem;
+}
+
+.dish-example__note {
+  margin: .8rem 0 0;
+  color: var(--ash);
+  font-size: .88rem;
+}
+
+.dish-rules {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: .8rem;
+  margin-top: 1rem;
+}
+
+.dish-rules > div {
+  padding: .9rem;
+  border: 1px solid var(--line);
+}
+
+.dish-rules h3 {
+  margin: 0 0 .6rem;
+  font-size: 1.05rem;
+}
+
+.dish-rules__warning {
+  border-color: rgba(123,39,29,.55) !important;
+  background: rgba(123,39,29,.08);
+}
+
+.wiki-brief {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.2rem;
+}
+
+.wiki-brief > div {
+  padding-right: 1.2rem;
+  border-right: 1px solid var(--line);
+}
+
+.wiki-brief > div:last-child {
+  padding-right: 0;
+  border-right: 0;
+}
+
+.wiki-brief__warning h2 {
+  color: var(--blood);
+}
+
+.wiki-related {
+  position: sticky;
+  top: 6rem;
+  padding: 1rem;
+}
+
+.wiki-related h2 {
+  margin: .8rem 0;
+  font-size: 1.55rem;
+}
+
+.wiki-related ul {
+  display: grid;
+  gap: .45rem;
+  padding: 0;
+  margin: 0 0 1rem;
+  list-style: none;
+}
+
+.wiki-related a {
+  display: flex;
+  gap: .65rem;
+  align-items: center;
+  padding: .5rem;
+  border-bottom: 1px solid var(--line);
+  text-decoration: none;
+}
+
+.wiki-related img {
+  width: 3rem;
+  height: 3rem;
+  object-fit: contain;
+}
+
+.wiki-related strong,
+.wiki-related small {
+  display: block;
+}
+
+.wiki-related strong {
+  font: 800 .8rem/1.3 var(--font-sans);
+}
+
+.wiki-related small {
+  margin-top: .15rem;
+  color: var(--ash);
+  font: .65rem/1.3 var(--font-sans);
+}
+
+.wiki-sources {
+  margin-top: 2rem;
+  padding: 1.25rem;
+  border-top: 1px solid var(--line);
+  color: var(--ash);
+  font-size: .8rem;
+}
+
+.wiki-sources h2 {
+  margin: 0 0 .5rem;
+  color: var(--ink);
+  font-size: 1.15rem;
+}
+
+.wiki-sources p {
+  max-width: 52rem;
+}
+
+.wiki-sources ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .6rem 1.25rem;
+  padding: 0;
+  list-style: none;
+}
+
+.wiki-sources small {
+  margin-left: .35rem;
+}
+
+@media (max-width: 980px) {
+  .wiki-dossier {
+    grid-template-columns: 12rem minmax(0, 1fr);
+  }
+
+  .wiki-facts {
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .wiki-detail__layout {
+    grid-template-columns: 1fr;
+  }
+
+  .wiki-related {
+    position: static;
+  }
+
+  .dish-stats {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 720px) {
+  .wiki-dossier {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+    padding: 1.1rem;
+  }
+
+  .wiki-icon__frame {
+    width: 10rem;
+    height: 10rem;
+  }
+
+  .wiki-icon img {
+    width: 7.5rem;
+    height: 7.5rem;
+  }
+
+  .wiki-dossier__topline {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .wiki-facts {
+    grid-column: auto;
+    grid-template-columns: 1fr;
+  }
+
+  .wiki-section {
+    padding: 1rem;
+  }
+
+  .wiki-section__header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .recipe-route {
+    grid-template-columns: 1fr;
+  }
+
+  .recipe-route__arrow {
+    transform: rotate(90deg);
+    text-align: center;
+  }
+
+  .recipe-route__ingredients,
+  .dish-slots {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .acquisition-grid,
+  .dish-rules,
+  .wiki-brief {
+    grid-template-columns: 1fr;
+  }
+
+  .wiki-brief > div {
+    padding: 0 0 1rem;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .wiki-brief > div:last-child {
+    border-bottom: 0;
+  }
 }
 
 .side-note {
