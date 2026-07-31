@@ -27,4 +27,19 @@ describe('wiki data', () => {
       }
     }
   })
+
+  it('uses unique slugs and resolvable ingredient links', () => {
+    const slugs = new Set(wikiEntries.map(item => item.slug))
+    expect(slugs.size).toBe(wikiEntries.length)
+
+    for (const item of wikiEntries) {
+      const ingredients = [
+        ...item.crafting.ingredients,
+        ...(item.dish?.examples.flatMap(example => example.ingredients) || [])
+      ]
+      for (const ingredient of ingredients) {
+        expect(slugs.has(ingredient.slug), `${item.slug} -> ${ingredient.slug}`).toBe(true)
+      }
+    }
+  })
 })
