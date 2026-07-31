@@ -1,0 +1,13 @@
+node_modules/
+.nuxt/
+.output/
+.data/
+.superpowers/
+.brainstorm-session-path
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+Thumbs.db
+
