@@ -1,0 +1,1 @@
+import{a1 as s,Y as u,a2 as r,A as o,a3 as c,a4 as i}from"./9OJaTjso.js";function n(t){const e=t||u();return e?.ssrContext?.head||e?.runWithContext(()=>{if(r())return o(c)})}function d(t,e={}){const a=n(e.nuxt);if(a)return i(t,{head:a,...e})}function f(t,e={}){const a=n(e.nuxt);if(a)return s(t,{head:a,...e})}export{f as a,d as u};
