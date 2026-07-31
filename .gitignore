@@ -1,7 +1,11 @@
 node_modules/
+.npm-cache/
+.nuxtrc
+.playwright-cli/
 .worktrees/
 .nuxt/
 .output/
+dist/
 .data/
 .superpowers/
 .brainstorm-session-path

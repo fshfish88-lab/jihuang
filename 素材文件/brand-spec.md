@@ -32,3 +32,15 @@
 - 中文 Wiki：https://dontstarve.wiki.gg/zh/
 
 所有官方游戏画面仅用于非商业攻略说明。网站必须明确标注非官方身份并链接官方页面。
+
+## 本地文件映射
+
+下载日期：2026-07-31。原始文件保存在 `素材文件/官方截图/`，Klei 媒体服务生成的 1600×900 质量优化副本保存在 `public/images/official/`。
+
+| 页面用途 | 原始文件 | 网站文件 |
+|---|---|---|
+| 首页与基础生存 | `官方截图/hero.jpg` | `/images/official/hero.jpg` |
+| 航海与月岛 | `官方截图/boat.jpg` | `/images/official/boat.jpg` |
+| WX-78 与基地 | `官方截图/wx-farm.jpg` | `/images/official/wx-farm.jpg` |
+| 洞穴与 Boss | `官方截图/toad-battle.jpg` | `/images/official/toad-battle.jpg` |
+| 暗影与危险提示 | `官方截图/shadow.jpg` | `/images/official/shadow.jpg` |

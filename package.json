@@ -1,0 +1,32 @@
+{
+  "name": "campfire-wiki",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "nuxt dev",
+    "postinstall": "nuxt prepare",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "generate": "nuxt generate",
+    "export": "node scripts/export-site.mjs",
+    "preview:static": "node scripts/preview-static.mjs",
+    "validate:content": "node scripts/validate-content.mjs",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@nuxt/content": "3.15.2",
+    "@pinia/nuxt": "latest",
+    "fuse.js": "latest",
+    "nuxt": "3.21.10",
+    "pinia": "latest",
+    "vue": "latest"
+  },
+  "devDependencies": {
+    "@playwright/test": "latest",
+    "@types/node": "latest",
+    "happy-dom": "latest",
+    "typescript": "latest",
+    "vitest": "latest"
+  }
+}
