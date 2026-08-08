@@ -1,4 +1,4 @@
-import type { WikiEntry } from '~/types/wiki'
+import type { WikiEntry, WikiRoute } from '~/types/wiki'
 import { creatureEntries } from './creatures'
 import { dishEntries } from './dishes'
 import { equipmentEntries } from './equipment'
@@ -21,4 +21,8 @@ export function getWikiEntry(slug: string): WikiEntry | undefined {
 
 export function getWikiEntriesByCategory(category: WikiEntry['category']): WikiEntry[] {
   return wikiEntries.filter(entry => entry.category === category)
+}
+
+export function getWikiEntriesByRoute(route: WikiRoute): WikiEntry[] {
+  return wikiEntries.filter(entry => entry.route === route)
 }

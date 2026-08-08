@@ -1,17 +1,21 @@
 import type {
   AcquisitionMethod,
+  CombatInfo,
   CraftingInfo,
   FactValue,
   IngredientAmount,
   WikiCategory,
-  WikiEntry
+  SourceLink,
+  WikiEntry,
+  WikiRoute
 } from '~/types/wiki'
 
-export const DATA_VERSION = 'DST 2026.07'
-export const VERIFIED_AT = '2026-07-31'
+export const DATA_VERSION = 'DST 2026.08'
+export const VERIFIED_AT = '2026-08-08'
 
 export type EntrySeed = Omit<WikiEntry, 'image' | 'version' | 'verifiedAt' | 'sources'> & {
   prefab: string
+  sourceLinks?: SourceLink[]
 }
 
 const imageSourceOverrides: Record<string, string> = {
@@ -31,10 +35,11 @@ function wikiPage(english: string): string {
 }
 
 export function createEntry(seed: EntrySeed): WikiEntry {
+  const { sourceLinks = [], ...entry } = seed
   const sourceUrl = imageSourceOverrides[seed.slug]
     || `https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items/${seed.prefab}.png`
   return {
-    ...seed,
+    ...entry,
     image: {
       path: `/images/wiki/${seed.slug}.png`,
       alt: `《饥荒联机版》${seed.title}物品图标`,
@@ -51,7 +56,8 @@ export function createEntry(seed: EntrySeed): WikiEntry {
         label: `Don't Starve Wiki：${seed.english}（DST）`,
         url: wikiPage(seed.english),
         kind: 'wiki'
-      }
+      },
+      ...sourceLinks
     ]
   }
 }
@@ -112,6 +118,10 @@ interface SimpleSeed {
   mistakes?: string[]
   related?: string[]
   tags?: string[]
+  route?: WikiRoute
+  routeGuide?: string
+  combat?: CombatInfo
+  sources?: SourceLink[]
 }
 
 export function simpleEntry(seed: SimpleSeed): WikiEntry {
@@ -131,6 +141,10 @@ export function simpleEntry(seed: SimpleSeed): WikiEntry {
     uses: seed.uses || [],
     tips: seed.tips || [],
     mistakes: seed.mistakes || [],
-    related: seed.related || []
+    related: seed.related || [],
+    route: seed.route,
+    routeGuide: seed.routeGuide,
+    combat: seed.combat,
+    sourceLinks: seed.sources
   })
 }

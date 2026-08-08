@@ -1,5 +1,13 @@
 export type WikiCategory = '资源' | '工具' | '装备' | '建筑' | '料理' | '生物' | '季节与探索'
 
+export type WikiRoute =
+  | '四季生存'
+  | '洞穴遗迹'
+  | '航海月岛'
+  | 'Boss战备'
+  | '天体裂隙'
+  | '暗影圣所'
+
 export interface SourceLink {
   label: string
   url: string
@@ -60,6 +68,21 @@ export interface DishInfo {
   examples: DishExample[]
 }
 
+export interface DropInfo {
+  slug?: string
+  name: string
+  amount: string
+  note?: string
+}
+
+export interface CombatInfo {
+  spawn: string[]
+  preparation: string[]
+  steps: string[]
+  retreat: string[]
+  drops: DropInfo[]
+}
+
 export interface WikiEntry {
   slug: string
   title: string
@@ -81,4 +104,7 @@ export interface WikiEntry {
   verifiedAt: string
   sources: SourceLink[]
   dish?: DishInfo
+  route?: WikiRoute
+  routeGuide?: string
+  combat?: CombatInfo
 }
