@@ -48,6 +48,19 @@ useSeoMeta({
           <WikiDishRecipePanel v-if="entry.dish" :dish="entry.dish" />
           <WikiCraftingRecipe v-else :crafting="entry.crafting" />
           <WikiAcquisitionList :methods="entry.acquisition" />
+          <WikiCombatGuidePanel v-if="entry.combat" :combat="entry.combat" />
+
+          <NuxtLink
+            v-if="entry.routeGuide"
+            class="wiki-route-link paper-card"
+            :to="`/progression/${entry.routeGuide}`"
+          >
+            <span>
+              <small>{{ entry.route }}路线</small>
+              查看本条目所在的完整进阶攻略
+            </span>
+            <strong aria-hidden="true">→</strong>
+          </NuxtLink>
 
           <section class="wiki-section wiki-brief paper-card">
             <div>
