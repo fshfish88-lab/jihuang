@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { CONTENT_VERSION, entryPath, getEntries } from '~/data/content'
+import { entryPath, getEntries } from '~/data/content'
+import { SITE_VERSION } from '~/data/site-metadata'
 const assetPath = useAssetPath()
 
 useSeoMeta({
@@ -35,7 +36,7 @@ const wiki = getEntries('wiki').slice(0, 6)
       <div class="hero__shade" />
       <div class="container hero__content">
         <div class="hero__copy">
-          <span class="hero__label">WILDERNESS FIELD NOTES / {{ CONTENT_VERSION }}</span>
+          <span class="hero__label">WILDERNESS FIELD NOTES / {{ SITE_VERSION }}</span>
           <h1>别让黑夜，<br>吃掉你的<span>第一天。</span></h1>
           <p>告诉你现在处于什么阶段、接下来做什么、需要准备什么，以及完成之后会解锁什么。</p>
         </div>

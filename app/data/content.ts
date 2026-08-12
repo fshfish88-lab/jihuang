@@ -2,17 +2,14 @@
 
 import { wikiEntries } from './wiki'
 
-export const CONTENT_VERSION = '2026.08'
-export const SITE_UPDATED_AT = '2026-08-13'
-
 const common = {
-  updatedAt: SITE_UPDATED_AT,
-  version: CONTENT_VERSION
+  updatedAt: '2026-07-31',
+  version: '2026.07'
 }
 
 const advancedCommon = {
   updatedAt: '2026-08-08',
-  version: CONTENT_VERSION
+  version: '2026.08'
 }
 
 const advancedProgressionEntries: GuideEntry[] = [
@@ -621,7 +618,7 @@ export const guideEntries: GuideEntry[] = [
     image: entry.image.path,
     imageAlt: entry.image.alt,
     updatedAt: entry.verifiedAt,
-    version: CONTENT_VERSION
+    version: entry.version
   }))
 ]
 
