@@ -52,6 +52,15 @@ describe('wiki data', () => {
     expect(entry?.uses.some(use => use.includes('电击吹箭') || use.includes('带电吹箭'))).toBe(false)
   })
 
+  it('documents the stable Friendly Scarecrow route for saffron feather', () => {
+    const entry = wikiEntries.find(item => item.slug === 'saffron-feather')
+    const steps = entry?.acquisition.flatMap(method => method.steps).join('') || ''
+    for (const detail of ['友好稻草人', '捕鸟器', '种子', '乌鸦', '金丝雀']) {
+      expect(steps, detail).toContain(detail)
+    }
+    expect(entry?.related).not.toContain('friendly-scarecrow')
+  })
+
   it('defines exactly 30 required craftables', () => {
     expect(requiredCraftables).toHaveLength(30)
   })
