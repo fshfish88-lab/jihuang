@@ -1,12 +1,12 @@
 import { execFile } from 'node:child_process'
-import { mkdir, readFile, readdir, rename, unlink } from 'node:fs/promises'
+import { mkdir, readFile, readdir, unlink } from 'node:fs/promises'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { promisify } from 'node:util'
 import {
+  commitIconSyncTransaction,
   readPriorManifest,
   removeStaleParts,
-  replaceManifestAtomically,
   validateIconBytes,
   validateTrustedLocalIcon
 } from './wiki-icon-integrity.mjs'
@@ -203,8 +203,6 @@ if (errors.length) {
   process.exit(1)
 }
 
-for (const { temporary, target } of pendingRenames) await rename(temporary, target)
-
 const manifestHeader = {
   title: '火堆边百科物品图标来源清单',
   note: '图标为 Klei Entertainment 游戏素材；本站为免费、非官方玩家攻略站。PNG 随仓库提交，清单中的字节数与 SHA-256 是信任锚；上游 main 变化会导致同步失败，不会静默替换。',
@@ -218,15 +216,23 @@ const priorComparable = {
   entries: priorManifest.entries
 }
 const changed = JSON.stringify(manifestHeader) !== JSON.stringify(priorComparable)
-if (changed) {
-  const nextManifest = {
-    title: manifestHeader.title,
-    note: manifestHeader.note,
-    generatedAt: new Date().toISOString(),
-    count: manifestHeader.count,
-    entries: manifestHeader.entries
-  }
-  await replaceManifestAtomically(manifestPath, `${JSON.stringify(nextManifest, null, 2)}\n`, errors)
+const nextManifest = {
+  title: manifestHeader.title,
+  note: manifestHeader.note,
+  generatedAt: new Date().toISOString(),
+  count: manifestHeader.count,
+  entries: manifestHeader.entries
+}
+try {
+  await commitIconSyncTransaction({
+    pendingRenames,
+    manifestPath,
+    serializedManifest: `${JSON.stringify(nextManifest, null, 2)}\n`,
+    manifestChanged: changed
+  })
+} catch (error) {
+  console.error(`icon sync commit failed: ${error.message}`)
+  process.exit(1)
 }
 
 console.log(`Verified ${manifest.length}/${unique.length} wiki icons; manifest ${changed ? 'updated atomically' : 'unchanged'}.`)

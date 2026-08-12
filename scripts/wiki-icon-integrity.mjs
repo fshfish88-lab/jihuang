@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto'
-import { readFile, readdir, rename, unlink, writeFile } from 'node:fs/promises'
+import { access, readFile, readdir, rename, unlink, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 
 const PNG_SIGNATURE = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10])
@@ -34,6 +34,48 @@ export async function replaceManifestAtomically(manifestPath, serialized, errors
   if (errors.length) throw new Error(errors.join('\n'))
   await writeFile(temporary, serialized, 'utf8')
   await rename(temporary, manifestPath)
+}
+
+export async function commitIconSyncTransaction({
+  pendingRenames,
+  manifestPath,
+  serializedManifest,
+  manifestChanged,
+  operations = {}
+}) {
+  const fs = { access, rename, unlink, writeFile, ...operations }
+  const manifestTemporary = `${manifestPath}.part`
+  const promotedNewTargets = []
+
+  try {
+    for (const { target } of pendingRenames) {
+      try {
+        await fs.access(target)
+        throw new Error(`refusing to replace icon target that already exists: ${target}`)
+      } catch (error) {
+        if (error.code !== 'ENOENT') throw error
+      }
+    }
+
+    for (const { temporary, target } of pendingRenames) {
+      await fs.rename(temporary, target)
+      promotedNewTargets.push(target)
+    }
+
+    if (manifestChanged) {
+      await fs.unlink(manifestTemporary).catch(() => {})
+      await fs.writeFile(manifestTemporary, serializedManifest, 'utf8')
+      await fs.rename(manifestTemporary, manifestPath)
+    }
+  } catch (error) {
+    await Promise.all(promotedNewTargets.map(target => fs.unlink(target).catch(() => {})))
+    throw error
+  } finally {
+    await Promise.all([
+      ...pendingRenames.map(({ temporary }) => fs.unlink(temporary).catch(() => {})),
+      fs.unlink(manifestTemporary).catch(() => {})
+    ])
+  }
 }
 
 export async function removeStaleParts(outputDir, manifestPath) {

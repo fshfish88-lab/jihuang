@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto'
-import { mkdtemp, readFile, writeFile } from 'node:fs/promises'
+import { access, mkdtemp, readFile, rename, unlink, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { afterEach, describe, expect, it } from 'vitest'
@@ -103,6 +103,112 @@ describe('wiki icon trust anchor helpers', () => {
 
     expect(await readFile(trusted, 'utf8')).toBe('trusted')
     await expect(readFile(iconPart)).rejects.toMatchObject({ code: 'ENOENT' })
+    await expect(readFile(`${manifestPath}.part`)).rejects.toMatchObject({ code: 'ENOENT' })
+  })
+
+  it('rolls back every promoted new icon when a later icon rename fails', async () => {
+    const { commitIconSyncTransaction } = await helpers()
+    const directory = await temporaryDirectory()
+    const manifestPath = join(directory, 'manifest.json')
+    const original = Buffer.from('{"trusted":true}\n')
+    const first = { temporary: join(directory, 'first.png.part'), target: join(directory, 'first.png') }
+    const second = { temporary: join(directory, 'second.png.part'), target: join(directory, 'second.png') }
+    const existingTrusted = join(directory, 'trusted.png')
+    await Promise.all([
+      writeFile(manifestPath, original),
+      writeFile(first.temporary, validPng()),
+      writeFile(second.temporary, validPng()),
+      writeFile(existingTrusted, 'trusted bytes'),
+    ])
+    let iconRenameCount = 0
+
+    await expect(commitIconSyncTransaction({
+      pendingRenames: [first, second],
+      manifestPath,
+      serializedManifest: '{"trusted":"next"}\n',
+      manifestChanged: true,
+      operations: {
+        access,
+        unlink,
+        writeFile,
+        rename: async (source: string, target: string) => {
+          if (source.endsWith('.png.part') && ++iconRenameCount === 2) throw new Error('injected icon rename failure')
+          await rename(source, target)
+        },
+      },
+    })).rejects.toThrow(/injected icon rename failure/i)
+
+    expect(await readFile(manifestPath)).toEqual(original)
+    expect(await readFile(existingTrusted, 'utf8')).toBe('trusted bytes')
+    for (const path of [first.temporary, first.target, second.temporary, second.target, `${manifestPath}.part`]) {
+      await expect(readFile(path), path).rejects.toMatchObject({ code: 'ENOENT' })
+    }
+  })
+
+  it.each(['write', 'rename'] as const)(
+    'rolls back new icons and preserves the prior manifest when manifest %s fails',
+    async (failure) => {
+      const { commitIconSyncTransaction } = await helpers()
+      const directory = await temporaryDirectory()
+      const manifestPath = join(directory, 'manifest.json')
+      const original = Buffer.from('{"trusted":true}\n')
+      const pending = { temporary: join(directory, 'new.png.part'), target: join(directory, 'new.png') }
+      const existingTrusted = join(directory, 'trusted.png')
+      await Promise.all([
+        writeFile(manifestPath, original),
+        writeFile(pending.temporary, validPng()),
+        writeFile(existingTrusted, 'trusted bytes'),
+      ])
+
+      await expect(commitIconSyncTransaction({
+        pendingRenames: [pending],
+        manifestPath,
+        serializedManifest: '{"trusted":"next"}\n',
+        manifestChanged: true,
+        operations: {
+          access,
+          unlink,
+          writeFile: async (...args: Parameters<typeof writeFile>) => {
+            if (failure === 'write' && String(args[0]).endsWith('.json.part')) throw new Error('injected manifest write failure')
+            await writeFile(...args)
+          },
+          rename: async (source: string, target: string) => {
+            if (failure === 'rename' && source.endsWith('.json.part')) throw new Error('injected manifest rename failure')
+            await rename(source, target)
+          },
+        },
+      })).rejects.toThrow(new RegExp(`injected manifest ${failure} failure`, 'i'))
+
+      expect(await readFile(manifestPath)).toEqual(original)
+      expect(await readFile(existingTrusted, 'utf8')).toBe('trusted bytes')
+      for (const path of [pending.temporary, pending.target, `${manifestPath}.part`]) {
+        await expect(readFile(path), path).rejects.toMatchObject({ code: 'ENOENT' })
+      }
+    },
+  )
+
+  it('refuses to overwrite or delete an existing trusted target during rollback', async () => {
+    const { commitIconSyncTransaction } = await helpers()
+    const directory = await temporaryDirectory()
+    const manifestPath = join(directory, 'manifest.json')
+    const original = Buffer.from('{"trusted":true}\n')
+    const pending = { temporary: join(directory, 'trusted.png.part'), target: join(directory, 'trusted.png') }
+    await Promise.all([
+      writeFile(manifestPath, original),
+      writeFile(pending.temporary, validPng()),
+      writeFile(pending.target, 'trusted bytes'),
+    ])
+
+    await expect(commitIconSyncTransaction({
+      pendingRenames: [pending],
+      manifestPath,
+      serializedManifest: '{"trusted":"next"}\n',
+      manifestChanged: true,
+    })).rejects.toThrow(/already exists/i)
+
+    expect(await readFile(manifestPath)).toEqual(original)
+    expect(await readFile(pending.target, 'utf8')).toBe('trusted bytes')
+    await expect(readFile(pending.temporary)).rejects.toMatchObject({ code: 'ENOENT' })
     await expect(readFile(`${manifestPath}.part`)).rejects.toMatchObject({ code: 'ENOENT' })
   })
 })
