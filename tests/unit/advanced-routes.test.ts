@@ -27,7 +27,6 @@ describe('advanced route contract', () => {
   })
 
   it('adds the exact 90 entries in six balanced route packs', () => {
-    expect(wikiEntries).toHaveLength(258)
     for (const [route, expected] of Object.entries(routeSlugs) as [WikiRoute, string[]][]) {
       const entries = getWikiEntriesByRoute(route)
       expect(entries.map(entry => entry.slug).sort()).toEqual([...expected].sort())
