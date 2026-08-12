@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { entryPath, getEntries } from '~/data/content'
+import { CONTENT_VERSION, entryPath, getEntries } from '~/data/content'
 const assetPath = useAssetPath()
 
 useSeoMeta({
@@ -9,7 +9,7 @@ useSeoMeta({
 
 const quickPaths = [
   { no: '01', label: '我是第一次玩', note: '从第 1 天开始', to: '/beginner/first-day' },
-  { no: '02', label: '我想学习角色', note: '比较 5 名代表角色', to: '/characters' },
+  { no: '02', label: '我想学习角色', note: '浏览代表角色档案', to: '/characters' },
   { no: '03', label: '我准备挑战 Boss', note: '先检查装备与场地', to: '/bosses' },
   { no: '04', label: '我不知道下一步', note: '打开世界进度清单', to: '/tools/progression-checklist' }
 ]
@@ -35,7 +35,7 @@ const wiki = getEntries('wiki').slice(0, 6)
       <div class="hero__shade" />
       <div class="container hero__content">
         <div class="hero__copy">
-          <span class="hero__label">WILDERNESS FIELD NOTES / 2026.07</span>
+          <span class="hero__label">WILDERNESS FIELD NOTES / {{ CONTENT_VERSION }}</span>
           <h1>别让黑夜，<br>吃掉你的<span>第一天。</span></h1>
           <p>告诉你现在处于什么阶段、接下来做什么、需要准备什么，以及完成之后会解锁什么。</p>
         </div>

@@ -54,8 +54,8 @@ function linkFor(slug: string) {
       <section v-else class="next-step paper-card">
         <span class="stamp">Complete</span>
         <div>
-          <h2>首版路线已全部完成</h2>
-          <p>你已经具备继续探索裂隙与终局内容的基础。</p>
+          <h2>当前路线清单已全部完成</h2>
+          <p>你可以继续复盘现有路线、完善基地，或自由探索终局内容。</p>
         </div>
       </section>
 

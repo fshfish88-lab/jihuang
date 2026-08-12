@@ -1,8 +1,14 @@
 <script setup lang="ts">
+import { CONTENT_VERSION, getEntries, guideEntries } from '~/data/content'
+
 useSeoMeta({
   title: '关于本站与资料来源',
   description: '火堆边百科的定位、内容原则、版权声明与外部资料来源。'
 })
+
+const wikiEntries = getEntries('wiki')
+const dishCount = wikiEntries.filter(entry => entry.tags.includes('四格食谱')).length
+const routeCount = getEntries('progression').length
 </script>
 
 <template>
@@ -38,8 +44,8 @@ useSeoMeta({
       </article>
       <aside class="paper-card source-card">
         <span class="stamp">Version</span>
-        <h2>2026.07</h2>
-        <p>首版包含 39 份攻略与百科手记。</p>
+        <h2>{{ CONTENT_VERSION }}</h2>
+        <p>当前共收录 {{ guideEntries.length }} 份手记：百科 {{ wikiEntries.length }} 份，其中四格食谱 {{ dishCount }} 道；世界路线 {{ routeCount }} 条。</p>
         <NuxtLink class="text-link" to="/search">搜索全部内容</NuxtLink>
       </aside>
     </div>

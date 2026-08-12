@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import { CONTENT_VERSION } from '~/data/content'
+</script>
+
 <template>
   <footer class="site-footer">
     <div class="container footer-grid">
@@ -18,7 +22,7 @@
     </div>
     <div class="container disclaimer">
       <p>本站为玩家制作的非官方、非商业《饥荒联机版》资料站，与 Klei Entertainment 无官方关联。游戏名称、角色、图片及相关素材版权归其权利人所有。</p>
-      <p>内容版本：2026.07 · <NuxtLink to="/about">关于本站与资料来源</NuxtLink></p>
+      <p>内容版本：{{ CONTENT_VERSION }} · <NuxtLink to="/about">关于本站与资料来源</NuxtLink></p>
     </div>
   </footer>
 </template>
