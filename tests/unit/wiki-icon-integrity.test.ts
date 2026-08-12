@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto'
 import { execFile } from 'node:child_process'
-import { access, mkdir, mkdtemp, readFile, rename, unlink, writeFile } from 'node:fs/promises'
+import { access, mkdir, mkdtemp, readFile, readdir, rename, unlink, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join, resolve } from 'node:path'
 import { promisify } from 'node:util'
@@ -256,6 +256,128 @@ describe('wiki icon trust anchor helpers', () => {
     expect(JSON.parse(await readFile(lockPath, 'utf8'))).toEqual(staleOwner)
   })
 
+  it('removes a crash-promoted new icon with the recorded SHA before taking a dead-owner lock', async () => {
+    const { acquireIconSyncLock } = await helpers()
+    const directory = await temporaryDirectory()
+    const lockPath = join(directory, '.wiki-icon-sync.lock')
+    const stagingDirectory = join(directory, '.wiki-icon-sync-dead-new')
+    const target = join(directory, 'new-icon.png')
+    const manifestPath = join(directory, 'manifest.json')
+    const originalManifest = Buffer.from('{"old":true}\n')
+    const promoted = validPng()
+    await mkdir(stagingDirectory)
+    await Promise.all([
+      writeFile(target, promoted),
+      writeFile(manifestPath, originalManifest),
+    ])
+    await writeFile(join(stagingDirectory, 'recovery-state.json'), JSON.stringify({
+      version: 2,
+      entries: [{
+        target,
+        backup: null,
+        existedBefore: false,
+        promotedSha256: createHash('sha256').update(promoted).digest('hex'),
+      }],
+      manifest: {
+        target: manifestPath,
+        backup: join(stagingDirectory, 'manifest.backup'),
+        existedBefore: true,
+        promotedSha256: createHash('sha256').update('{"new":true}\n').digest('hex'),
+      },
+    }))
+    await writeFile(lockPath, JSON.stringify({
+      token: 'dead-owner', pid: 999999, startedAt: '2026-08-12T00:00:00.000Z', recoveryPath: stagingDirectory,
+    }))
+
+    const release = await acquireIconSyncLock(lockPath, {
+      token: 'next-owner',
+      isProcessAlive: async () => false,
+      allowedRoots: [directory],
+    })
+
+    await expect(access(target)).rejects.toMatchObject({ code: 'ENOENT' })
+    expect(await readFile(manifestPath)).toEqual(originalManifest)
+    await expect(access(stagingDirectory)).rejects.toMatchObject({ code: 'ENOENT' })
+    await release()
+  })
+
+  it('preserves recovery and refuses takeover when a crash-promoted new target was externally modified', async () => {
+    const { acquireIconSyncLock } = await helpers()
+    const directory = await temporaryDirectory()
+    const lockPath = join(directory, '.wiki-icon-sync.lock')
+    const stagingDirectory = join(directory, '.wiki-icon-sync-dead-modified')
+    const target = join(directory, 'new-icon.png')
+    const promoted = validPng()
+    await mkdir(stagingDirectory)
+    await writeFile(target, Buffer.from(promoted).fill(3, 20))
+    await writeFile(join(stagingDirectory, 'recovery-state.json'), JSON.stringify({
+      version: 2,
+      entries: [{
+        target,
+        backup: null,
+        existedBefore: false,
+        promotedSha256: createHash('sha256').update(promoted).digest('hex'),
+      }],
+      manifest: null,
+    }))
+    const staleOwner = {
+      token: 'dead-owner', pid: 999999, startedAt: '2026-08-12T00:00:00.000Z', recoveryPath: stagingDirectory,
+    }
+    await writeFile(lockPath, JSON.stringify(staleOwner))
+
+    await expect(acquireIconSyncLock(lockPath, {
+      token: 'next-owner',
+      isProcessAlive: async () => false,
+      allowedRoots: [directory],
+    })).rejects.toThrow(/ambiguous recovery.*SHA/i)
+
+    expect(await readFile(target)).toEqual(Buffer.from(promoted).fill(3, 20))
+    expect(JSON.parse(await readFile(lockPath, 'utf8'))).toEqual(staleOwner)
+    expect(await access(stagingDirectory)).toBeUndefined()
+  })
+
+  it.each(['write', 'rename'] as const)(
+    'keeps the original lock releasable when atomic recovery metadata %s fails',
+    async (failure) => {
+      const { acquireIconSyncLock } = await helpers()
+      const directory = await temporaryDirectory()
+      const lockPath = join(directory, '.wiki-icon-sync.lock')
+      const stagingDirectory = join(directory, '.wiki-icon-sync-stage')
+      await mkdir(stagingDirectory)
+      const release = await acquireIconSyncLock(lockPath, {
+        token: `${failure}-owner`,
+        operations: {
+          writeFile: async (path: string, data: string) => {
+            if (String(path).includes('.metadata-')) {
+              if (failure === 'write') {
+                await writeFile(path, '{')
+                throw new Error('injected metadata partial write failure')
+              }
+              await writeFile(path, data)
+              return
+            }
+            await writeFile(path, data)
+          },
+          rename: async (source: string, target: string) => {
+            if (failure === 'rename' && source.includes('.metadata-')) {
+              throw new Error('injected metadata rename failure')
+            }
+            await rename(source, target)
+          },
+        },
+      })
+
+      await expect(release.setRecoveryPath(stagingDirectory))
+        .rejects.toThrow(new RegExp(`metadata ${failure === 'write' ? 'partial write' : 'rename'} failure`, 'i'))
+      expect(JSON.parse(await readFile(lockPath, 'utf8')).token).toBe(`${failure}-owner`)
+      await release()
+      await expect(access(lockPath)).rejects.toMatchObject({ code: 'ENOENT' })
+      const releaseNext = await acquireIconSyncLock(lockPath, { token: 'next-owner' })
+      await releaseNext()
+      expect((await readdir(directory)).filter(name => name.includes('.metadata-'))).toEqual([])
+    },
+  )
+
   it('validates slug and prefab and URL-encodes a safe prefab', async () => {
     const { buildMirrorIconUrl, validateWikiIconEntry } = await helpers()
 
@@ -488,6 +610,67 @@ describe('wiki icon trust anchor helpers', () => {
     expect(await readFile(recoveryBackup)).toEqual(original)
     expect(JSON.parse(await readFile(join(stagingDirectory, 'recovery-state.json'), 'utf8')).entries[0].backup)
       .toBe(recoveryBackup)
+  })
+
+  it('records and recovers an actual new-target promotion when rollback cannot remove it', async () => {
+    const { acquireIconSyncLock, commitIconSyncTransaction } = await helpers()
+    const directory = await temporaryDirectory()
+    const stagingDirectory = await mkdtemp(join(directory, '.wiki-icon-sync-crash-'))
+    const lockPath = join(directory, '.wiki-icon-sync.lock')
+    const manifestPath = join(directory, 'manifest.json')
+    const target = join(directory, 'new-icon.png')
+    const temporary = join(stagingDirectory, 'new-icon.png')
+    const originalManifest = Buffer.from('{"old":true}\n')
+    const promoted = validPng()
+    await Promise.all([
+      writeFile(manifestPath, originalManifest),
+      writeFile(temporary, promoted),
+    ])
+
+    await expect(commitIconSyncTransaction({
+      pendingRenames: [{ temporary, target, replaceExisting: false }],
+      manifestPath,
+      manifestDirectory: directory,
+      outputDirectory: directory,
+      stagingDirectory,
+      serializedManifest: '{"new":true}\n',
+      manifestChanged: true,
+      operations: {
+        access,
+        readFile,
+        writeFile,
+        rename: async (source: string, destination: string) => {
+          if (source.endsWith('manifest.next.json')) throw new Error('simulated crash before manifest exchange')
+          await rename(source, destination)
+        },
+        unlink: async (path: string) => {
+          if (path === target) throw new Error('simulated process death before new target rollback')
+          await unlink(path)
+        },
+      },
+    })).rejects.toBeInstanceOf(AggregateError)
+
+    const recovery = JSON.parse(await readFile(join(stagingDirectory, 'recovery-state.json'), 'utf8'))
+    expect(recovery.version).toBe(2)
+    expect(recovery.entries).toEqual([{
+      target,
+      backup: null,
+      existedBefore: false,
+      promotedSha256: createHash('sha256').update(promoted).digest('hex'),
+    }])
+    expect(recovery.manifest).toMatchObject({ target: manifestPath, existedBefore: true })
+    await writeFile(lockPath, JSON.stringify({
+      token: 'crashed-owner', pid: 999999, startedAt: '2026-08-12T00:00:00.000Z', recoveryPath: stagingDirectory,
+    }))
+
+    const release = await acquireIconSyncLock(lockPath, {
+      token: 'next-owner',
+      isProcessAlive: async () => false,
+      allowedRoots: [directory],
+    })
+    await expect(access(target)).rejects.toMatchObject({ code: 'ENOENT' })
+    expect(await readFile(manifestPath)).toEqual(originalManifest)
+    await release()
   })
 
   it('does not clean a staging directory that contains required recovery state', async () => {

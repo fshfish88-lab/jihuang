@@ -198,16 +198,58 @@ async function recoverDeadOwner(lockPath, rawOwner, owner, fs, allowedRoots) {
   const actions = []
   for (const record of records) {
     const target = resolveWithinAnyRoot(record.target, allowedRoots)
-    const backup = resolveContainedPath(recoveryPath, relative(recoveryPath, record.backup))
-    const [targetExists, backupExists] = await Promise.all([pathExists(target, fs), pathExists(backup, fs)])
-    if (!targetExists && backupExists) actions.push({ backup, target })
-    else if (targetExists && !backupExists) continue
-    else {
-      throw new Error(`ambiguous recovery for ${record.kind}: target=${target} backup=${backup}; preserving ${recoveryPath}`)
+    const backup = record.backup
+      ? resolveContainedPath(recoveryPath, relative(recoveryPath, record.backup))
+      : null
+    const [targetExists, backupExists] = await Promise.all([
+      pathExists(target, fs),
+      backup ? pathExists(backup, fs) : false
+    ])
+
+    if (state.version === 1 || record.existedBefore === undefined) {
+      if (!targetExists && backupExists) actions.push({ type: 'restore', backup, target })
+      else if (targetExists && !backupExists) continue
+      else {
+        throw new Error(`ambiguous recovery for ${record.kind}: target=${target} backup=${backup}; preserving ${recoveryPath}`)
+      }
+      continue
+    }
+
+    if (!record.existedBefore) {
+      if (backupExists) {
+        throw new Error(`ambiguous recovery for ${record.kind}: unexpected backup ${backup}; preserving ${recoveryPath}`)
+      }
+      if (!targetExists) continue
+      const actualSha256 = createHash('sha256').update(await fs.readFile(target)).digest('hex')
+      if (actualSha256 !== record.promotedSha256) {
+        throw new Error(`ambiguous recovery for ${record.kind}: target SHA differs from promoted SHA; preserving ${recoveryPath}`)
+      }
+      actions.push({ type: 'remove', target })
+      continue
+    }
+
+    if (!targetExists && backupExists) {
+      actions.push({ type: 'restore', backup, target })
+    } else if (targetExists && !backupExists) {
+      continue
+    } else if (targetExists && backupExists) {
+      const actualSha256 = createHash('sha256').update(await fs.readFile(target)).digest('hex')
+      if (actualSha256 !== record.promotedSha256) {
+        throw new Error(`ambiguous recovery for ${record.kind}: target SHA differs from promoted SHA; preserving ${recoveryPath}`)
+      }
+      actions.push({ type: 'replace', backup, target })
+    } else {
+      throw new Error(`ambiguous recovery for ${record.kind}: old target and backup are both missing; preserving ${recoveryPath}`)
     }
   }
 
-  for (const action of actions) await fs.rename(action.backup, action.target)
+  const currentBeforeRecovery = await fs.readFile(lockPath, 'utf8')
+  if (currentBeforeRecovery !== rawOwner) throw new Error('stale lock changed before recovery; refusing takeover')
+  for (const action of actions) {
+    if (action.type === 'remove') await fs.unlink(action.target)
+    if (action.type === 'replace') await fs.unlink(action.target)
+    if (action.type === 'restore' || action.type === 'replace') await fs.rename(action.backup, action.target)
+  }
   const current = await fs.readFile(lockPath, 'utf8')
   if (current !== rawOwner) throw new Error('stale lock changed during recovery; refusing takeover')
   await fs.rm(recoveryPath, { recursive: true, force: true })
@@ -260,8 +302,10 @@ export async function acquireIconSyncLock(lockPath, options = {}) {
 
   try {
     await handle.writeFile(`${JSON.stringify(owner)}\n`, 'utf8')
+    await handle.close()
+    handle = undefined
   } catch (error) {
-    await handle.close().catch(() => {})
+    await handle?.close().catch(() => {})
     await fs.unlink(lockPath).catch(() => {})
     throw error
   }
@@ -270,7 +314,7 @@ export async function acquireIconSyncLock(lockPath, options = {}) {
   const release = async ({ preserve = false } = {}) => {
     if (released) return
     released = true
-    await handle.close()
+    await handle?.close()
     if (preserve) return
     const currentToken = await fs.readFile(lockPath, 'utf8').catch(error => {
       if (error.code === 'ENOENT') return undefined
@@ -287,8 +331,39 @@ export async function acquireIconSyncLock(lockPath, options = {}) {
     }
   }
   release.setRecoveryPath = async recoveryPath => {
-    owner.recoveryPath = resolveContainedPath(dirname(lockPath), relative(dirname(lockPath), recoveryPath))
-    await fs.writeFile(lockPath, `${JSON.stringify(owner)}\n`, 'utf8')
+    const nextOwner = {
+      ...owner,
+      recoveryPath: resolveContainedPath(dirname(lockPath), relative(dirname(lockPath), recoveryPath))
+    }
+    const temporary = resolveContainedPath(dirname(lockPath), `${lockPath.split(/[\\/]/).pop()}.metadata-${token}-${randomUUID()}`)
+    let primaryError
+    try {
+      await fs.writeFile(temporary, `${JSON.stringify(nextOwner)}\n`, 'utf8')
+      const current = await fs.readFile(lockPath, 'utf8')
+      let currentOwner
+      try {
+        currentOwner = JSON.parse(current)
+      } catch (error) {
+        throw new Error(`owned lock metadata became unreadable before atomic update: ${error.message}`)
+      }
+      if (currentOwner.token !== token) throw new Error('owned lock changed before atomic metadata update; refusing replacement')
+      await fs.rename(temporary, lockPath)
+      Object.assign(owner, nextOwner)
+    } catch (error) {
+      primaryError = error
+      throw error
+    } finally {
+      try {
+        await fs.unlink(temporary)
+      } catch (cleanupError) {
+        if (cleanupError.code !== 'ENOENT') {
+          if (primaryError) {
+            throw recoveryAggregate(primaryError, [cleanupError], `lock metadata update and cleanup failed: ${primaryError.message}`)
+          }
+          throw cleanupError
+        }
+      }
+    }
   }
   release.owner = owner
   return release
@@ -329,7 +404,7 @@ export async function commitIconSyncTransaction({
   manifestChanged,
   operations = {}
 }) {
-  const fs = { access, rename, unlink, writeFile, ...operations }
+  const fs = { access, readFile, rename, unlink, writeFile, ...operations }
   if (!stagingDirectory) throw new Error('icon sync transaction requires a unique staging directory')
   if (!outputDirectory) throw new Error('icon sync transaction requires an output directory containment boundary')
   if (!manifestDirectory) throw new Error('icon sync transaction requires a manifest directory containment boundary')
@@ -353,15 +428,6 @@ export async function commitIconSyncTransaction({
   let rollbackComplete = false
   let primaryError
 
-  const recoveryState = {
-    version: 1,
-    entries: states.filter(state => state.replaceExisting).map(state => ({
-      target: state.target,
-      backup: state.backup
-    })),
-    manifest: manifestChanged ? { target: safeManifest, backup: manifestBackup } : null
-  }
-
   try {
     for (const state of states) {
       let exists = true
@@ -377,6 +443,24 @@ export async function commitIconSyncTransaction({
       if (!exists && state.replaceExisting) {
         throw new Error(`cannot replace icon target because it no longer exists: ${state.target}`)
       }
+      state.existedBefore = exists
+      state.promotedSha256 = createHash('sha256').update(await fs.readFile(state.temporary)).digest('hex')
+    }
+
+    const recoveryState = {
+      version: 2,
+      entries: states.map(state => ({
+        target: state.target,
+        backup: state.replaceExisting ? state.backup : null,
+        existedBefore: state.existedBefore,
+        promotedSha256: state.promotedSha256
+      })),
+      manifest: manifestChanged ? {
+        target: safeManifest,
+        backup: manifestBackup,
+        existedBefore: await pathExists(safeManifest, fs),
+        promotedSha256: createHash('sha256').update(serializedManifest).digest('hex')
+      } : null
     }
 
     if (manifestChanged) {
