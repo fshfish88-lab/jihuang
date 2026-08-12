@@ -63,12 +63,12 @@ export const craftingExpandedEntries: WikiEntry[] = [
     tips: ['移植物集中运回基地后及时种下并按需施肥。'], mistakes: ['只挖不种，让可再生资源长期躺在地上或枯萎。'], related: ['shovel', 'gold-nugget', 'berry-bush']
   }),
   simpleEntry({
-    slug: 'compass', prefab: 'compass', title: '指南针', english: 'Compass', category: '工具', stage: '第一周',
-    summary: '指南针提供稳定方向参照，在旋转镜头或多人远行时帮助统一方位描述。',
-    crafting: craft([amount('gold-nugget', '金块', 1), amount('papyrus', '莎草纸', 1)], '科学机器及以上科技', '工具', 1, ['首次制作需解锁科学一级配方。']),
-    acquisition: [acquire('制作', '在科学机器旁制作指南针', '准备 1 个金块和 1 张莎草纸。', '靠近科学机器，在“工具”筛选中制作 1 个指南针。')],
+    slug: 'compass', prefab: 'compass', title: '指南针', english: 'Compass', category: '工具', stage: '第 1 天',
+    summary: '指南针无需科技即可制作，通常能在旋转镜头或多人远行时帮助统一方位描述。',
+    crafting: craft([amount('gold-nugget', '金块', 1), amount('flint', '燧石', 1)], '徒手制作', '工具'),
+    acquisition: [acquire('制作', '徒手制作指南针', '准备 1 个金块和 1 个燧石。', '打开“工具”筛选，直接制作 1 个指南针。')],
     facts: [{ label: '功能', value: '提供不受镜头旋转干扰的方向参照' }], uses: ['多人报点和远行辨向。'],
-    tips: ['队伍事先约定按指南针方位报点，减少“屏幕左边”这类歧义。'], mistakes: ['把镜头方向当作固定北方，旋转镜头后继续按屏幕方位交流。'], related: ['gold-nugget', 'papyrus']
+    tips: ['队伍事先约定按指南针方位报点，减少“屏幕左边”这类歧义。', '满月或低理智状态会让显示方向变得不可靠，关键远行不要只依赖指南针。'], mistakes: ['把镜头方向当作固定北方，旋转镜头后继续按屏幕方位交流。'], related: ['gold-nugget', 'flint']
   }),
   simpleEntry({
     slug: 'boomerang', prefab: 'boomerang', title: '回旋镖', english: 'Boomerang', category: '装备', stage: '炼金科技',
@@ -79,7 +79,7 @@ export const craftingExpandedEntries: WikiEntry[] = [
     tips: ['投出后盯住回旋时机，提前准备动作键接取。'], mistakes: ['投掷后立刻切换注意力，漏接回旋镖并被它击中。'], related: ['boards', 'silk', 'charcoal']
   }),
   simpleEntry({
-    slug: 'blow-dart', prefab: 'blowdart_pipe', title: '攻击吹箭', english: 'Blow Dart', aliases: ['攻击吹箭', '吹箭', 'Blow Dart'], category: '装备', stage: '第一周远程战',
+    slug: 'blow-dart', prefab: 'blowdart_pipe', title: '攻击吹箭', english: 'Blow Dart', aliases: ['攻击吹箭', '吹箭', 'Blow Dart'], category: '装备', stage: '冬季远程战',
     summary: '攻击吹箭是单次使用的高伤害远程武器，季节性蓝色羽毛会限制批量制作。',
     crafting: craft([amount('cut-reeds', '芦苇', 2), amount('hound-tooth', '犬牙', 1), amount('azure-feather', '蓝色羽毛', 1)], '科学机器及以上科技', '武器', 1, ['首次制作需解锁科学一级配方。']),
     acquisition: [acquire('制作', '在科学机器旁制作攻击吹箭', '准备 2 个芦苇、1 个犬牙和 1 根蓝色羽毛。', '靠近科学机器，在“武器”筛选中制作 1 支攻击吹箭。')],
@@ -152,17 +152,17 @@ export const craftingExpandedEntries: WikiEntry[] = [
   }),
   simpleEntry({
     slug: 'rabbit-earmuffs', prefab: 'earmuffshat', title: '兔耳罩', english: 'Rabbit Earmuffs', aliases: ['兔耳罩', '兔毛耳罩', 'Rabbit Earmuffs'], category: '装备', stage: '入冬前',
-    summary: '兔耳罩是科学一级的基础保暖帽，成本低但保暖有限，适合作为第一年冬装过渡。',
-    crafting: craft([amount('rabbit', '兔子', 2), amount('twigs', '树枝', 1)], '科学机器及以上科技', '服装', 1, ['首次制作需解锁科学一级配方。']),
-    acquisition: [acquire('制作', '在科学机器旁制作兔耳罩', '活捉 2 只兔子并准备 1 个树枝。', '靠近科学机器，在“服装”筛选中制作 1 副兔耳罩。')],
+    summary: '兔耳罩是无需科技的基础保暖帽，成本低但保暖有限，适合作为第一年冬装过渡。',
+    crafting: craft([amount('rabbit', '兔子', 2), amount('twigs', '树枝', 1)], '徒手制作', '服装'),
+    acquisition: [acquire('制作', '徒手制作兔耳罩', '活捉 2 只兔子并准备 1 个树枝。', '打开“服装”筛选，直接制作 1 副兔耳罩。')],
     facts: [{ label: '保暖', value: '60' }], uses: ['初冬短途保暖。'],
     tips: ['配合暖石和沿途火源使用，不要只靠耳罩进行长途冬季远征。'], mistakes: ['把兔耳罩当成高级冬装，离开火源太久后才发现保暖不足。'], related: ['rabbit', 'twigs', 'thermal-stone']
   }),
   simpleEntry({
     slug: 'bush-hat', prefab: 'bushhat', title: '灌木丛帽', english: 'Bush Hat', aliases: ['灌木丛帽', '灌木帽', 'Bush Hat'], category: '装备', stage: '炼金科技',
     summary: '灌木丛帽可让玩家原地伪装成灌木，用于观察或规避部分仇恨，但移动会结束伪装。',
-    crafting: craft([amount('straw-hat', '草帽', 1), amount('rope', '绳子', 1), amount('berry-bush', '浆果丛', 2)], '炼金引擎', '服装', 1, ['首次制作需在炼金引擎旁原型。']),
-    acquisition: [acquire('制作', '在炼金引擎旁制作灌木丛帽', '准备 1 顶草帽、1 根绳子和 2 个挖起的浆果丛。', '靠近炼金引擎，在“服装”筛选中制作 1 顶灌木丛帽。')],
+    crafting: craft([amount('straw-hat', '草帽', 1), amount('rope', '绳子', 1), amount('berry-bush', '浆果丛', 1)], '炼金引擎', '服装', 1, ['首次制作需在炼金引擎旁原型。']),
+    acquisition: [acquire('制作', '在炼金引擎旁制作灌木丛帽', '准备 1 顶草帽、1 根绳子和 1 个挖起的浆果丛。', '靠近炼金引擎，在“服装”筛选中制作 1 顶灌木丛帽。')],
     facts: [{ label: '主动效果', value: '原地伪装；移动时解除' }], uses: ['隐蔽观察和部分生物规避。'],
     tips: ['在敌人尚未锁定前使用更可靠，并预留解除后的撤退路线。'], mistakes: ['已经被强敌锁定后才伪装，误以为它能无条件清除所有仇恨。'], related: ['straw-hat', 'rope', 'berry-bush']
   }),
@@ -225,10 +225,10 @@ export const craftingExpandedEntries: WikiEntry[] = [
   simpleEntry({
     slug: 'war-saddle', prefab: 'saddle_war', title: '战争牛鞍', english: 'War Saddle', aliases: ['战争牛鞍', '战斗鞍', 'War Saddle'], category: '装备', stage: '战斗型驯牛',
     summary: '战争牛鞍牺牲一部分速度专精骑乘攻击，适合战斗型皮弗娄牛而非纯赶路。',
-    crafting: craft([amount('steel-wool', '钢羊毛', 4), amount('pig-skin', '猪皮', 4), amount('gold-nugget', '金块', 4)], '炼金引擎', '骑乘', 1, ['首次制作需在炼金引擎旁原型。']),
-    acquisition: [acquire('制作', '在炼金引擎旁制作战争牛鞍', '准备 4 个钢羊毛、4 块猪皮和 4 个金块。', '靠近炼金引擎，在“骑乘”筛选中制作 1 个战争牛鞍。')],
+    crafting: craft([amount('rabbit', '兔子', 4), amount('steel-wool', '钢羊毛', 4), amount('log', '木头', 10)], '炼金引擎', '骑乘', 1, ['首次制作需在炼金引擎旁原型。']),
+    acquisition: [acquire('制作', '在炼金引擎旁制作战争牛鞍', '活捉 4 只兔子，并准备 4 个钢羊毛和 10 个木头。', '靠近炼金引擎，在“骑乘”筛选中制作 1 个战争牛鞍。')],
     facts: [{ label: '专精', value: '提高骑乘攻击伤害，速度低于普通牛鞍' }], uses: ['强化战斗型皮弗娄牛的骑乘输出。'],
-    tips: ['与高攻击倾向的战斗型牛搭配，才能充分利用伤害加成。'], mistakes: ['为了赶路制作战争牛鞍；它的优势是伤害，不是最高移动速度。'], related: ['steel-wool', 'pig-skin', 'saddle']
+    tips: ['与高攻击倾向的战斗型牛搭配，才能充分利用伤害加成。'], mistakes: ['为了赶路制作战争牛鞍；它的优势是伤害，不是最高移动速度。'], related: ['rabbit', 'steel-wool', 'log', 'saddle']
   }),
   simpleEntry({
     slug: 'glossamer-saddle', prefab: 'saddle_race', title: '薄纱牛鞍', english: 'Glossamer Saddle', aliases: ['薄纱牛鞍', '轻盈鞍', 'Glossamer Saddle'], category: '装备', stage: '高速驯牛后期',

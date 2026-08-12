@@ -22,13 +22,17 @@ const featherUses: Record<string, string[]> = {
   'azure-feather': ['攻击吹箭'],
   'saffron-feather': ['电击吹箭']
 }
-const featherRecipeContracts: Record<string, Record<string, number>> = {
-  'blow-dart': { 'cut-reeds': 2, 'hound-tooth': 1, 'azure-feather': 1 },
-  'sleep-dart': { 'cut-reeds': 2, stinger: 1, 'jet-feather': 1 },
-  'fire-dart': { 'cut-reeds': 2, charcoal: 1, 'crimson-feather': 1 },
-  'electric-dart': { 'cut-reeds': 2, 'gold-nugget': 1, 'saffron-feather': 1 },
-  saddlehorn: { twigs: 2, 'bone-shards': 2, 'jet-feather': 1 },
-  'feather-hat': { 'crimson-feather': 2, 'jet-feather': 3, 'tentacle-spots': 2 }
+const canonicalRecipeContracts: Record<string, { ingredients: Record<string, number>, station: string }> = {
+  compass: { ingredients: { 'gold-nugget': 1, flint: 1 }, station: '徒手制作' },
+  'blow-dart': { ingredients: { 'cut-reeds': 2, 'hound-tooth': 1, 'azure-feather': 1 }, station: '科学机器及以上科技' },
+  'sleep-dart': { ingredients: { 'cut-reeds': 2, stinger: 1, 'jet-feather': 1 }, station: '科学机器及以上科技' },
+  'fire-dart': { ingredients: { 'cut-reeds': 2, charcoal: 1, 'crimson-feather': 1 }, station: '科学机器及以上科技' },
+  'electric-dart': { ingredients: { 'cut-reeds': 2, 'gold-nugget': 1, 'saffron-feather': 1 }, station: '科学机器及以上科技' },
+  'rabbit-earmuffs': { ingredients: { rabbit: 2, twigs: 1 }, station: '徒手制作' },
+  'bush-hat': { ingredients: { 'straw-hat': 1, rope: 1, 'berry-bush': 1 }, station: '炼金引擎' },
+  'war-saddle': { ingredients: { rabbit: 4, 'steel-wool': 4, log: 10 }, station: '炼金引擎' },
+  saddlehorn: { ingredients: { twigs: 2, 'bone-shards': 2, 'jet-feather': 1 }, station: '炼金引擎' },
+  'feather-hat': { ingredients: { 'crimson-feather': 2, 'jet-feather': 3, 'tentacle-spots': 2 }, station: '炼金引擎' }
 }
 
 describe('wiki data', () => {
@@ -79,10 +83,11 @@ describe('wiki data', () => {
     expect(entry?.crafting.craftable, `${slug} is craftable`).toBe(true)
   })
 
-  it.each(Object.entries(featherRecipeContracts))('uses the exact current feather recipe for %s', (slug, expected) => {
+  it.each(Object.entries(canonicalRecipeContracts))('uses the canonical current recipe and station for %s', (slug, expected) => {
     const entry = wikiEntries.find(item => item.slug === slug)
-    expect(entry, `missing feather recipe ${slug}`).toBeDefined()
-    expect(Object.fromEntries(entry?.crafting.ingredients.map(item => [item.slug, item.amount]) || [])).toEqual(expected)
+    expect(entry, `missing canonical recipe ${slug}`).toBeDefined()
+    expect(Object.fromEntries(entry?.crafting.ingredients.map(item => [item.slug, item.amount]) || [])).toEqual(expected.ingredients)
+    expect(entry?.crafting.station).toBe(expected.station)
   })
 
   it('has valid crafting or acquisition data', () => {
