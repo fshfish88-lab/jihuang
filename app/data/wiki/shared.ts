@@ -12,6 +12,7 @@ import type {
 
 export const DATA_VERSION = 'DST 2026.08'
 export const VERIFIED_AT = '2026-08-08'
+export const IMAGE_VERIFIED_AT = '2026-08-13'
 
 export type EntrySeed = Omit<WikiEntry, 'image' | 'version' | 'verifiedAt' | 'sources'> & {
   prefab: string
@@ -81,7 +82,7 @@ export function createEntry(seed: EntrySeed): WikiEntry {
       sourcePage: imageSourceOverrides[seed.slug]
         || `https://github.com/fankimm/dst-craft/blob/main/public/images/game-items/${seed.prefab}.png`,
       owner: 'Klei Entertainment',
-      verifiedAt: VERIFIED_AT
+      verifiedAt: IMAGE_VERIFIED_AT
     },
     version: DATA_VERSION,
     verifiedAt: VERIFIED_AT,

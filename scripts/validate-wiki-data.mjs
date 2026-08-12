@@ -22,7 +22,7 @@ const routeGuides = [
   'shadow-sanctum'
 ]
 
-if (entries.length < 258) errors.push(`structured wiki has only ${entries.length} entries`)
+if (entries.length < 328) errors.push(`structured wiki has only ${entries.length} entries`)
 if (new Set(entries.map(entry => entry.slug)).size !== entries.length) errors.push('structured wiki contains duplicate slugs')
 if (manifest.count !== entries.length) errors.push(`manifest count ${manifest.count} does not match ${entries.length} entries`)
 

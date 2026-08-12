@@ -161,7 +161,7 @@ function manifestEntry(entry, url, bytes) {
     mirror: fromWiki ? 'dontstarve.wiki.gg' : 'fankimm/dst-craft',
     sha256: createHash('sha256').update(bytes).digest('hex'),
     bytes: bytes.length,
-    verifiedAt: '2026-08-08'
+    verifiedAt: '2026-08-13'
   }
 }
 
