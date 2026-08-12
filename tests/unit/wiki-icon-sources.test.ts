@@ -35,7 +35,9 @@ describe('wiki icon source contract', () => {
   })
 
   it('requires the current 328-entry icon corpus', () => {
-    expect(validatorSource).toContain('if (entries.length < 328)')
+    expect(validatorSource).toContain('if (entries.length !== 328)')
+    expect(validatorSource).toContain('manifest slug set does not exactly match structured wiki entries')
+    expect(validatorSource).toContain('PNG filename stem set does not exactly match structured wiki entries')
   })
 
   it('derives contact-sheet rows from the number of audited icons', () => {

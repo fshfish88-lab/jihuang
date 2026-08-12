@@ -12,11 +12,13 @@ import type {
 
 export const DATA_VERSION = 'DST 2026.08'
 export const VERIFIED_AT = '2026-08-08'
+export const EXPANSION_VERIFIED_AT = '2026-08-13'
 export const IMAGE_VERIFIED_AT = '2026-08-13'
 
 export type EntrySeed = Omit<WikiEntry, 'image' | 'version' | 'verifiedAt' | 'sources'> & {
   prefab: string
   sourceLinks?: SourceLink[]
+  contentVerifiedAt?: string
 }
 
 const imageSourceOverrides: Record<string, string> = {
@@ -70,7 +72,7 @@ function wikiPage(english: string): string {
 }
 
 export function createEntry(seed: EntrySeed): WikiEntry {
-  const { sourceLinks = [], ...entry } = seed
+  const { sourceLinks = [], contentVerifiedAt, ...entry } = seed
   const sourceUrl = imageSourceOverrides[seed.slug]
     || `https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items/${seed.prefab}.png`
   return {
@@ -85,7 +87,7 @@ export function createEntry(seed: EntrySeed): WikiEntry {
       verifiedAt: IMAGE_VERIFIED_AT
     },
     version: DATA_VERSION,
-    verifiedAt: VERIFIED_AT,
+    verifiedAt: contentVerifiedAt ?? VERIFIED_AT,
     sources: [
       {
         label: `Don't Starve Wiki：${seed.english}（DST）`,
@@ -157,6 +159,7 @@ interface SimpleSeed {
   routeGuide?: string
   combat?: CombatInfo
   sources?: SourceLink[]
+  contentVerifiedAt?: string
 }
 
 export function simpleEntry(seed: SimpleSeed): WikiEntry {
@@ -180,6 +183,7 @@ export function simpleEntry(seed: SimpleSeed): WikiEntry {
     route: seed.route,
     routeGuide: seed.routeGuide,
     combat: seed.combat,
-    sourceLinks: seed.sources
+    sourceLinks: seed.sources,
+    contentVerifiedAt: seed.contentVerifiedAt
   })
 }

@@ -1,5 +1,8 @@
 import type { WikiEntry } from '~/types/wiki'
-import { acquire, simpleEntry } from './shared'
+import { acquire, EXPANSION_VERIFIED_AT, simpleEntry as baseSimpleEntry } from './shared'
+
+const simpleEntry = (seed: Parameters<typeof baseSimpleEntry>[0]): WikiEntry =>
+  baseSimpleEntry({ ...seed, contentVerifiedAt: EXPANSION_VERIFIED_AT })
 
 export const expandedMaterialEntries: WikiEntry[] = [
   simpleEntry({

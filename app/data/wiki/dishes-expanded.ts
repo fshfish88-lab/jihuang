@@ -1,5 +1,5 @@
 import type { DishInfo, IngredientAmount, WikiEntry } from '~/types/wiki'
-import { acquire, amount, createEntry, noCraft } from './shared'
+import { acquire, amount, createEntry, EXPANSION_VERIFIED_AT, noCraft } from './shared'
 
 interface ExpandedDishSeed {
   slug: string
@@ -65,7 +65,8 @@ function dish(seed: ExpandedDishSeed): WikiEntry {
     tips: [seed.warlyExclusive ? '必须由沃利用便携烹饪锅制作，普通烹饪锅不会产出这道料理。' : '先按示例配方制作，再根据食材度替换同类填充物。'],
     mistakes: seed.conflicts,
     related: ['crock-pot'],
-    dish: dishInfo
+    dish: dishInfo,
+    contentVerifiedAt: EXPANSION_VERIFIED_AT
   })
 }
 

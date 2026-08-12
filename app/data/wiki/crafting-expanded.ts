@@ -1,5 +1,8 @@
 import type { WikiEntry } from '~/types/wiki'
-import { acquire, amount, craft, simpleEntry } from './shared'
+import { acquire, amount, craft, EXPANSION_VERIFIED_AT, simpleEntry as baseSimpleEntry } from './shared'
+
+const simpleEntry = (seed: Parameters<typeof baseSimpleEntry>[0]): WikiEntry =>
+  baseSimpleEntry({ ...seed, contentVerifiedAt: EXPANSION_VERIFIED_AT })
 
 export const craftingExpandedEntries: WikiEntry[] = [
   simpleEntry({
@@ -227,7 +230,11 @@ export const craftingExpandedEntries: WikiEntry[] = [
     summary: '战争牛鞍牺牲一部分速度专精骑乘攻击，适合战斗型皮弗娄牛而非纯赶路。',
     crafting: craft([amount('rabbit', '兔子', 4), amount('steel-wool', '钢羊毛', 4), amount('log', '木头', 10)], '炼金引擎', '骑乘', 1, ['首次制作需在炼金引擎旁原型。']),
     acquisition: [acquire('制作', '在炼金引擎旁制作战争牛鞍', '活捉 4 只兔子，并准备 4 个钢羊毛和 10 个木头。', '靠近炼金引擎，在“骑乘”筛选中制作 1 个战争牛鞍。')],
-    facts: [{ label: '专精', value: '提高骑乘攻击伤害，速度低于普通牛鞍' }], uses: ['强化战斗型皮弗娄牛的骑乘输出。'],
+    facts: [
+      { label: '骑乘加速', value: '相对牛基础速度提高 25%' },
+      { label: '骑乘攻击', value: '骑乘近战攻击额外 +16 伤害' },
+      { label: '耐久', value: '可被不服从的皮弗娄牛甩落 8 次' }
+    ], uses: ['强化战斗型皮弗娄牛的骑乘输出。'],
     tips: ['与高攻击倾向的战斗型牛搭配，才能充分利用伤害加成。'], mistakes: ['为了赶路制作战争牛鞍；它的优势是伤害，不是最高移动速度。'], related: ['rabbit', 'steel-wool', 'log', 'saddle']
   }),
   simpleEntry({
@@ -235,7 +242,10 @@ export const craftingExpandedEntries: WikiEntry[] = [
     summary: '薄纱牛鞍专精最高骑乘速度，但 68 个蝴蝶翅膀使它成为高投入的赶路装备。',
     crafting: craft([amount('butterfly-wings', '蝴蝶翅膀', 68), amount('silk', '蜘蛛丝', 4), amount('living-log', '活木', 2)], '炼金引擎', '骑乘', 1, ['首次制作需在炼金引擎旁原型。']),
     acquisition: [acquire('制作', '在炼金引擎旁制作薄纱牛鞍', '准备 68 个蝴蝶翅膀、4 个蜘蛛丝和 2 个活木。', '靠近炼金引擎，在“骑乘”筛选中制作 1 个薄纱牛鞍。')],
-    facts: [{ label: '骑乘加速', value: '相对牛基础速度提高 55%' }], uses: ['长途运输、探索和依靠移速走位。'],
+    facts: [
+      { label: '骑乘加速', value: '相对牛基础速度提高 55%' },
+      { label: '耐久', value: '可被不服从的皮弗娄牛甩落 8 次' }
+    ], uses: ['长途运输、探索和依靠移速走位。'],
     tips: ['先解决蝴蝶翅膀保鲜与批量捕捉，再开始集中制作；它适合速度专精。'], mistakes: ['把它当作战斗增伤鞍，或在没有保鲜方案时让大量翅膀腐坏。'], related: ['butterfly-wings', 'silk', 'living-log']
   }),
   simpleEntry({

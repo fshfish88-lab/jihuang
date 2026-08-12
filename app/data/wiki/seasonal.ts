@@ -93,7 +93,7 @@ export const seasonalEntries = buildRouteEntries('四季生存', 'seasonal-cycle
     slug: 'dragonfly', prefab: 'dragonfly', title: '龙蝇', english: 'Dragonfly', aliases: ['龙蜻蜓'], category: '生物', stage: '稳定基地后',
     summary: '沙漠岩浆池区域的常驻团队 Boss，暴怒和熔岩虫是主要压力。', obtainType: '掉落',
     obtain: ['在沙漠岩浆池区域找到龙蝇。', '击败后获得鳞片、宝石与龙蝇相关蓝图。'], facts: [['生命', '27500'], ['攻击', '75']],
-    combat: fight(['常驻岩浆池区域，离开一定距离会脱战返回。'], ['石墙围堵熔岩虫', '排箫应对暴怒', '足量护甲与群体治疗'], ['先建墙分隔熔岩虫。', '躲地拍并稳定输出。', '暴怒时使用排箫或拉开。'], ['围墙破口无法控虫。', '多人护甲或治疗断档。'], [{ slug: 'scales', name: '鳞片', amount: '1—2' }, { name: '宝石', amount: '多种' }]), related: ['scales', 'pan-flute', 'wall-stone-item']
+    combat: fight(['常驻岩浆池区域，离开一定距离会脱战返回。'], ['石墙围堵熔岩虫', '排箫应对暴怒', '足量护甲与群体治疗'], ['先建墙分隔熔岩虫。', '躲地拍并稳定输出。', '暴怒时使用排箫或拉开。'], ['围墙破口无法控虫。', '多人护甲或治疗断档。'], [{ slug: 'scales', name: '鳞片', amount: '1—2' }, { name: '宝石', amount: '多种' }]), related: ['scales', 'pan-flute', 'football-helmet']
   },
   {
     slug: 'bearger', prefab: 'bearger', title: '熊獾', english: 'Bearger', aliases: ['熊大', '秋季Boss'], category: '生物', stage: '第二个秋季起',

@@ -34,6 +34,7 @@ export interface AdvancedSeed {
   related?: string[]
   combat?: CombatInfo
   sources?: SourceLink[]
+  contentVerifiedAt?: string
 }
 
 export function buildRouteEntries(
@@ -77,7 +78,8 @@ export function buildRouteEntries(
       mistakes: seed.mistakes || ['不要在没有撤退路线时一次投入全部稀有材料。'],
       related: seed.related || [],
       combat: seed.combat,
-      sources: seed.sources
+      sources: seed.sources,
+      contentVerifiedAt: seed.contentVerifiedAt
     })
   })
 }

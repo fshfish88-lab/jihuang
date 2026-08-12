@@ -1,8 +1,11 @@
 import { describe, expect, it } from 'vitest'
 import { wikiEntries } from '../../app/data/wiki'
+import { craftingExpandedEntries } from '../../app/data/wiki/crafting-expanded'
 import { expandedDishEntries } from '../../app/data/wiki/dishes-expanded'
+import { expandedMaterialEntries } from '../../app/data/wiki/materials-expanded'
+import { EXPANSION_VERIFIED_AT, VERIFIED_AT } from '../../app/data/wiki/shared'
 
-const requiredCraftables = [
+const expectedCraftables = [
   'razor', 'pitchfork', 'garden-hoe', 'watering-can', 'golden-axe', 'golden-pickaxe',
   'golden-shovel', 'compass', 'boomerang', 'blow-dart', 'sleep-dart', 'fire-dart',
   'electric-dart', 'morning-star', 'fire-staff', 'ice-staff', 'grass-suit',
@@ -86,12 +89,12 @@ describe('wiki data', () => {
     expect(entry?.image.sourceUrl).toMatch(/\/pondeel\.png$/)
   })
 
-  it('contains at least 312 wiki entries', () => {
-    expect(wikiEntries.length).toBeGreaterThanOrEqual(312)
+  it('contains exactly 328 wiki entries', () => {
+    expect(wikiEntries).toHaveLength(328)
   })
 
-  it('contains at least 50 dishes', () => {
-    expect(wikiEntries.filter(item => item.category === '料理').length).toBeGreaterThanOrEqual(50)
+  it('contains exactly 50 dishes', () => {
+    expect(wikiEntries.filter(item => item.category === '料理')).toHaveLength(50)
   })
 
   it.each(requiredMissingMaterials)('contains required material %s', (slug) => {
@@ -123,11 +126,13 @@ describe('wiki data', () => {
     expect(entry?.related).not.toContain('friendly-scarecrow')
   })
 
-  it('defines exactly 30 required craftables', () => {
-    expect(requiredCraftables).toHaveLength(30)
+  it('contains exactly the canonical 30-entry crafting expansion', () => {
+    expect(expectedCraftables).toHaveLength(30)
+    expect(craftingExpandedEntries).toHaveLength(30)
+    expect(craftingExpandedEntries.map(item => item.slug).sort()).toEqual([...expectedCraftables].sort())
   })
 
-  it.each(requiredCraftables)('contains required craftable %s', (slug) => {
+  it.each(expectedCraftables)('contains required craftable %s', (slug) => {
     const entry = wikiEntries.find(item => item.slug === slug)
     expect(entry, `missing craftable ${slug}`).toBeDefined()
     expect(entry?.crafting.craftable, `${slug} is craftable`).toBe(true)
@@ -177,6 +182,51 @@ describe('wiki data', () => {
         if (ingredient.slug) expect(slugs.has(ingredient.slug), `${item.slug} -> ${ingredient.slug}`).toBe(true)
       }
     }
+  })
+
+  it('keeps every related link inside the encyclopedia', () => {
+    const slugs = new Set(wikiEntries.map(item => item.slug))
+
+    for (const item of wikiEntries) {
+      for (const relatedSlug of item.related) {
+        expect(slugs.has(relatedSlug), `${item.slug} -> ${relatedSlug}`).toBe(true)
+      }
+    }
+  })
+
+  it('dates exactly the 70 expansion entries at their actual fact verification date', () => {
+    const expandedEntries = [
+      ...expandedMaterialEntries,
+      ...craftingExpandedEntries,
+      ...expandedDishEntries,
+    ]
+    const expandedSlugs = new Set(expandedEntries.map(item => item.slug))
+    const originalEntries = wikiEntries.filter(item => !expandedSlugs.has(item.slug))
+
+    expect(EXPANSION_VERIFIED_AT).toBe('2026-08-13')
+    expect(expandedEntries).toHaveLength(70)
+    expect(expandedSlugs.size).toBe(70)
+    expect(originalEntries).toHaveLength(258)
+    expect(expandedEntries.every(item => item.verifiedAt === EXPANSION_VERIFIED_AT)).toBe(true)
+    expect(originalEntries.every(item => item.verifiedAt === VERIFIED_AT)).toBe(true)
+    expect(wikiEntries.every(item => item.image.verifiedAt === '2026-08-13')).toBe(true)
+  })
+
+  it.each([
+    ['war-saddle', [
+      { label: '骑乘加速', value: '相对牛基础速度提高 25%' },
+      { label: '骑乘攻击', value: '骑乘近战攻击额外 +16 伤害' },
+      { label: '耐久', value: '可被不服从的皮弗娄牛甩落 8 次' },
+    ]],
+    ['glossamer-saddle', [
+      { label: '骑乘加速', value: '相对牛基础速度提高 55%' },
+      { label: '耐久', value: '可被不服从的皮弗娄牛甩落 8 次' },
+    ]],
+  ] as const)('shows current riding and shake-off facts for %s', (slug, expectedFacts) => {
+    const entry = wikiEntries.find(item => item.slug === slug)
+
+    expect(entry, `missing saddle ${slug}`).toBeDefined()
+    for (const fact of expectedFacts) expect(entry?.facts).toContainEqual(fact)
   })
 
   it.each(Object.entries(missingMaterialLinks))('links every %s ingredient to %s', (name, expectedSlug) => {

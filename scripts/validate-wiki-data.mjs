@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto'
 import { execFileSync } from 'node:child_process'
-import { access, readFile, stat } from 'node:fs/promises'
+import { access, readFile, readdir, stat } from 'node:fs/promises'
 import { resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -12,6 +12,13 @@ const listOutput = execFileSync(process.execPath, [resolve(root, 'scripts', 'syn
 const entries = JSON.parse(listOutput)
 const manifest = JSON.parse(await readFile(manifestPath, 'utf8'))
 const manifestBySlug = new Map(manifest.entries.map(entry => [entry.slug, entry]))
+const entrySlugs = new Set(entries.map(entry => entry.slug))
+const manifestSlugs = new Set(manifest.entries.map(entry => entry.slug))
+const pngSlugs = new Set(
+  (await readdir(resolve(root, 'public', 'images', 'wiki')))
+    .filter(filename => filename.endsWith('.png'))
+    .map(filename => filename.slice(0, -4)),
+)
 const errors = []
 const routeGuides = [
   'seasonal-cycle',
@@ -22,9 +29,17 @@ const routeGuides = [
   'shadow-sanctum'
 ]
 
-if (entries.length < 328) errors.push(`structured wiki has only ${entries.length} entries`)
-if (new Set(entries.map(entry => entry.slug)).size !== entries.length) errors.push('structured wiki contains duplicate slugs')
-if (manifest.count !== entries.length) errors.push(`manifest count ${manifest.count} does not match ${entries.length} entries`)
+function hasSameSlugSet(left, right) {
+  return left.size === right.size && [...left].every(slug => right.has(slug))
+}
+
+if (entries.length !== 328) errors.push(`structured wiki has ${entries.length} entries instead of exactly 328`)
+if (entrySlugs.size !== entries.length) errors.push('structured wiki contains duplicate slugs')
+if (manifest.count !== entries.length || manifest.entries.length !== entries.length) {
+  errors.push(`manifest count ${manifest.count} and record count ${manifest.entries.length} do not match ${entries.length} entries`)
+}
+if (!hasSameSlugSet(manifestSlugs, entrySlugs)) errors.push('manifest slug set does not exactly match structured wiki entries')
+if (!hasSameSlugSet(pngSlugs, entrySlugs)) errors.push('PNG filename stem set does not exactly match structured wiki entries')
 
 for (const slug of routeGuides) {
   try {
