@@ -111,6 +111,15 @@ export async function acquireIconSyncLock(lockPath, options = {}) {
   }
 }
 
+export async function withIconSyncLock(lockPath, task, options = {}) {
+  const release = await acquireIconSyncLock(lockPath, options)
+  try {
+    return await task()
+  } finally {
+    await release()
+  }
+}
+
 export async function commitIconSyncTransaction({
   pendingRenames,
   manifestPath,

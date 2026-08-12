@@ -121,6 +121,22 @@ describe('wiki icon trust anchor helpers', () => {
     await expect(access(lockPath)).rejects.toMatchObject({ code: 'ENOENT' })
   })
 
+  it('releases the lock in finally when the protected sync task throws', async () => {
+    const { acquireIconSyncLock, withIconSyncLock } = await helpers()
+    const directory = await temporaryDirectory()
+    const lockPath = join(directory, '.wiki-icon-sync.lock')
+
+    await expect(withIconSyncLock(
+      lockPath,
+      async () => { throw new Error('injected sync failure') },
+      { token: 'failing-run' },
+    )).rejects.toThrow(/injected sync failure/i)
+
+    await expect(access(lockPath)).rejects.toMatchObject({ code: 'ENOENT' })
+    const releaseNextRun = await acquireIconSyncLock(lockPath, { token: 'next-run' })
+    await releaseNextRun()
+  })
+
   it('does not remove a lock that no longer contains its ownership token', async () => {
     const { acquireIconSyncLock } = await helpers()
     const directory = await temporaryDirectory()

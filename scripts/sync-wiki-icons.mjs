@@ -4,14 +4,14 @@ import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { promisify } from 'node:util'
 import {
-  acquireIconSyncLock,
   commitIconSyncTransaction,
   createIconSyncStaging,
   readPriorManifest,
   removeIconSyncStaging,
   stageTrustedIconReplacement,
   validateIconBytes,
-  validateTrustedLocalIcon
+  validateTrustedLocalIcon,
+  withIconSyncLock
 } from './wiki-icon-integrity.mjs'
 
 const root = fileURLToPath(new URL('..', import.meta.url))
@@ -97,21 +97,18 @@ if (process.argv.includes('--list')) {
   process.exit(0)
 }
 
-let releaseLock
-let stagingDirectory
 try {
-  releaseLock = await acquireIconSyncLock(lockPath)
-  stagingDirectory = await createIconSyncStaging(outputDir)
-  await syncIcons(stagingDirectory)
+  await withIconSyncLock(lockPath, async () => {
+    const stagingDirectory = await createIconSyncStaging(outputDir)
+    try {
+      await syncIcons(stagingDirectory)
+    } finally {
+      await removeIconSyncStaging(stagingDirectory)
+    }
+  })
 } catch (error) {
   console.error(`icon sync failed: ${error.message}`)
   process.exitCode = 1
-} finally {
-  try {
-    if (stagingDirectory) await removeIconSyncStaging(stagingDirectory)
-  } finally {
-    if (releaseLock) await releaseLock()
-  }
 }
 
 async function syncIcons(stagingDirectory) {
