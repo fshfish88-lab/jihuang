@@ -122,13 +122,17 @@ export async function exportSiteAtomically({
       throw new Error('Staging verification failed: copied files do not match the static export source')
     }
 
-    await operations.writeFile(
-      join(staging, 'build-info.json'),
-      `${JSON.stringify(buildInfo, null, 2)}\n`,
-    )
+    const buildInfoPath = join(staging, 'build-info.json')
+    const expectedBuildInfo = Buffer.from(`${JSON.stringify(buildInfo, null, 2)}\n`)
+    await operations.writeFile(buildInfoPath, expectedBuildInfo)
     await requireDirectory(staging, operations, 'Static export staging directory')
     await requireIndex(staging, operations, 'Static export staging directory')
-    await operations.stat(join(staging, 'build-info.json'))
+    const actualBuildInfo = await operations.readFile(buildInfoPath)
+    const expectedBuildInfoHash = createHash('sha256').update(expectedBuildInfo).digest('hex')
+    const actualBuildInfoHash = createHash('sha256').update(actualBuildInfo).digest('hex')
+    if (actualBuildInfo.length !== expectedBuildInfo.length || actualBuildInfoHash !== expectedBuildInfoHash) {
+      throw new Error('Build-info verification failed: written bytes do not match the expected size and SHA-256')
+    }
 
     if (await pathExists(target, operations)) {
       await operations.rename(target, backup)

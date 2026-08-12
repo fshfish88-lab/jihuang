@@ -158,6 +158,36 @@ describe('atomic static-site export', () => {
     expect(await siblingResidues(target)).toEqual([])
   })
 
+  it('rejects same-size corrupted build-info bytes before changing the old artifact', async () => {
+    const { exportSiteAtomically } = await helpers()
+    const root = await temporaryDirectory()
+    const source = await createSource(root)
+    const target = await createOldTarget(root)
+    const oldIndex = await readFile(join(target, 'index.html'))
+    const oldOnly = await readFile(join(target, 'old-only.txt'))
+
+    await expect(exportSiteAtomically({
+      source,
+      target,
+      buildInfo: buildInfo(),
+      operations: {
+        writeFile: async (path: Parameters<typeof writeFile>[0], data: Parameters<typeof writeFile>[1]) => {
+          if (String(path).endsWith('build-info.json')) {
+            if (!Buffer.isBuffer(data)) throw new Error('test expected build-info to be written as a Buffer')
+            const expectedBytes = data
+            await writeFile(path, Buffer.alloc(expectedBytes.length, 120))
+            return
+          }
+          return writeFile(path, data)
+        },
+      },
+    })).rejects.toThrow(/build-info|verification|do not match/i)
+
+    expect(await readFile(join(target, 'index.html'))).toEqual(oldIndex)
+    expect(await readFile(join(target, 'old-only.txt'))).toEqual(oldOnly)
+    expect(await siblingResidues(target)).toEqual([])
+  })
+
   it('restores the old artifact when promoting staging fails after backup rename', async () => {
     const { exportSiteAtomically } = await helpers()
     const root = await temporaryDirectory()
