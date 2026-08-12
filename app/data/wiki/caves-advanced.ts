@@ -8,7 +8,7 @@ export const advancedCaveEntries = buildRouteEntries('洞穴遗迹', 'ruins-expe
   {
     slug: 'moggles', prefab: 'molehat', title: '鼹鼠帽', english: 'Moggles', category: '装备', stage: '洞穴探索',
     summary: '提供夜视效果的头部装备，适合遗迹定位，但会占用护甲头栏。',
-    materials: [['moleworm', '鼹鼠', 2], ['electrical-doodad', '电子元件', 2], [undefined, '发光浆果', 1]], station: '炼金引擎', filter: '照明',
+    materials: [['moleworm', '鼹鼠', 2], ['electrical-doodad', '电子元件', 2], ['glow-berry', '发光浆果', 1]], station: '炼金引擎', filter: '照明',
     requirements: ['配方需要活鼹鼠 ×2；发光浆果由深渊蠕虫死亡后掉落。'],
     obtain: ['用锤击昏并拾取活鼹鼠，不要直接击杀。', '在炼金引擎旁投入活鼹鼠 ×2、电子元件 ×2、发光浆果 ×1。'], facts: [['耐久', '12 分钟'], ['效果', '全屏夜视']], related: ['moleworm', 'electrical-doodad', 'lantern']
   },

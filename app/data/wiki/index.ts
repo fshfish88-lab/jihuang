@@ -6,6 +6,7 @@ import { dishEntries } from './dishes'
 import { equipmentEntries } from './equipment'
 import { explorationEntries } from './exploration'
 import { materialEntries } from './materials'
+import { expandedMaterialEntries } from './materials-expanded'
 import { lunarRiftEntries } from './lunar-rift'
 import { oceanLunarEntries } from './ocean-lunar'
 import { seasonalEntries } from './seasonal'
@@ -14,6 +15,7 @@ import { structureEntries } from './structures'
 
 export const wikiEntries: WikiEntry[] = [
   ...materialEntries,
+  ...expandedMaterialEntries,
   ...equipmentEntries,
   ...structureEntries,
   ...dishEntries,

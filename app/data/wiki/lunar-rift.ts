@@ -73,7 +73,7 @@ export const lunarRiftEntries = buildRouteEntries('天体裂隙', 'celestial-lun
   {
     slug: 'brightshade-bomb', prefab: 'bomb_lunarplant', title: '亮茄炸弹', english: 'Brightshade Bomb', category: '装备', stage: '亮茄制作站',
     summary: '投掷后造成高额范围位面伤害，也会伤到投掷者并摧毁结构。',
-    materials: [['pure-brilliance', '纯粹辉煌', 4], ['brightshade-husk', '亮茄外壳', 4], [undefined, '注能月亮碎片', 1]], station: '亮茄制作站', filter: '亮茄制作', yield: 6,
+    materials: [['pure-brilliance', '纯粹辉煌', 4], ['brightshade-husk', '亮茄外壳', 4], ['infused-moon-shard', '注能月亮碎片', 1]], station: '亮茄制作站', filter: '亮茄制作', yield: 6,
     requirements: ['第三项为注能月亮碎片 ×1，可在月亮裂隙开启后由裂隙晶体取得。'], obtain: ['在亮茄制作站旁投入纯粹辉煌 ×4、亮茄外壳 ×4、注能月亮碎片 ×1。', '每次制作得到 6 枚；投掷前确认自己和建筑都在爆炸范围外。'], facts: [['位面伤害', '200'], ['产量', '6'], ['警告', '会伤害投掷者并破坏建筑']], related: ['grazer', 'brightshade-husk', 'pure-brilliance']
   }
 ])

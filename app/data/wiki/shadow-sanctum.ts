@@ -15,31 +15,31 @@ export const shadowSanctumEntries = buildRouteEntries('暗影圣所', 'shadow-sa
   {
     slug: 'dreadstone-helm', prefab: 'dreadstonehat', title: '绝望石头盔', english: 'Dreadstone Helm', category: '装备', stage: '暗影裂隙',
     summary: '高物理减伤并带位面防御的头盔，理智较高时可逐步恢复耐久。',
-    materials: [['dreadstone', '绝望石', 4], [undefined, '纯粹恐惧', 4]], station: '暗影制作站', filter: '暗影制作',
+    materials: [['dreadstone', '绝望石', 4], ['pure-horror', '纯粹恐惧', 4]], station: '暗影制作站', filter: '暗影制作',
     requirements: ['当前配方第二项为纯粹恐惧 ×4；纯粹恐惧由暗影裂隙生物掉落。'], obtain: ['开启暗影裂隙并开采绝望石。', '在暗影制作站旁投入绝望石 ×4、纯粹恐惧 ×4。', '保持理智以启用耐久恢复；启蒙状态不会恢复。'], facts: [['减伤', '90%'], ['位面防御', '5'], ['耐久', '840，可恢复']], related: ['dreadstone', 'dreadstone-armour'], sources: currentSources
   },
   {
     slug: 'dreadstone-armour', prefab: 'armordreadstone', title: '绝望石盔甲', english: 'Dreadstone Armor', aliases: ['绝望石甲'], category: '装备', stage: '暗影裂隙',
     summary: '可在理智充足时恢复耐久的高减伤身体护甲，适合长期暗影路线。',
-    materials: [['dreadstone', '绝望石', 6], [undefined, '纯粹恐惧', 4]], station: '暗影制作站', filter: '暗影制作',
+    materials: [['dreadstone', '绝望石', 6], ['pure-horror', '纯粹恐惧', 4]], station: '暗影制作站', filter: '暗影制作',
     requirements: ['需要绝望石 ×6、纯粹恐惧 ×4。'], obtain: ['开采暗影裂隙绝望石并收集纯粹恐惧。', '在暗影制作站旁投入绝望石 ×6、纯粹恐惧 ×4。', '离战后恢复理智，让护甲自行修复再入场。'], facts: [['减伤', '90%'], ['位面防御', '5'], ['特点', '理智驱动恢复']], related: ['dreadstone', 'dreadstone-helm'], sources: currentSources
   },
   {
     slug: 'void-cowl', prefab: 'voidclothhat', title: '虚空风帽', english: 'Void Cowl', category: '装备', stage: '暗影制作站',
     summary: '暗影位面头盔，可强化虚空武器并免受瘴气伤害。',
-    materials: [[undefined, '纯粹恐惧', 4], [undefined, '暗影碎布', 2]], station: '暗影制作台座', filter: '暗影制作',
+    materials: [['pure-horror', '纯粹恐惧', 4], ['dark-tatters', '暗影碎布', 2]], station: '暗影制作台座', filter: '暗影制作',
     requirements: ['需要纯粹恐惧 ×4、暗影碎布 ×2。'], obtain: ['开启暗影裂隙，击败裂隙生物取得纯粹恐惧和暗影碎布。', '在暗影制作台座旁投入纯粹恐惧 ×4、暗影碎布 ×2。'], facts: [['减伤', '80%'], ['位面防御', '10'], ['耐久', '830']], related: ['void-robe', 'shadow-reaper'], sources: currentSources
   },
   {
     slug: 'void-robe', prefab: 'armor_voidcloth', title: '虚空长袍', english: 'Void Robe', category: '装备', stage: '暗影制作站',
     summary: '暗影位面身体护甲，与虚空风帽组成套装后提高对暗影阵营的防护。',
-    materials: [[undefined, '纯粹恐惧', 4], [undefined, '暗影碎布', 2]], station: '暗影制作台座', filter: '暗影制作',
+    materials: [['pure-horror', '纯粹恐惧', 4], ['dark-tatters', '暗影碎布', 2]], station: '暗影制作台座', filter: '暗影制作',
     requirements: ['材料为纯粹恐惧 ×4、暗影碎布 ×2。'], obtain: ['在暗影裂隙收集纯粹恐惧和暗影碎布。', '在暗影制作台座旁投入各自数量制作。', '与虚空风帽配套并准备虚空修理包。'], facts: [['减伤', '80%'], ['位面防御', '10'], ['套装', '提高暗影阵营防护']], related: ['void-cowl', 'shadow-reaper'], sources: currentSources
   },
   {
     slug: 'shadow-reaper', prefab: 'voidcloth_scythe', title: '暗影收割者', english: 'Shadow Reaper', aliases: ['暗影镰刀'], category: '装备', stage: '暗影制作站',
     summary: '虚空近战武器，可随连续命中提高伤害；受击或断连会失去叠层。',
-    materials: [[undefined, '纯粹恐惧', 3], [undefined, '暗影碎布', 1]], station: '暗影制作台座', filter: '暗影制作',
+    materials: [['pure-horror', '纯粹恐惧', 3], ['dark-tatters', '暗影碎布', 1]], station: '暗影制作台座', filter: '暗影制作',
     requirements: ['需要纯粹恐惧 ×3、暗影碎布 ×1。'], obtain: ['先制作虚空风帽以获得完整武器增益。', '在暗影制作台座旁投入纯粹恐惧 ×3、暗影碎布 ×1。', '战斗时保持连续命中，受击后重新叠层。'], facts: [['伤害', '38 物理 + 18 位面'], ['机制', '佩戴虚空风帽时连续命中增伤']], related: ['void-cowl', 'void-robe'], sources: currentSources
   },
   {
