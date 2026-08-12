@@ -1,8 +1,50 @@
 import { createHash, randomUUID } from 'node:crypto'
 import { access, mkdtemp, open, readFile, rename, rm, unlink, writeFile } from 'node:fs/promises'
-import { join } from 'node:path'
+import { dirname, isAbsolute, join, relative, resolve } from 'node:path'
 
 const PNG_SIGNATURE = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10])
+const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
+const PREFAB_PATTERN = /^[A-Za-z0-9_-]+$/
+
+export function validateWikiIconEntry({ slug, prefab }) {
+  if (!SLUG_PATTERN.test(slug)) throw new Error(`unsafe slug: ${slug}`)
+  if (!PREFAB_PATTERN.test(prefab)) throw new Error(`unsafe prefab: ${prefab}`)
+  return { slug, prefab }
+}
+
+export function buildMirrorIconUrl(prefab, mirrorBase) {
+  validateWikiIconEntry({ slug: 'safe', prefab })
+  return `${mirrorBase}/${encodeURIComponent(prefab)}.png`
+}
+
+export function resolveContainedPath(root, ...parts) {
+  const allowedRoot = resolve(root)
+  const candidate = resolve(allowedRoot, ...parts)
+  const relation = relative(allowedRoot, candidate)
+  if (relation === '..' || relation.startsWith(`..${process.platform === 'win32' ? '\\' : '/'}`) || isAbsolute(relation)) {
+    throw new Error(`path escapes allowed directory ${allowedRoot}: ${candidate}`)
+  }
+  return candidate
+}
+
+async function pathExists(path, fs = { access }) {
+  try {
+    await fs.access(path)
+    return true
+  } catch (error) {
+    if (error.code === 'ENOENT') return false
+    throw error
+  }
+}
+
+function recoveryAggregate(primary, secondary, message, recoveryPaths = []) {
+  const aggregate = new AggregateError([primary, ...secondary], message)
+  if (recoveryPaths.length) {
+    aggregate.recoveryRequired = true
+    aggregate.recoveryPaths = recoveryPaths
+  }
+  return aggregate
+}
 
 export function validateIconBytes(bytes, expected, label) {
   if (bytes.length < 100) throw new Error(`${label}: image is too small (${bytes.length} bytes)`)
@@ -33,11 +75,21 @@ export async function stageTrustedIconReplacement({
   temporary,
   target,
   replaceExisting,
+  outputDirectory,
+  stagingDirectory,
   expected,
   download,
   operations = {}
 }) {
   const fs = { readFile, unlink, ...operations }
+  if (stagingDirectory) {
+    const checkedTemporary = resolveContainedPath(stagingDirectory, relative(stagingDirectory, temporary))
+    if (checkedTemporary !== resolve(temporary)) throw new Error(`path escapes allowed directory: ${temporary}`)
+  }
+  if (outputDirectory) {
+    const checkedTarget = resolveContainedPath(outputDirectory, relative(outputDirectory, target))
+    if (checkedTarget !== resolve(target)) throw new Error(`path escapes allowed directory: ${target}`)
+  }
   try {
     await download(temporary)
     const bytes = await fs.readFile(temporary)
@@ -73,21 +125,141 @@ export async function removeIconSyncStaging(stagingDirectory, operations = {}) {
   await fs.rm(stagingDirectory, { recursive: true, force: true })
 }
 
+export async function withIconSyncStaging(outputDir, task, options = {}) {
+  const create = options.create || createIconSyncStaging
+  const remove = options.remove || removeIconSyncStaging
+  const stagingDirectory = await create(outputDir, options.operations)
+  let primaryError
+  try {
+    return await task(stagingDirectory)
+  } catch (error) {
+    primaryError = error
+    throw error
+  } finally {
+    if (!primaryError?.recoveryRequired) {
+      try {
+        await remove(stagingDirectory, options.operations)
+      } catch (cleanupError) {
+        if (primaryError) {
+          throw recoveryAggregate(
+            primaryError,
+            [cleanupError],
+            `icon sync failed and staging cleanup also failed: ${primaryError.message}`,
+            [stagingDirectory]
+          )
+        }
+        throw cleanupError
+      }
+    }
+  }
+}
+
+function defaultProcessAlive(pid) {
+  try {
+    process.kill(pid, 0)
+    return true
+  } catch (error) {
+    if (error.code === 'ESRCH') return false
+    throw new Error(`cannot confirm whether process ${pid} is alive: ${error.message}`, { cause: error })
+  }
+}
+
+function resolveWithinAnyRoot(path, roots) {
+  for (const root of roots) {
+    try {
+      return resolveContainedPath(root, relative(root, path))
+    } catch {}
+  }
+  throw new Error(`path escapes every allowed directory: ${path}`)
+}
+
+async function recoverDeadOwner(lockPath, rawOwner, owner, fs, allowedRoots) {
+  if (!owner.recoveryPath) {
+    const current = await fs.readFile(lockPath, 'utf8')
+    if (current !== rawOwner) throw new Error('stale lock changed while checking ownership; refusing takeover')
+    await fs.unlink(lockPath)
+    return
+  }
+
+  const lockDirectory = dirname(lockPath)
+  const recoveryPath = resolveContainedPath(lockDirectory, relative(lockDirectory, owner.recoveryPath))
+  const statePath = resolveContainedPath(recoveryPath, 'recovery-state.json')
+  let state
+  try {
+    state = JSON.parse(await fs.readFile(statePath, 'utf8'))
+  } catch (error) {
+    throw new Error(`dead process recovery cannot be confirmed; preserving lock and recovery path ${recoveryPath}: ${error.message}`)
+  }
+
+  const records = [
+    ...(state.entries || []).map(entry => ({ kind: 'icon', ...entry })),
+    ...(state.manifest ? [{ kind: 'manifest', ...state.manifest }] : [])
+  ]
+  const actions = []
+  for (const record of records) {
+    const target = resolveWithinAnyRoot(record.target, allowedRoots)
+    const backup = resolveContainedPath(recoveryPath, relative(recoveryPath, record.backup))
+    const [targetExists, backupExists] = await Promise.all([pathExists(target, fs), pathExists(backup, fs)])
+    if (!targetExists && backupExists) actions.push({ backup, target })
+    else if (targetExists && !backupExists) continue
+    else {
+      throw new Error(`ambiguous recovery for ${record.kind}: target=${target} backup=${backup}; preserving ${recoveryPath}`)
+    }
+  }
+
+  for (const action of actions) await fs.rename(action.backup, action.target)
+  const current = await fs.readFile(lockPath, 'utf8')
+  if (current !== rawOwner) throw new Error('stale lock changed during recovery; refusing takeover')
+  await fs.rm(recoveryPath, { recursive: true, force: true })
+  await fs.unlink(lockPath)
+}
+
 export async function acquireIconSyncLock(lockPath, options = {}) {
-  const fs = { open, readFile, unlink, ...options.operations }
+  const fs = { access, open, readFile, rename, rm, unlink, writeFile, ...options.operations }
   const token = options.token || randomUUID()
+  const owner = {
+    token,
+    pid: options.pid ?? process.pid,
+    startedAt: options.startedAt || new Date().toISOString(),
+    recoveryPath: null
+  }
   let handle
   try {
     handle = await fs.open(lockPath, 'wx')
   } catch (error) {
     if (error.code === 'EEXIST') {
-      throw new Error(`wiki icon sync is already running (lock exists: ${lockPath})`)
+      let rawOwner
+      let existing
+      try {
+        rawOwner = await fs.readFile(lockPath, 'utf8')
+        existing = JSON.parse(rawOwner)
+      } catch (ownerError) {
+        throw new Error(`wiki icon sync lock owner cannot be confirmed; refusing takeover: ${ownerError.message}`)
+      }
+      if (!Number.isInteger(existing.pid) || !existing.token || !existing.startedAt) {
+        throw new Error('wiki icon sync lock owner metadata is incomplete; refusing takeover')
+      }
+      let alive
+      try {
+        alive = await (options.isProcessAlive || defaultProcessAlive)(existing.pid)
+      } catch (aliveError) {
+        throw new Error(`wiki icon sync lock owner cannot be confirmed; refusing takeover: ${aliveError.message}`)
+      }
+      if (alive) throw new Error(`wiki icon sync is already running in active process ${existing.pid}`)
+      await recoverDeadOwner(
+        lockPath,
+        rawOwner,
+        existing,
+        fs,
+        (options.allowedRoots || [dirname(lockPath)]).map(root => resolve(root))
+      )
+      return acquireIconSyncLock(lockPath, options)
     }
     throw error
   }
 
   try {
-    await handle.writeFile(`${token}\n`, 'utf8')
+    await handle.writeFile(`${JSON.stringify(owner)}\n`, 'utf8')
   } catch (error) {
     await handle.close().catch(() => {})
     await fs.unlink(lockPath).catch(() => {})
@@ -95,34 +267,63 @@ export async function acquireIconSyncLock(lockPath, options = {}) {
   }
 
   let released = false
-  return async () => {
+  const release = async ({ preserve = false } = {}) => {
     if (released) return
     released = true
     await handle.close()
+    if (preserve) return
     const currentToken = await fs.readFile(lockPath, 'utf8').catch(error => {
       if (error.code === 'ENOENT') return undefined
       throw error
     })
-    if (currentToken === `${token}\n`) {
+    let currentOwner
+    try {
+      currentOwner = currentToken ? JSON.parse(currentToken) : undefined
+    } catch {}
+    if (currentOwner?.token === token) {
       await fs.unlink(lockPath).catch(error => {
         if (error.code !== 'ENOENT') throw error
       })
     }
   }
+  release.setRecoveryPath = async recoveryPath => {
+    owner.recoveryPath = resolveContainedPath(dirname(lockPath), relative(dirname(lockPath), recoveryPath))
+    await fs.writeFile(lockPath, `${JSON.stringify(owner)}\n`, 'utf8')
+  }
+  release.owner = owner
+  return release
 }
 
 export async function withIconSyncLock(lockPath, task, options = {}) {
   const release = await acquireIconSyncLock(lockPath, options)
+  let primaryError
   try {
-    return await task()
+    return await task(release)
+  } catch (error) {
+    primaryError = error
+    throw error
   } finally {
-    await release()
+    try {
+      await release({ preserve: Boolean(primaryError?.recoveryRequired) })
+    } catch (releaseError) {
+      if (primaryError) {
+        throw recoveryAggregate(
+          primaryError,
+          [releaseError],
+          `icon sync failed and lock release also failed: ${primaryError.message}`,
+          primaryError.recoveryPaths || []
+        )
+      }
+      throw releaseError
+    }
   }
 }
 
 export async function commitIconSyncTransaction({
   pendingRenames,
   manifestPath,
+  manifestDirectory,
+  outputDirectory,
   stagingDirectory,
   serializedManifest,
   manifestChanged,
@@ -130,16 +331,36 @@ export async function commitIconSyncTransaction({
 }) {
   const fs = { access, rename, unlink, writeFile, ...operations }
   if (!stagingDirectory) throw new Error('icon sync transaction requires a unique staging directory')
-  const manifestTemporary = join(stagingDirectory, 'manifest.next.json')
-  const manifestBackup = join(stagingDirectory, 'manifest.backup')
+  if (!outputDirectory) throw new Error('icon sync transaction requires an output directory containment boundary')
+  if (!manifestDirectory) throw new Error('icon sync transaction requires a manifest directory containment boundary')
+  const safeStaging = resolve(stagingDirectory)
+  const safeOutput = resolve(outputDirectory)
+  const safeManifest = resolveContainedPath(manifestDirectory, relative(manifestDirectory, manifestPath))
+  const manifestTemporary = resolveContainedPath(safeStaging, 'manifest.next.json')
+  const manifestBackup = resolveContainedPath(safeStaging, 'manifest.backup')
+  const recoveryStatePath = resolveContainedPath(safeStaging, 'recovery-state.json')
   const states = pendingRenames.map((pending, index) => ({
     ...pending,
-    backup: join(stagingDirectory, `icon-${index}.backup`),
+    temporary: resolveContainedPath(safeStaging, relative(safeStaging, pending.temporary)),
+    target: resolveContainedPath(safeOutput, relative(safeOutput, pending.target)),
+    backup: resolveContainedPath(safeStaging, `icon-${index}.backup`),
     backedUp: false,
     promoted: false
   }))
   let manifestBackedUp = false
   let manifestPromoted = false
+  let transactionSucceeded = false
+  let rollbackComplete = false
+  let primaryError
+
+  const recoveryState = {
+    version: 1,
+    entries: states.filter(state => state.replaceExisting).map(state => ({
+      target: state.target,
+      backup: state.backup
+    })),
+    manifest: manifestChanged ? { target: safeManifest, backup: manifestBackup } : null
+  }
 
   try {
     for (const state of states) {
@@ -161,6 +382,7 @@ export async function commitIconSyncTransaction({
     if (manifestChanged) {
       await fs.writeFile(manifestTemporary, serializedManifest, 'utf8')
     }
+    await fs.writeFile(recoveryStatePath, JSON.stringify(recoveryState, null, 2), 'utf8')
 
     for (const state of states) {
       if (state.replaceExisting) {
@@ -172,18 +394,22 @@ export async function commitIconSyncTransaction({
     }
 
     if (manifestChanged) {
-      await fs.rename(manifestPath, manifestBackup)
+      await fs.rename(safeManifest, manifestBackup)
       manifestBackedUp = true
-      await fs.rename(manifestTemporary, manifestPath)
+      await fs.rename(manifestTemporary, safeManifest)
       manifestPromoted = true
     }
+    transactionSucceeded = true
   } catch (error) {
+    primaryError = error
     const rollbackErrors = []
     if (manifestPromoted) {
-      await fs.unlink(manifestPath).catch(rollbackError => rollbackErrors.push(rollbackError))
+      await fs.unlink(safeManifest).catch(rollbackError => rollbackErrors.push(rollbackError))
     }
     if (manifestBackedUp) {
-      await fs.rename(manifestBackup, manifestPath).catch(rollbackError => rollbackErrors.push(rollbackError))
+      await fs.rename(manifestBackup, safeManifest)
+        .then(() => { manifestBackedUp = false })
+        .catch(rollbackError => rollbackErrors.push(rollbackError))
     }
     for (const state of [...states].reverse()) {
       if (state.promoted) {
@@ -192,20 +418,52 @@ export async function commitIconSyncTransaction({
         })
       }
       if (state.backedUp) {
-        await fs.rename(state.backup, state.target).catch(rollbackError => rollbackErrors.push(rollbackError))
+        await fs.rename(state.backup, state.target)
+          .then(() => { state.backedUp = false })
+          .catch(rollbackError => rollbackErrors.push(rollbackError))
       }
     }
     if (rollbackErrors.length) {
-      throw new AggregateError([error, ...rollbackErrors], `icon sync failed and rollback was incomplete: ${error.message}`)
+      const recoveryPaths = [safeStaging]
+      const backupPaths = [
+        ...states.filter(state => state.backedUp).map(state => state.backup),
+        ...(manifestBackedUp ? [manifestBackup] : [])
+      ]
+      throw recoveryAggregate(
+        error,
+        rollbackErrors,
+        `icon sync failed and rollback was incomplete; preserve recovery directory ${safeStaging}; backups: ${backupPaths.join(', ')}`,
+        recoveryPaths
+      )
     }
+    rollbackComplete = true
     throw error
   } finally {
-    await Promise.all([
-      ...states.map(state => fs.unlink(state.temporary).catch(() => {})),
-      ...states.map(state => fs.unlink(state.backup).catch(() => {})),
-      fs.unlink(manifestTemporary).catch(() => {}),
-      fs.unlink(manifestBackup).catch(() => {})
-    ])
+    if (transactionSucceeded || rollbackComplete || !primaryError) {
+      const cleanupErrors = []
+      for (const path of [
+        ...states.map(state => state.temporary),
+        ...states.map(state => state.backup),
+        manifestTemporary,
+        manifestBackup,
+        recoveryStatePath
+      ]) {
+        await fs.unlink(path).catch(error => {
+          if (error.code !== 'ENOENT') cleanupErrors.push(error)
+        })
+      }
+      if (cleanupErrors.length) {
+        if (primaryError) {
+          throw recoveryAggregate(
+            primaryError,
+            cleanupErrors,
+            `icon sync failed and transaction cleanup also failed: ${primaryError.message}`,
+            [safeStaging]
+          )
+        }
+        throw new AggregateError(cleanupErrors, 'icon sync transaction cleanup failed')
+      }
+    }
   }
 }
 

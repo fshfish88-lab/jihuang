@@ -4,14 +4,16 @@ import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { promisify } from 'node:util'
 import {
+  buildMirrorIconUrl,
   commitIconSyncTransaction,
-  createIconSyncStaging,
   readPriorManifest,
-  removeIconSyncStaging,
+  resolveContainedPath,
   stageTrustedIconReplacement,
   validateIconBytes,
   validateTrustedLocalIcon,
-  withIconSyncLock
+  validateWikiIconEntry,
+  withIconSyncLock,
+  withIconSyncStaging
 } from './wiki-icon-integrity.mjs'
 
 const root = fileURLToPath(new URL('..', import.meta.url))
@@ -69,9 +71,6 @@ const sourceOverrides = {
   chest: 'https://dontstarve.wiki.gg/wiki/Special:Redirect/file/Chest.png'
 }
 
-await mkdir(outputDir, { recursive: true })
-await mkdir(materialDir, { recursive: true })
-
 const sourceFiles = (await readdir(dataDir))
   .filter(name => name.endsWith('.ts') && !['index.ts', 'shared.ts'].includes(name))
 
@@ -91,21 +90,23 @@ for (const name of sourceFiles) {
 }
 
 const unique = [...new Map(entries.map(entry => [entry.slug, entry])).values()]
+for (const entry of unique) validateWikiIconEntry(entry)
 
 if (process.argv.includes('--list')) {
   console.log(JSON.stringify(unique))
   process.exit(0)
 }
 
+await mkdir(outputDir, { recursive: true })
+await mkdir(materialDir, { recursive: true })
+
 try {
-  await withIconSyncLock(lockPath, async () => {
-    const stagingDirectory = await createIconSyncStaging(outputDir)
-    try {
+  await withIconSyncLock(lockPath, async lock => {
+    await withIconSyncStaging(outputDir, async stagingDirectory => {
+      await lock.setRecoveryPath(stagingDirectory)
       await syncIcons(stagingDirectory)
-    } finally {
-      await removeIconSyncStaging(stagingDirectory)
-    }
-  })
+    })
+  }, { allowedRoots: [outputDir, materialDir] })
 } catch (error) {
   console.error(`icon sync failed: ${error.message}`)
   process.exitCode = 1
@@ -119,8 +120,8 @@ const errors = []
 const pendingRenames = []
 
 async function download(entry) {
-  const url = sourceOverrides[entry.slug] || `${mirrorBase}/${entry.prefab}.png`
-  const target = join(outputDir, `${entry.slug}.png`)
+  const url = sourceOverrides[entry.slug] || buildMirrorIconUrl(entry.prefab, mirrorBase)
+  const target = resolveContainedPath(outputDir, `${entry.slug}.png`)
   const expected = expectedBySlug.get(entry.slug)
   try {
     const bytes = await readFile(target)
@@ -149,13 +150,15 @@ async function download(entry) {
 async function downloadTrustedReplacement(entry, url, target, expected, replaceExisting) {
   let lastError
   for (let attempt = 1; attempt <= 3; attempt += 1) {
-    const temporary = join(stagingDirectory, `${entry.slug}-${attempt}.png`)
+    const temporary = resolveContainedPath(stagingDirectory, `${entry.slug}-${attempt}.png`)
     try {
       const { bytes, pending } = await stageTrustedIconReplacement({
         label: entry.slug,
         temporary,
         target,
         replaceExisting,
+        outputDirectory: outputDir,
+        stagingDirectory,
         expected,
         download: async output => {
           const command = process.platform === 'win32' ? 'curl.exe' : 'curl'
@@ -234,17 +237,15 @@ const nextManifest = {
   count: manifestHeader.count,
   entries: manifestHeader.entries
 }
-try {
-  await commitIconSyncTransaction({
-    pendingRenames,
-    manifestPath,
-    stagingDirectory,
-    serializedManifest: `${JSON.stringify(nextManifest, null, 2)}\n`,
-    manifestChanged: changed
-  })
-} catch (error) {
-  throw new Error(`icon sync commit failed: ${error.message}`, { cause: error })
-}
+await commitIconSyncTransaction({
+  pendingRenames,
+  manifestPath,
+  manifestDirectory: materialDir,
+  outputDirectory: outputDir,
+  stagingDirectory,
+  serializedManifest: `${JSON.stringify(nextManifest, null, 2)}\n`,
+  manifestChanged: changed
+})
 
 console.log(`Verified ${manifest.length}/${unique.length} wiki icons; manifest ${changed ? 'updated atomically' : 'unchanged'}.`)
 }

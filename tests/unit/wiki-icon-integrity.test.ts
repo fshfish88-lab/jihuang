@@ -1,8 +1,8 @@
 import { createHash } from 'node:crypto'
 import { execFile } from 'node:child_process'
-import { access, mkdtemp, readFile, rename, unlink, writeFile } from 'node:fs/promises'
+import { access, mkdir, mkdtemp, readFile, rename, unlink, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
-import { join } from 'node:path'
+import { join, resolve } from 'node:path'
 import { promisify } from 'node:util'
 import { afterEach, describe, expect, it } from 'vitest'
 
@@ -137,6 +137,184 @@ describe('wiki icon trust anchor helpers', () => {
     await releaseNextRun()
   })
 
+  it('keeps the primary task error first when lock release also fails', async () => {
+    const { withIconSyncLock } = await helpers()
+    const directory = await temporaryDirectory()
+    const lockPath = join(directory, '.wiki-icon-sync.lock')
+    let failure: AggregateError | undefined
+
+    try {
+      await withIconSyncLock(
+        lockPath,
+        async () => { throw new Error('primary sync failure') },
+        {
+          operations: {
+            unlink: async () => { throw new Error('release cleanup failure') },
+          },
+        },
+      )
+    } catch (error) {
+      failure = error as AggregateError
+    }
+
+    expect(failure).toBeInstanceOf(AggregateError)
+    expect(failure!.errors.map(error => error.message)).toEqual([
+      'primary sync failure',
+      'release cleanup failure',
+    ])
+  })
+
+  it('writes PID and start time into an owned lock and rejects a live owner', async () => {
+    const { acquireIconSyncLock } = await helpers()
+    const directory = await temporaryDirectory()
+    const lockPath = join(directory, '.wiki-icon-sync.lock')
+    const release = await acquireIconSyncLock(lockPath, {
+      token: 'live-owner',
+      pid: 4321,
+      startedAt: '2026-08-13T00:00:00.000Z',
+    })
+    const owner = JSON.parse(await readFile(lockPath, 'utf8'))
+
+    expect(owner).toMatchObject({ token: 'live-owner', pid: 4321, startedAt: '2026-08-13T00:00:00.000Z' })
+    await expect(acquireIconSyncLock(lockPath, {
+      token: 'contender',
+      isProcessAlive: async () => true,
+    })).rejects.toThrow(/active process 4321/i)
+    expect(JSON.parse(await readFile(lockPath, 'utf8')).token).toBe('live-owner')
+    await release()
+  })
+
+  it('refuses takeover when stale-owner process liveness cannot be confirmed', async () => {
+    const { acquireIconSyncLock } = await helpers()
+    const directory = await temporaryDirectory()
+    const lockPath = join(directory, '.wiki-icon-sync.lock')
+    const owner = { token: 'unknown-owner', pid: 4321, startedAt: '2026-08-13T00:00:00.000Z', recoveryPath: null }
+    await writeFile(lockPath, JSON.stringify(owner))
+
+    await expect(acquireIconSyncLock(lockPath, {
+      isProcessAlive: async () => { throw new Error('permission denied') },
+    })).rejects.toThrow(/cannot be confirmed.*permission denied/i)
+
+    expect(JSON.parse(await readFile(lockPath, 'utf8'))).toEqual(owner)
+  })
+
+  it('recovers the unique backup from a dead PID transaction before taking the stale lock', async () => {
+    const { acquireIconSyncLock } = await helpers()
+    const directory = await temporaryDirectory()
+    const lockPath = join(directory, '.wiki-icon-sync.lock')
+    const stagingDirectory = join(directory, '.wiki-icon-sync-dead')
+    const target = join(directory, 'trusted.png')
+    const backup = join(stagingDirectory, 'icon-0.backup')
+    await mkdir(stagingDirectory)
+    await writeFile(backup, 'recoverable bytes')
+    await writeFile(join(stagingDirectory, 'recovery-state.json'), JSON.stringify({
+      version: 1,
+      entries: [{ target, backup }],
+      manifest: null,
+    }))
+    await writeFile(lockPath, JSON.stringify({
+      token: 'dead-owner', pid: 999999, startedAt: '2026-08-12T00:00:00.000Z', recoveryPath: stagingDirectory,
+    }))
+
+    const release = await acquireIconSyncLock(lockPath, {
+      token: 'new-owner',
+      isProcessAlive: async () => false,
+    })
+
+    expect(await readFile(target, 'utf8')).toBe('recoverable bytes')
+    expect(JSON.parse(await readFile(lockPath, 'utf8')).token).toBe('new-owner')
+    await expect(access(stagingDirectory)).rejects.toMatchObject({ code: 'ENOENT' })
+    await release()
+  })
+
+  it('preserves an ambiguous dead-PID recovery and refuses to take its lock', async () => {
+    const { acquireIconSyncLock } = await helpers()
+    const directory = await temporaryDirectory()
+    const lockPath = join(directory, '.wiki-icon-sync.lock')
+    const stagingDirectory = join(directory, '.wiki-icon-sync-ambiguous')
+    const target = join(directory, 'trusted.png')
+    const backup = join(stagingDirectory, 'icon-0.backup')
+    await mkdir(stagingDirectory)
+    await Promise.all([writeFile(target, 'current bytes'), writeFile(backup, 'backup bytes')])
+    await writeFile(join(stagingDirectory, 'recovery-state.json'), JSON.stringify({
+      version: 1,
+      entries: [{ target, backup }],
+      manifest: null,
+    }))
+    const staleOwner = {
+      token: 'dead-owner', pid: 999999, startedAt: '2026-08-12T00:00:00.000Z', recoveryPath: stagingDirectory,
+    }
+    await writeFile(lockPath, JSON.stringify(staleOwner))
+
+    await expect(acquireIconSyncLock(lockPath, {
+      token: 'new-owner',
+      isProcessAlive: async () => false,
+    })).rejects.toThrow(/ambiguous recovery/i)
+
+    expect(await readFile(target, 'utf8')).toBe('current bytes')
+    expect(await readFile(backup, 'utf8')).toBe('backup bytes')
+    expect(JSON.parse(await readFile(lockPath, 'utf8'))).toEqual(staleOwner)
+  })
+
+  it('validates slug and prefab and URL-encodes a safe prefab', async () => {
+    const { buildMirrorIconUrl, validateWikiIconEntry } = await helpers()
+
+    expect(validateWikiIconEntry({ slug: 'volt-goat', prefab: 'lightning_goat' })).toEqual({
+      slug: 'volt-goat', prefab: 'lightning_goat',
+    })
+    expect(buildMirrorIconUrl('lightning_goat', 'https://example.test/icons')).toBe(
+      'https://example.test/icons/lightning_goat.png',
+    )
+    expect(() => validateWikiIconEntry({ slug: '../outside', prefab: 'safe' })).toThrow(/unsafe slug/i)
+    expect(() => validateWikiIconEntry({ slug: 'safe', prefab: '../outside' })).toThrow(/unsafe prefab/i)
+  })
+
+  it('rejects target and staging path traversal before writing anything', async () => {
+    const { resolveContainedPath, stageTrustedIconReplacement } = await helpers()
+    const directory = await temporaryDirectory()
+    const stagingDirectory = join(directory, 'stage')
+    await mkdir(stagingDirectory)
+    const outside = join(directory, '..', 'outside.png')
+    let downloadCalled = false
+
+    expect(() => resolveContainedPath(directory, '../outside.png')).toThrow(/escapes allowed directory/i)
+    await expect(stageTrustedIconReplacement({
+      label: 'unsafe',
+      temporary: outside,
+      target: join(directory, 'target.png'),
+      replaceExisting: false,
+      outputDirectory: directory,
+      stagingDirectory,
+      expected: undefined,
+      download: async () => { downloadCalled = true },
+    })).rejects.toThrow(/escapes allowed directory/i)
+    expect(downloadCalled).toBe(false)
+  })
+
+  it('rejects a transaction path outside its boundaries before the first write', async () => {
+    const { commitIconSyncTransaction } = await helpers()
+    const directory = await temporaryDirectory()
+    const stagingDirectory = join(directory, 'stage')
+    const outside = resolve(directory, '..', 'outside.png')
+    await mkdir(stagingDirectory)
+    let writeCalled = false
+
+    await expect(commitIconSyncTransaction({
+      pendingRenames: [{ temporary: outside, target: join(directory, 'target.png') }],
+      manifestPath: join(directory, 'manifest.json'),
+      manifestDirectory: directory,
+      outputDirectory: directory,
+      stagingDirectory,
+      serializedManifest: '{}\n',
+      manifestChanged: false,
+      operations: {
+        writeFile: async () => { writeCalled = true },
+      },
+    })).rejects.toThrow(/escapes allowed directory/i)
+
+    expect(writeCalled).toBe(false)
+  })
+
   it('does not remove a lock that no longer contains its ownership token', async () => {
     const { acquireIconSyncLock } = await helpers()
     const directory = await temporaryDirectory()
@@ -162,7 +340,7 @@ describe('wiki icon trust anchor helpers', () => {
         failure = error as { stderr?: string }
       }
       expect(failure?.stderr).toMatch(/already running/i)
-      expect(await readFile(lockPath, 'utf8')).toBe('integration-test-owner\n')
+      expect(JSON.parse(await readFile(lockPath, 'utf8')).token).toBe('integration-test-owner')
     } finally {
       await release()
     }
@@ -188,6 +366,8 @@ describe('wiki icon trust anchor helpers', () => {
     await expect(commitIconSyncTransaction({
       pendingRenames: [first, second],
       manifestPath,
+      manifestDirectory: directory,
+      outputDirectory: directory,
       stagingDirectory,
       serializedManifest: '{"trusted":"next"}\n',
       manifestChanged: true,
@@ -228,6 +408,8 @@ describe('wiki icon trust anchor helpers', () => {
       await expect(commitIconSyncTransaction({
         pendingRenames: [pending],
         manifestPath,
+        manifestDirectory: directory,
+        outputDirectory: directory,
         stagingDirectory,
         serializedManifest: '{"trusted":"next"}\n',
         manifestChanged: true,
@@ -253,6 +435,77 @@ describe('wiki icon trust anchor helpers', () => {
     },
   )
 
+  it('preserves the recovery backup when manifest commit and icon restore both fail', async () => {
+    const { commitIconSyncTransaction } = await helpers()
+    const directory = await temporaryDirectory()
+    const stagingDirectory = await mkdtemp(join(directory, 'stage-'))
+    const manifestPath = join(directory, 'manifest.json')
+    const target = join(directory, 'trusted.png')
+    const temporary = join(stagingDirectory, 'replacement.png')
+    const original = Buffer.from('original recoverable icon bytes')
+    await Promise.all([
+      writeFile(manifestPath, '{"trusted":true}\n'),
+      writeFile(target, original),
+      writeFile(temporary, validPng()),
+    ])
+    let recoveryBackup = ''
+    let failure: AggregateError | undefined
+
+    try {
+      await commitIconSyncTransaction({
+        pendingRenames: [{ temporary, target, replaceExisting: true }],
+        manifestPath,
+        manifestDirectory: directory,
+        outputDirectory: directory,
+        stagingDirectory,
+        serializedManifest: '{"trusted":"next"}\n',
+        manifestChanged: true,
+        operations: {
+          access,
+          unlink,
+          writeFile,
+          rename: async (source: string, destination: string) => {
+            if (source.endsWith('manifest.next.json')) throw new Error('injected manifest commit failure')
+            if (source.endsWith('icon-0.backup') && destination === target) {
+              recoveryBackup = source
+              throw new Error('injected icon restore failure')
+            }
+            await rename(source, destination)
+          },
+        },
+      })
+    } catch (error) {
+      failure = error as AggregateError
+    }
+
+    expect(failure).toBeInstanceOf(AggregateError)
+    expect(failure!.errors.map(error => error.message)).toEqual([
+      'injected manifest commit failure',
+      'injected icon restore failure',
+    ])
+    expect(failure!.message).toContain(recoveryBackup)
+    await expect(access(target)).rejects.toMatchObject({ code: 'ENOENT' })
+    expect(await readFile(recoveryBackup)).toEqual(original)
+    expect(JSON.parse(await readFile(join(stagingDirectory, 'recovery-state.json'), 'utf8')).entries[0].backup)
+      .toBe(recoveryBackup)
+  })
+
+  it('does not clean a staging directory that contains required recovery state', async () => {
+    const { withIconSyncStaging } = await helpers()
+    const directory = await temporaryDirectory()
+    let recoveryPath = ''
+
+    await expect(withIconSyncStaging(directory, async (stagingDirectory: string) => {
+      recoveryPath = stagingDirectory
+      await writeFile(join(stagingDirectory, 'icon-0.backup'), 'rescue bytes')
+      const failure = new AggregateError([new Error('primary'), new Error('rollback')], 'recovery required')
+      Object.assign(failure, { recoveryRequired: true, recoveryPaths: [stagingDirectory] })
+      throw failure
+    })).rejects.toThrow(/recovery required/i)
+
+    expect(await readFile(join(recoveryPath, 'icon-0.backup'), 'utf8')).toBe('rescue bytes')
+  })
+
   it('replaces a damaged known icon only when the replacement has already been verified', async () => {
     const { commitIconSyncTransaction, stageTrustedIconReplacement } = await helpers()
     const directory = await temporaryDirectory()
@@ -274,6 +527,8 @@ describe('wiki icon trust anchor helpers', () => {
       temporary: join(stagingDirectory, 'trusted.png'),
       target: join(directory, 'trusted.png'),
       replaceExisting: true,
+      outputDirectory: directory,
+      stagingDirectory,
       expected,
       download: (temporary: string) => writeFile(temporary, replacement),
     })
@@ -281,6 +536,8 @@ describe('wiki icon trust anchor helpers', () => {
     await commitIconSyncTransaction({
       pendingRenames: [pending],
       manifestPath,
+      manifestDirectory: directory,
+      outputDirectory: directory,
       stagingDirectory,
       serializedManifest: '{"trusted":"next"}\n',
       manifestChanged: false,
@@ -306,6 +563,8 @@ describe('wiki icon trust anchor helpers', () => {
       temporary,
       target,
       replaceExisting: true,
+      outputDirectory: directory,
+      stagingDirectory,
       expected: {
         bytes: trusted.length,
         sha256: createHash('sha256').update(trusted).digest('hex'),
@@ -340,6 +599,8 @@ describe('wiki icon trust anchor helpers', () => {
     await expect(commitIconSyncTransaction({
       pendingRenames: [first, second],
       manifestPath,
+      manifestDirectory: directory,
+      outputDirectory: directory,
       stagingDirectory,
       serializedManifest: '{"trusted":"next"}\n',
       manifestChanged: false,
@@ -383,6 +644,8 @@ describe('wiki icon trust anchor helpers', () => {
       await expect(commitIconSyncTransaction({
         pendingRenames: [pending],
         manifestPath,
+        manifestDirectory: directory,
+        outputDirectory: directory,
         stagingDirectory,
         serializedManifest: '{"trusted":"next"}\n',
         manifestChanged: true,
@@ -422,6 +685,8 @@ describe('wiki icon trust anchor helpers', () => {
     await expect(commitIconSyncTransaction({
       pendingRenames: [pending],
       manifestPath,
+      manifestDirectory: directory,
+      outputDirectory: directory,
       stagingDirectory,
       serializedManifest: '{"trusted":"next"}\n',
       manifestChanged: false,
