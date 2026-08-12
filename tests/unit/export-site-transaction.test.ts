@@ -435,6 +435,59 @@ describe('atomic static-site export', () => {
     expect(await readFile(join(target, 'old-only.txt'), 'utf8')).toBe('trusted old artifact')
   })
 
+  it('recovers a dead copying-phase transaction only when the untouched target identity matches', async () => {
+    const { artifactIdentity, exportSiteAtomically } = await helpers()
+    const root = await temporaryDirectory()
+    const source = await createSource(root)
+    const target = await createOldTarget(root)
+    const staging = join(dirname(target), '.github-pages.staging-copying')
+    const backup = join(dirname(target), '.github-pages.backup-copying')
+    await mkdir(staging)
+    await writeFile(join(staging, 'partial.txt'), 'partial copy')
+    const oldTargetIdentity = await artifactIdentity(target)
+    const lock = await createTransactionLock(target, {
+      token: 'copying', pid: 4646, startedAt: '2026-08-13T00:00:00.000Z', target, staging, backup,
+      phase: 'copying', oldTargetIdentity,
+    })
+
+    await expect(exportSiteAtomically({
+      source,
+      target,
+      buildInfo: buildInfo(),
+      isProcessAlive: () => false,
+      operations: { cp: async () => { throw new Error('continued after copying recovery') } },
+    })).rejects.toThrow(/continued after copying recovery/i)
+
+    expect(await readFile(join(target, 'old-only.txt'), 'utf8')).toBe('trusted old artifact')
+    await expect(stat(staging)).rejects.toMatchObject({ code: 'ENOENT' })
+    await expect(stat(lock)).rejects.toMatchObject({ code: 'ENOENT' })
+  })
+
+  it('preserves a dead copying-phase lock when the old target identity changed', async () => {
+    const { artifactIdentity, exportSiteAtomically } = await helpers()
+    const root = await temporaryDirectory()
+    const source = await createSource(root)
+    const target = await createOldTarget(root)
+    const staging = join(dirname(target), '.github-pages.staging-copying')
+    const backup = join(dirname(target), '.github-pages.backup-copying')
+    const oldTargetIdentity = await artifactIdentity(target)
+    await writeFile(join(target, 'old-only.txt'), 'externally changed artifact')
+    await mkdir(staging)
+    await writeFile(join(staging, 'partial.txt'), 'partial copy')
+    const lock = await createTransactionLock(target, {
+      token: 'copying', pid: 4646, startedAt: '2026-08-13T00:00:00.000Z', target, staging, backup,
+      phase: 'copying', oldTargetIdentity,
+    })
+
+    await expect(exportSiteAtomically({
+      source, target, buildInfo: buildInfo(), isProcessAlive: () => false,
+    })).rejects.toThrow(/identity|changed|ambiguous|refus/i)
+
+    expect(await readFile(join(target, 'old-only.txt'), 'utf8')).toBe('externally changed artifact')
+    await expect(stat(staging)).rejects.toMatchObject({ code: 'ENOENT' })
+    expect(await stat(lock)).toMatchObject({})
+  })
+
   it('recovers the unique old backup from a dead transaction before starting', async () => {
     const { exportSiteAtomically } = await helpers()
     const root = await temporaryDirectory()

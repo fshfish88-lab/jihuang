@@ -87,6 +87,24 @@ function snapshotsMatch(expected, actual) {
   return expected.length === actual.length && expected.every((entry, index) => entry === actual[index])
 }
 
+export async function artifactIdentity(path, operationOverrides = {}) {
+  const operations = { ...defaultOperations, ...operationOverrides }
+  if (!await pathExists(path, operations)) return { exists: false }
+  await requireDirectory(path, operations, 'Artifact identity target')
+  const snapshot = await snapshotDirectory(path, operations)
+  return {
+    exists: true,
+    entries: snapshot.length,
+    sha256: createHash('sha256').update(JSON.stringify(snapshot)).digest('hex'),
+  }
+}
+
+function identitiesMatch(left, right) {
+  return Boolean(left && right)
+    && left.exists === right.exists
+    && (!left.exists || (left.entries === right.entries && left.sha256 === right.sha256))
+}
+
 function defaultIsProcessAlive(pid) {
   try {
     process.kill(pid, 0)
@@ -147,6 +165,15 @@ async function recoverDeadTransaction({ lock, target, operations, isProcessAlive
   const backupNames = (await operations.readdir(parent)).filter(name => name.startsWith(backupPrefix))
   const targetExists = await pathExists(target, operations)
   const stagingExists = await pathExists(journal.staging, operations)
+  if (['prepared', 'copying'].includes(journal.phase) && backupNames.length === 0) {
+    if (stagingExists) await operations.rm(journal.staging, { recursive: true, force: true })
+    const currentIdentity = await artifactIdentity(target, operations)
+    if (!identitiesMatch(journal.oldTargetIdentity, currentIdentity)) {
+      throw new Error(`Dead ${journal.phase}-phase export target identity changed; preserving target and lock: ${lock}`)
+    }
+    await operations.rm(lock, { recursive: true })
+    return
+  }
   if (targetExists && journal.phase === 'cleanup' && backupNames.length === 0 && !stagingExists) {
     await verifyCompletedExportTarget(target, operations)
     await operations.rm(lock, { recursive: true })
@@ -294,6 +321,9 @@ export async function exportSiteAtomically({
     await acquireTransactionLock({ lock, journal, target, operations, isProcessAlive })
     lockAcquired = true
 
+    journal.oldTargetIdentity = await artifactIdentity(target, operations)
+    journal.phase = 'prepared'
+    await writeJournal(lock, journal, operations)
     journal.phase = 'copying'
     await writeJournal(lock, journal, operations)
     await operations.mkdir(staging)
@@ -332,6 +362,10 @@ export async function exportSiteAtomically({
     }
 
     if (await pathExists(target, operations)) {
+      const currentTargetIdentity = await artifactIdentity(target, operations)
+      if (!identitiesMatch(journal.oldTargetIdentity, currentTargetIdentity)) {
+        throw new Error('Static export target changed before backup; refusing to replace externally modified artifact')
+      }
       journal.phase = 'backing-up'
       await writeJournal(lock, journal, operations)
       // On Windows this is a lock-protected, crash-recoverable two-rename exchange.
