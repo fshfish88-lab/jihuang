@@ -146,7 +146,13 @@ async function recoverDeadTransaction({ lock, target, operations, isProcessAlive
   const backupPrefix = `.${basename(target)}.backup-`
   const backupNames = (await operations.readdir(parent)).filter(name => name.startsWith(backupPrefix))
   const targetExists = await pathExists(target, operations)
-  if (await pathExists(journal.staging, operations)) {
+  const stagingExists = await pathExists(journal.staging, operations)
+  if (targetExists && journal.phase === 'cleanup' && backupNames.length === 0 && !stagingExists) {
+    await verifyCompletedExportTarget(target, operations)
+    await operations.rm(lock, { recursive: true })
+    return
+  }
+  if (stagingExists) {
     await operations.rm(journal.staging, { recursive: true, force: true })
   }
   if (!targetExists) {
@@ -158,6 +164,29 @@ async function recoverDeadTransaction({ lock, target, operations, isProcessAlive
     throw new Error(`Dead export recovery is ambiguous because the target still exists; preserving target, backups, and lock: ${lock}`)
   }
   await operations.rm(lock, { recursive: true })
+}
+
+async function verifyCompletedExportTarget(target, operations) {
+  const targetPath = normalizedWindowsPath(target)
+  const manifest = await readAndVerifyBuildManifest(target, {
+    ...operations,
+    readdir: async (path, options) => {
+      const entries = await operations.readdir(path, options)
+      if (normalizedWindowsPath(String(path)) !== targetPath) return entries
+      return entries.filter(entry => (typeof entry === 'string' ? entry : entry.name) !== 'build-info.json')
+    },
+  })
+  let buildInfo
+  try {
+    buildInfo = JSON.parse(await operations.readFile(join(target, 'build-info.json'), 'utf8'))
+  } catch (error) {
+    throw new Error('Completed cleanup-phase target has missing or invalid build-info.json', { cause: error })
+  }
+  if (
+    buildInfo.commit !== manifest.commit
+    || buildInfo.baseURL !== manifest.baseURL
+    || buildInfo.generatedAt !== manifest.generatedAt
+  ) throw new Error('Completed cleanup-phase target build-info does not match its build manifest')
 }
 
 async function acquireTransactionLock({ lock, journal, target, operations, isProcessAlive }) {
@@ -256,6 +285,7 @@ export async function exportSiteAtomically({
   let lockAcquired = false
   let stagingCreated = false
   let backupCreated = false
+  let preserveRecoveryJournal = false
   let primaryError
   let result
 
@@ -270,6 +300,11 @@ export async function exportSiteAtomically({
     stagingCreated = true
     await operations.cp(source, staging, { recursive: true })
 
+    const sourceAfterCopy = await snapshotDirectory(source, operations)
+    if (!snapshotsMatch(sourceSnapshot, sourceAfterCopy)) {
+      throw new Error('Static export source changed while it was being copied')
+    }
+    await readAndVerifyBuildManifest(source, operations)
     const copiedSnapshot = await snapshotDirectory(staging, operations)
     if (!snapshotsMatch(sourceSnapshot, copiedSnapshot)) {
       throw new Error('Staging verification failed: copied files do not match the static export source')
@@ -303,6 +338,7 @@ export async function exportSiteAtomically({
       // Readers that ignore the lock can briefly observe no target; it is not atomic for them.
       await operations.rename(target, backup)
       backupCreated = true
+      preserveRecoveryJournal = true
     }
 
     try {
@@ -315,10 +351,11 @@ export async function exportSiteAtomically({
         try {
           await operations.rename(backup, target)
           backupCreated = false
+          preserveRecoveryJournal = false
         } catch (restoreError) {
           throw new AggregateError(
             [promotionError, restoreError],
-            `Static export promotion failed and the old artifact could not be restored from ${backup}`,
+            `Static export promotion failed; recovery evidence preserved at lock ${lock}, journal ${join(lock, 'transaction.json')}, backup ${backup}`,
           )
         }
       }
@@ -330,6 +367,7 @@ export async function exportSiteAtomically({
       await writeJournal(lock, journal, operations)
       await operations.rm(backup, { recursive: true })
       backupCreated = false
+      preserveRecoveryJournal = false
     }
 
     result = { target, staging, backup, lock }
@@ -344,7 +382,7 @@ export async function exportSiteAtomically({
     }
     // Never remove an unrestored backup: it is the last byte-identical old artifact.
     try {
-      if (lockAcquired) await operations.rm(lock, { recursive: true })
+      if (lockAcquired && !preserveRecoveryJournal) await operations.rm(lock, { recursive: true })
     } catch (error) {
       cleanupErrors.push(error)
     }

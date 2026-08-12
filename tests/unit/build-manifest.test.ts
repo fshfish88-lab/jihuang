@@ -50,6 +50,28 @@ describe('completed-build manifest', () => {
     expect((await readdir(source)).filter(name => name.includes('test-token'))).toEqual([])
   })
 
+  it('includes nested manifest names and stale root temporary manifests as generated files', async () => {
+    const { writeCompletedBuildManifest, readAndVerifyBuildManifest } = await helpers()
+    const source = await temporaryDirectory()
+    await mkdir(join(source, 'nested'))
+    await Promise.all([
+      writeFile(join(source, 'index.html'), 'home'),
+      writeFile(join(source, 'nested', '.campfire-build.json'), 'nested content'),
+      writeFile(join(source, '.campfire-build.json.tmp-stale'), 'stale temp content'),
+    ])
+
+    const manifest = await writeCompletedBuildManifest({
+      source, commit: 'abc123', baseURL: '/', token: 'current-token',
+    })
+
+    expect(manifest.files.map((entry: { path: string }) => entry.path)).toEqual([
+      '.campfire-build.json.tmp-stale',
+      'index.html',
+      'nested/.campfire-build.json',
+    ])
+    expect(await readAndVerifyBuildManifest(source)).toEqual(manifest)
+  })
+
   it('does not publish a completion manifest when its atomic rename fails', async () => {
     const { writeCompletedBuildManifest } = await helpers()
     const source = await temporaryDirectory()

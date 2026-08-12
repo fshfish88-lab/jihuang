@@ -15,7 +15,7 @@ export async function snapshotBuildFiles(root, operations = defaultOperations, c
   const entries = await operations.readdir(current, { withFileTypes: true })
   const files = []
   for (const entry of entries.sort((left, right) => left.name.localeCompare(right.name))) {
-    if (entry.name === BUILD_MANIFEST_NAME || entry.name.startsWith(`${BUILD_MANIFEST_NAME}.tmp-`)) continue
+    if (current === root && entry.name === BUILD_MANIFEST_NAME) continue
     const path = join(current, entry.name)
     if (entry.isDirectory()) {
       files.push(...await snapshotBuildFiles(root, operations, path))

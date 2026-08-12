@@ -214,6 +214,28 @@ describe('atomic static-site export', () => {
     expect(await siblingResidues(target)).toEqual([])
   })
 
+  it('rejects source mutation during copy and preserves the old artifact', async () => {
+    const { exportSiteAtomically } = await helpers()
+    const root = await temporaryDirectory()
+    const source = await createSource(root)
+    const target = await createOldTarget(root)
+
+    await expect(exportSiteAtomically({
+      source,
+      target,
+      buildInfo: buildInfo(),
+      operations: {
+        cp: async (...args: Parameters<typeof cp>) => {
+          await cp(...args)
+          await writeFile(join(source, 'index.html'), '<h1>changed while copying</h1>')
+        },
+      },
+    })).rejects.toThrow(/source|changed|snapshot|manifest/i)
+
+    expect(await readFile(join(target, 'index.html'), 'utf8')).toContain('old home')
+    expect(await readFile(join(target, 'old-only.txt'), 'utf8')).toBe('trusted old artifact')
+  })
+
   it('preserves the old artifact when build-info writing fails', async () => {
     const { exportSiteAtomically } = await helpers()
     const root = await temporaryDirectory()
@@ -321,14 +343,31 @@ describe('atomic static-site export', () => {
     }
 
     const backup = join(dirname(target), '.github-pages.backup-rollback-failure')
+    const lock = join(dirname(target), '.github-pages.export.lock')
     expect(caught).toBeInstanceOf(AggregateError)
     expect((caught as Error).message).toMatch(/backup-rollback-failure/i)
+    expect((caught as Error).message).toMatch(/export\.lock|transaction\.json/i)
     expect((caught as AggregateError).errors.map(error => (error as Error).message)).toEqual([
       'primary promotion failure',
       'secondary restore failure',
     ])
     expect(await readFile(join(backup, 'old-only.txt'), 'utf8')).toBe('trusted old artifact')
+    expect(JSON.parse(await readFile(join(lock, 'transaction.json'), 'utf8'))).toMatchObject({
+      token: 'rollback-failure',
+      phase: 'promoting',
+      backup,
+    })
     await expect(stat(target)).rejects.toMatchObject({ code: 'ENOENT' })
+
+    await expect(exportSiteAtomically({
+      source,
+      target,
+      buildInfo: buildInfo(),
+      isProcessAlive: () => false,
+      operations: { cp: async () => { throw new Error('stop after journal recovery') } },
+    })).rejects.toThrow(/stop after journal recovery/i)
+    expect(await readFile(join(target, 'old-only.txt'), 'utf8')).toBe('trusted old artifact')
+    await expect(stat(lock)).rejects.toMatchObject({ code: 'ENOENT' })
   })
 
   it('replaces the artifact only after a verified staging copy is complete', async () => {
@@ -421,6 +460,58 @@ describe('atomic static-site export', () => {
     expect(await readFile(join(target, 'old-only.txt'), 'utf8')).toBe('trusted old artifact')
     await expect(stat(staging)).rejects.toMatchObject({ code: 'ENOENT' })
     await expect(stat(lock)).rejects.toMatchObject({ code: 'ENOENT' })
+  })
+
+  it('accepts a completed cleanup-phase target, removes the dead lock, and continues', async () => {
+    const { exportSiteAtomically } = await helpers()
+    const root = await temporaryDirectory()
+    const source = await createSource(root)
+    const target = join(root, '成品文件', 'github-pages')
+    await mkdir(dirname(target), { recursive: true })
+    await cp(source, target, { recursive: true })
+    await writeFile(join(target, 'build-info.json'), `${JSON.stringify({
+      ...buildInfo(), commit: 'generated-commit', baseURL: '/jihuang/', generatedAt: '2026-08-13T00:00:00.000Z',
+    })}\n`)
+    const staging = join(dirname(target), '.github-pages.staging-cleanup')
+    const backup = join(dirname(target), '.github-pages.backup-cleanup')
+    const lock = await createTransactionLock(target, {
+      token: 'cleanup', pid: 4545, startedAt: '2026-08-13T00:00:00.000Z', target, staging, backup, phase: 'cleanup',
+    })
+
+    await expect(exportSiteAtomically({
+      source,
+      target,
+      buildInfo: buildInfo(),
+      isProcessAlive: () => false,
+      operations: { cp: async () => { throw new Error('continued after completed cleanup') } },
+    })).rejects.toThrow(/continued after completed cleanup/i)
+
+    await expect(stat(lock)).rejects.toMatchObject({ code: 'ENOENT' })
+    expect(await readFile(join(target, 'index.html'), 'utf8')).toContain('new home')
+  })
+
+  it('preserves a cleanup-phase lock when the target no longer matches its build manifest', async () => {
+    const { exportSiteAtomically } = await helpers()
+    const root = await temporaryDirectory()
+    const source = await createSource(root)
+    const target = join(root, '成品文件', 'github-pages')
+    await mkdir(dirname(target), { recursive: true })
+    await cp(source, target, { recursive: true })
+    await writeFile(join(target, 'build-info.json'), `${JSON.stringify({
+      ...buildInfo(), commit: 'generated-commit', baseURL: '/jihuang/', generatedAt: '2026-08-13T00:00:00.000Z',
+    })}\n`)
+    await writeFile(join(target, 'index.html'), 'tampered after promotion')
+    const staging = join(dirname(target), '.github-pages.staging-cleanup')
+    const backup = join(dirname(target), '.github-pages.backup-cleanup')
+    const lock = await createTransactionLock(target, {
+      token: 'cleanup', pid: 4545, startedAt: '2026-08-13T00:00:00.000Z', target, staging, backup, phase: 'cleanup',
+    })
+
+    await expect(exportSiteAtomically({
+      source, target, buildInfo: buildInfo(), isProcessAlive: () => false,
+    })).rejects.toThrow(/ambiguous|manifest|match|refus/i)
+
+    expect(await stat(lock)).toMatchObject({})
   })
 
   it('preserves ambiguous dead-transaction backups and refuses recovery', async () => {
