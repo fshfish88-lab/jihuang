@@ -46,6 +46,29 @@ function recoveryAggregate(primary, secondary, message, recoveryPaths = []) {
   return aggregate
 }
 
+async function writeJsonAtomically(path, value, fs, label = 'state') {
+  const temporary = resolveContainedPath(dirname(path), `${path.split(/[\\/]/).pop()}.${label}-${randomUUID()}`)
+  let primaryError
+  try {
+    await fs.writeFile(temporary, `${JSON.stringify(value, null, 2)}\n`, 'utf8')
+    await fs.rename(temporary, path)
+  } catch (error) {
+    primaryError = error
+    throw error
+  } finally {
+    try {
+      await fs.unlink(temporary)
+    } catch (cleanupError) {
+      if (cleanupError.code !== 'ENOENT') {
+        if (primaryError) {
+          throw recoveryAggregate(primaryError, [cleanupError], `${label} update and cleanup failed: ${primaryError.message}`)
+        }
+        throw cleanupError
+      }
+    }
+  }
+}
+
 export function validateIconBytes(bytes, expected, label) {
   if (bytes.length < 100) throw new Error(`${label}: image is too small (${bytes.length} bytes)`)
   if (!bytes.subarray(0, PNG_SIGNATURE.length).equals(PNG_SIGNATURE)) {
@@ -195,6 +218,28 @@ async function recoverDeadOwner(lockPath, rawOwner, owner, fs, allowedRoots) {
     ...(state.entries || []).map(entry => ({ kind: 'icon', ...entry })),
     ...(state.manifest ? [{ kind: 'manifest', ...state.manifest }] : [])
   ]
+  const phase = state.phase || 'prepared'
+  if (phase === 'manifest-committed' || phase === 'cleanup') {
+    for (const record of records) {
+      const target = resolveWithinAnyRoot(record.target, allowedRoots)
+      if (!await pathExists(target, fs)) {
+        throw new Error(`committed recovery target is missing: ${target}; preserving ${recoveryPath}`)
+      }
+      const actualSha256 = createHash('sha256').update(await fs.readFile(target)).digest('hex')
+      if (actualSha256 !== record.promotedSha256) {
+        throw new Error(`committed recovery target SHA differs from promoted SHA: ${target}; preserving ${recoveryPath}`)
+      }
+    }
+    const currentBeforeCleanup = await fs.readFile(lockPath, 'utf8')
+    if (currentBeforeCleanup !== rawOwner) throw new Error('stale lock changed before committed cleanup; refusing takeover')
+    await fs.unlink(lockPath)
+    await fs.rm(recoveryPath, { recursive: true, force: true })
+    return
+  }
+  if (!['prepared', 'promoted'].includes(phase)) {
+    throw new Error(`unknown recovery phase ${phase}; preserving ${recoveryPath}`)
+  }
+
   const actions = []
   for (const record of records) {
     const target = resolveWithinAnyRoot(record.target, allowedRoots)
@@ -231,7 +276,10 @@ async function recoverDeadOwner(lockPath, rawOwner, owner, fs, allowedRoots) {
     if (!targetExists && backupExists) {
       actions.push({ type: 'restore', backup, target })
     } else if (targetExists && !backupExists) {
-      continue
+      if (state.version < 3) continue
+      const actualSha256 = createHash('sha256').update(await fs.readFile(target)).digest('hex')
+      if (record.oldSha256 && actualSha256 === record.oldSha256) continue
+      throw new Error(`ambiguous recovery for ${record.kind}: existing target is neither safely backed up nor unchanged; preserving ${recoveryPath}`)
     } else if (targetExists && backupExists) {
       const actualSha256 = createHash('sha256').update(await fs.readFile(target)).digest('hex')
       if (actualSha256 !== record.promotedSha256) {
@@ -252,8 +300,8 @@ async function recoverDeadOwner(lockPath, rawOwner, owner, fs, allowedRoots) {
   }
   const current = await fs.readFile(lockPath, 'utf8')
   if (current !== rawOwner) throw new Error('stale lock changed during recovery; refusing takeover')
-  await fs.rm(recoveryPath, { recursive: true, force: true })
   await fs.unlink(lockPath)
+  await fs.rm(recoveryPath, { recursive: true, force: true })
 }
 
 export async function acquireIconSyncLock(lockPath, options = {}) {
@@ -445,20 +493,28 @@ export async function commitIconSyncTransaction({
       }
       state.existedBefore = exists
       state.promotedSha256 = createHash('sha256').update(await fs.readFile(state.temporary)).digest('hex')
+      state.oldSha256 = exists
+        ? createHash('sha256').update(await fs.readFile(state.target)).digest('hex')
+        : null
     }
 
     const recoveryState = {
-      version: 2,
+      version: 3,
+      phase: 'prepared',
       entries: states.map(state => ({
         target: state.target,
         backup: state.replaceExisting ? state.backup : null,
         existedBefore: state.existedBefore,
+        oldSha256: state.oldSha256,
         promotedSha256: state.promotedSha256
       })),
       manifest: manifestChanged ? {
         target: safeManifest,
         backup: manifestBackup,
         existedBefore: await pathExists(safeManifest, fs),
+        oldSha256: await pathExists(safeManifest, fs)
+          ? createHash('sha256').update(await fs.readFile(safeManifest)).digest('hex')
+          : null,
         promotedSha256: createHash('sha256').update(serializedManifest).digest('hex')
       } : null
     }
@@ -466,7 +522,7 @@ export async function commitIconSyncTransaction({
     if (manifestChanged) {
       await fs.writeFile(manifestTemporary, serializedManifest, 'utf8')
     }
-    await fs.writeFile(recoveryStatePath, JSON.stringify(recoveryState, null, 2), 'utf8')
+    await writeJsonAtomically(recoveryStatePath, recoveryState, fs, 'state')
 
     for (const state of states) {
       if (state.replaceExisting) {
@@ -476,6 +532,8 @@ export async function commitIconSyncTransaction({
       await fs.rename(state.temporary, state.target)
       state.promoted = true
     }
+    recoveryState.phase = 'promoted'
+    await writeJsonAtomically(recoveryStatePath, recoveryState, fs, 'state')
 
     if (manifestChanged) {
       await fs.rename(safeManifest, manifestBackup)
@@ -483,6 +541,10 @@ export async function commitIconSyncTransaction({
       await fs.rename(manifestTemporary, safeManifest)
       manifestPromoted = true
     }
+    recoveryState.phase = 'manifest-committed'
+    await writeJsonAtomically(recoveryStatePath, recoveryState, fs, 'state')
+    recoveryState.phase = 'cleanup'
+    await writeJsonAtomically(recoveryStatePath, recoveryState, fs, 'state')
     transactionSucceeded = true
   } catch (error) {
     primaryError = error
