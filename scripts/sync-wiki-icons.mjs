@@ -12,6 +12,40 @@ const materialDir = join(root, '素材文件', '物品图标')
 const mirrorBase = 'https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items'
 const execFileAsync = promisify(execFile)
 const sourceOverrides = {
+  'bee-queen': 'https://dontstarve.wiki.gg/wiki/Special:Redirect/file/Bee_Queen.png',
+  'malbatross': 'https://dontstarve.wiki.gg/wiki/Special:Redirect/file/Malbatross.png',
+  'crab-king': 'https://dontstarve.wiki.gg/wiki/Special:Redirect/file/Crab_King.png',
+  'twins-of-terror': 'https://dontstarve.wiki.gg/images/Retinazor.png?6e12b3',
+  'cave-entrance': 'https://dontstarve.wiki.gg/images/Sinkhole.png?ef9ea5',
+  'klaus': 'https://dontstarve.wiki.gg/wiki/Special:Redirect/file/Klaus.png',
+  'toadstool': 'https://dontstarve.wiki.gg/wiki/Special:Redirect/file/Toadstool.png',
+  'ancient-fuelweaver': 'https://dontstarve.wiki.gg/wiki/Special:Redirect/file/Ancient_Fuelweaver.png',
+  'eye-of-terror': 'https://dontstarve.wiki.gg/images/Eye_of_Terror_Phase_1.png?1e50f7',
+  'ruins': 'https://dontstarve.wiki.gg/images/Ruins_Entrance.png?4b188f',
+  'depth-worm': 'https://dontstarve.wiki.gg/wiki/Special:Redirect/file/Depths_Worm.png',
+  'bunnyman': 'https://dontstarve.wiki.gg/wiki/Special:Redirect/file/Bunnyman.png',
+  'splumonkey': 'https://dontstarve.wiki.gg/wiki/Special:Redirect/file/Splumonkey.png',
+  'ancient-guardian': 'https://dontstarve.wiki.gg/wiki/Special:Redirect/file/Ancient_Guardian.png',
+  'ancient-pseudoscience-station': 'https://dontstarve.wiki.gg/wiki/Special:Redirect/file/Ancient_Pseudoscience_Station.png',
+  'celestial-portal': 'https://dontstarve.wiki.gg/images/Celestial_Portal.png?b13281',
+  'celestial-altar': 'https://dontstarve.wiki.gg/images/Celestial_Altar.png?6223d1',
+  'deadly-brightshade': 'https://dontstarve.wiki.gg/images/Deadly_Brightshade.png?7e4470',
+  'grazer': 'https://dontstarve.wiki.gg/wiki/Special:Redirect/file/Grazer.png',
+  'lunar-rift': 'https://dontstarve.wiki.gg/images/Lunar_Rift_Phase_3.png?2baa26',
+  'celestial-champion': 'https://dontstarve.wiki.gg/images/Celestial_Champion_Phase_3.png?18cdc3',
+  'lunar-island': 'https://dontstarve.wiki.gg/images/Lunar_Island.png?a901f4',
+  'cookie-cutter': 'https://dontstarve.wiki.gg/images/Cookie_Cutter.png?725d8d',
+  'deerclops': 'https://dontstarve.wiki.gg/wiki/Special:Redirect/file/Deerclops.png',
+  'antlion': 'https://dontstarve.wiki.gg/wiki/Special:Redirect/file/Antlion.png',
+  'bearger': 'https://dontstarve.wiki.gg/wiki/Special:Redirect/file/Bearger.png',
+  'dragonfly': 'https://dontstarve.wiki.gg/wiki/Special:Redirect/file/Dragonfly.png',
+  'shadow-rift': 'https://dontstarve.wiki.gg/images/Shadow_Rift_Phase_3.png?55d45c',
+  'moose-goose': 'https://dontstarve.wiki.gg/images/Goose.png?6fad68',
+  'waymark-compass': 'https://dontstarve.wiki.gg/images/Waymark_Compass.png?ffd7f3',
+  'sanctum': 'https://dontstarve.wiki.gg/images/Sanctum_Icon.png?c3d611',
+  'ancient-guard-tower': 'https://dontstarve.wiki.gg/images/Ancient_Guard_Tower.png?c3ea50',
+  'geothermite': 'https://dontstarve.wiki.gg/images/Geothermite.png?a79ca6',
+  'keystone': 'https://dontstarve.wiki.gg/images/Keystone.png?efda91',
   hound: 'https://dontstarve.wiki.gg/wiki/Special:Redirect/file/Hound.png',
   pigman: 'https://dontstarve.wiki.gg/images/Happy_Pigman_Profile_Icon.png?82354d&20230728040734',
   frog: 'https://dontstarve.wiki.gg/wiki/Special:Redirect/file/Frog.png',
@@ -32,10 +66,14 @@ const sourceFiles = (await readdir(dataDir))
 const entries = []
 for (const name of sourceFiles) {
   const text = await readFile(join(dataDir, name), 'utf8')
-  const pattern = /\bslug:\s*'([^']+)'([\s\S]*?)\btitle:\s*'([^']+)'/g
-  for (const match of text.matchAll(pattern)) {
-    const [, slug, middle, title] = match
-    const prefab = middle.match(/\bprefab:\s*'([^']+)'/)?.[1] || slug
+  const starts = [...text.matchAll(/^  (?:[A-Za-z]\w*\()?\{\s*(?:\r?\n\s*)?slug:\s*'([^']+)'/gm)]
+  for (let index = 0; index < starts.length; index += 1) {
+    const match = starts[index]
+    const slug = match[1]
+    const block = text.slice(match.index, starts[index + 1]?.index || text.length)
+    const title = block.match(/\btitle:\s*'([^']+)'/)?.[1]
+    if (!title) continue
+    const prefab = block.match(/\bprefab:\s*'([^']+)'/)?.[1] || slug
     entries.push({ slug, prefab, title, sourceFile: name })
   }
 }
@@ -103,7 +141,7 @@ async function download(entry) {
     } catch (error) {
       lastError = error
       await unlink(temporary).catch(() => {})
-      await new Promise(resolve => setTimeout(resolve, attempt * 500))
+      await new Promise(resolve => setTimeout(resolve, attempt * 2000))
     }
   }
   errors.push(`${entry.slug} (${entry.prefab}.png): ${lastError.message}`)
@@ -123,12 +161,12 @@ function manifestEntry(entry, url, bytes) {
     mirror: fromWiki ? 'dontstarve.wiki.gg' : 'fankimm/dst-craft',
     sha256: createHash('sha256').update(bytes).digest('hex'),
     bytes: bytes.length,
-    verifiedAt: '2026-07-31'
+    verifiedAt: '2026-08-08'
   }
 }
 
-for (let index = 0; index < unique.length; index += 8) {
-  await Promise.all(unique.slice(index, index + 8).map(download))
+for (let index = 0; index < unique.length; index += 3) {
+  await Promise.all(unique.slice(index, index + 3).map(download))
 }
 
 manifest.sort((a, b) => a.slug.localeCompare(b.slug))

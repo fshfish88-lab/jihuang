@@ -7,6 +7,86 @@ const common = {
   version: '2026.07'
 }
 
+const advancedCommon = {
+  updatedAt: '2026-08-08',
+  version: '2026.08'
+}
+
+const advancedProgressionEntries: GuideEntry[] = [
+  {
+    ...advancedCommon,
+    slug: 'seasonal-cycle',
+    title: '四季循环进阶路线',
+    kind: 'progression',
+    description: '把保暖、防雨、降温和四季巨兽预案串成可重复的年度循环。',
+    stage: '第一个完整年度',
+    tags: ['主线', '四季', '季节 Boss'],
+    aliases: ['四季路线', '春夏秋冬', '季节循环'],
+    image: '/images/official/hero.jpg',
+    imageAlt: '饥荒联机版四季荒野'
+  },
+  {
+    ...advancedCommon,
+    slug: 'ruins-expedition',
+    title: '遗迹远征进阶路线',
+    kind: 'progression',
+    description: '从洞穴补给点到完整远古科技与守护者战利品的可撤退远征。',
+    stage: '稳定基地后',
+    tags: ['主线', '洞穴', '遗迹'],
+    aliases: ['遗迹远征', '下洞路线', '远古科技'],
+    image: '/images/official/toad-battle.jpg',
+    imageAlt: '饥荒联机版洞穴战斗'
+  },
+  {
+    ...advancedCommon,
+    slug: 'ocean-lunar-expedition',
+    title: '航海与月岛远征',
+    kind: 'progression',
+    description: '从船体配置、海上应急到月岛定位、资源搬运和安全返航。',
+    stage: '航海中期',
+    tags: ['主线', '航海', '月岛'],
+    aliases: ['月岛远征', '航海路线', '找月岛'],
+    image: '/images/official/boat.jpg',
+    imageAlt: '饥荒联机版角色乘船航海'
+  },
+  {
+    ...advancedCommon,
+    slug: 'boss-logistics',
+    title: 'Boss 战备与后勤',
+    kind: 'progression',
+    description: '用场地、护甲、武器、恢复和撤退阈值建立可复用的 Boss 战备体系。',
+    stage: '中后期战斗',
+    tags: ['主线', 'Boss', '后勤'],
+    aliases: ['Boss战备', '打Boss准备', '战斗后勤'],
+    image: '/images/official/toad-battle.jpg',
+    imageAlt: '饥荒联机版大型 Boss 战斗'
+  },
+  {
+    ...advancedCommon,
+    slug: 'celestial-lunar-rift',
+    title: '天体与月亮裂隙路线',
+    kind: 'progression',
+    description: '完成天体英雄、开启月亮裂隙并建立亮茄材料与装备循环。',
+    stage: '天体后期',
+    tags: ['主线', '天体', '月亮裂隙'],
+    aliases: ['天体裂隙', '亮茄路线', '月亮阵营'],
+    image: '/images/official/shadow.jpg',
+    imageAlt: '饥荒联机版天体与暗影场景'
+  },
+  {
+    ...advancedCommon,
+    slug: 'shadow-sanctum',
+    title: '暗影裂隙与远古圣所',
+    kind: 'progression',
+    description: '从织影者、暗影裂隙推进到圣所导航、守卫塔和钥石撤离。',
+    stage: '暗影终局与 2026 圣所',
+    tags: ['主线', '暗影', '圣所'],
+    aliases: ['暗影圣所', 'Sanctum', '钥石路线'],
+    image: '/images/official/shadow.jpg',
+    imageAlt: '饥荒联机版暗影遗迹场景'
+  }
+]
+
 const legacyGuideEntries: GuideEntry[] = [
   {
     ...common,
@@ -521,6 +601,7 @@ const legacyGuideEntries: GuideEntry[] = [
 
 export const guideEntries: GuideEntry[] = [
   ...legacyGuideEntries.filter(entry => entry.kind !== 'wiki'),
+  ...advancedProgressionEntries,
   ...wikiEntries.map(entry => ({
     slug: entry.slug,
     title: entry.title,

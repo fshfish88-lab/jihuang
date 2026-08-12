@@ -24,7 +24,7 @@ export interface ImageCredit {
 }
 
 export interface IngredientAmount {
-  slug: string
+  slug?: string
   name: string
   amount: number
 }

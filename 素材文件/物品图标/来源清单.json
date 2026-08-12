@@ -1,8 +1,8 @@
 {
   "title": "火堆边百科物品图标来源清单",
   "note": "图标为 Klei Entertainment 游戏素材；本站为免费、非官方玩家攻略站。下载镜像仅用于取得对应原版图标。",
-  "generatedAt": "2026-07-31T09:57:58.507Z",
-  "count": 168,
+  "generatedAt": "2026-08-12T14:21:21.858Z",
+  "count": 258,
   "entries": [
     {
       "slug": "alchemy-engine",
@@ -14,7 +14,91 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "6b1e117d51e3913b3381960f045008c00e75cab4754e44e4ed9fb5b132416c22",
       "bytes": 5392,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "anchor",
+      "title": "锚",
+      "file": "public/images/wiki/anchor.png",
+      "sourceUrl": "https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items/anchor_item.png",
+      "sourcePage": "https://github.com/fankimm/dst-craft/blob/main/public/images/game-items/anchor_item.png",
+      "owner": "Klei Entertainment",
+      "mirror": "fankimm/dst-craft",
+      "sha256": "daa9efb88d4a92e4813be270ec11ec49a09cdf45cd4ffbe0677fd2b300598a4d",
+      "bytes": 4765,
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "ancient-fuelweaver",
+      "title": "远古织影者",
+      "file": "public/images/wiki/ancient-fuelweaver.png",
+      "sourceUrl": "https://dontstarve.wiki.gg/wiki/Special:Redirect/file/Ancient_Fuelweaver.png",
+      "sourcePage": "https://dontstarve.wiki.gg/wiki/Special:Redirect/file/Ancient_Fuelweaver.png",
+      "owner": "Klei Entertainment",
+      "mirror": "dontstarve.wiki.gg",
+      "sha256": "a5d07ed5ea8843fa289f17e09b27d5f36c673e5daf135cae1caff6a8dc3a55ef",
+      "bytes": 555091,
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "ancient-guard-tower",
+      "title": "远古守卫塔",
+      "file": "public/images/wiki/ancient-guard-tower.png",
+      "sourceUrl": "https://dontstarve.wiki.gg/images/Ancient_Guard_Tower.png?c3ea50",
+      "sourcePage": "https://dontstarve.wiki.gg/images/Ancient_Guard_Tower.png?c3ea50",
+      "owner": "Klei Entertainment",
+      "mirror": "dontstarve.wiki.gg",
+      "sha256": "ca046c822bc41546cefbc0a69d6b70ac542a1789b12d130257611ac87d0834e8",
+      "bytes": 1092424,
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "ancient-guardian",
+      "title": "远古守护者",
+      "file": "public/images/wiki/ancient-guardian.png",
+      "sourceUrl": "https://dontstarve.wiki.gg/wiki/Special:Redirect/file/Ancient_Guardian.png",
+      "sourcePage": "https://dontstarve.wiki.gg/wiki/Special:Redirect/file/Ancient_Guardian.png",
+      "owner": "Klei Entertainment",
+      "mirror": "dontstarve.wiki.gg",
+      "sha256": "a1a652160c0c0669820b20d62ac616e7118149923cda9114f86bf5a518c62601",
+      "bytes": 44402,
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "ancient-pseudoscience-station",
+      "title": "远古伪科学站",
+      "file": "public/images/wiki/ancient-pseudoscience-station.png",
+      "sourceUrl": "https://dontstarve.wiki.gg/wiki/Special:Redirect/file/Ancient_Pseudoscience_Station.png",
+      "sourcePage": "https://dontstarve.wiki.gg/wiki/Special:Redirect/file/Ancient_Pseudoscience_Station.png",
+      "owner": "Klei Entertainment",
+      "mirror": "dontstarve.wiki.gg",
+      "sha256": "774e094959af34e197eb30fccb004cfc5d99f62b98f41d2173f5d2b91ffad7b2",
+      "bytes": 6389,
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "antlion",
+      "title": "蚁狮",
+      "file": "public/images/wiki/antlion.png",
+      "sourceUrl": "https://dontstarve.wiki.gg/wiki/Special:Redirect/file/Antlion.png",
+      "sourcePage": "https://dontstarve.wiki.gg/wiki/Special:Redirect/file/Antlion.png",
+      "owner": "Klei Entertainment",
+      "mirror": "dontstarve.wiki.gg",
+      "sha256": "af2c94a8092a5d4fad5d23edb56b6a165c4188415fddefc7333f592beaa7968a",
+      "bytes": 374971,
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "ardent-axe",
+      "title": "炽热斧",
+      "file": "public/images/wiki/ardent-axe.png",
+      "sourceUrl": "https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items/fumaroleaxe.png",
+      "sourcePage": "https://github.com/fankimm/dst-craft/blob/main/public/images/game-items/fumaroleaxe.png",
+      "owner": "Klei Entertainment",
+      "mirror": "fankimm/dst-craft",
+      "sha256": "4b9528a33aa38e6a8766136337bf8eec1500b7811399c6a38e090d168b2613db",
+      "bytes": 3886,
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "ash",
@@ -26,7 +110,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "c1d2ddf0a22890befe15c03d3178d0a969bb755d9080eacf81c1150d52ad100a",
       "bytes": 3177,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "axe",
@@ -38,7 +122,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "aaa03895d6ff1d5ba0c5e2d487d286456adeac66ef2da25dcb85a0088d9b8795",
       "bytes": 3287,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "backpack",
@@ -50,7 +134,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "506848b0239a21aa0f82a330b6d9cc138d293f54f016f754d48316fab8c61b48",
       "bytes": 5391,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "bacon-and-eggs",
@@ -62,7 +146,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "2d05c017c821e04ce41a561d7994de599893bee34198c4512b484104a99a3c7d",
       "bytes": 3725,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "barnacles",
@@ -74,7 +158,31 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "5f5ea2f6c1ca7790864e74ee3e241be6b1b12ba11487662581f0c655bd7581eb",
       "bytes": 5041,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "batilisk",
+      "title": "蝙蝠",
+      "file": "public/images/wiki/batilisk.png",
+      "sourceUrl": "https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items/bat.png",
+      "sourcePage": "https://github.com/fankimm/dst-craft/blob/main/public/images/game-items/bat.png",
+      "owner": "Klei Entertainment",
+      "mirror": "fankimm/dst-craft",
+      "sha256": "a7fd3c505db4c9d192c4f503baf3224e7b763015ac9751b093fc30c43119d45d",
+      "bytes": 4291,
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "bearger",
+      "title": "熊獾",
+      "file": "public/images/wiki/bearger.png",
+      "sourceUrl": "https://dontstarve.wiki.gg/wiki/Special:Redirect/file/Bearger.png",
+      "sourcePage": "https://dontstarve.wiki.gg/wiki/Special:Redirect/file/Bearger.png",
+      "owner": "Klei Entertainment",
+      "mirror": "dontstarve.wiki.gg",
+      "sha256": "a742e6ccc751006c347341e2444a3319c76d0be432b652a7d992deefd80d2947",
+      "bytes": 1438201,
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "bee",
@@ -86,7 +194,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "a33abd4eb89e996ab4f80f9209c1bfe748428cca8f10195f23e7b05ed82419f7",
       "bytes": 4010,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "bee-box",
@@ -98,7 +206,31 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "bfae29ed3249c5dcfd6439f1327780ad0cf0f46ec85218fd25824ae76e50003f",
       "bytes": 4786,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "bee-mine",
+      "title": "蜜蜂地雷",
+      "file": "public/images/wiki/bee-mine.png",
+      "sourceUrl": "https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items/beemine.png",
+      "sourcePage": "https://github.com/fankimm/dst-craft/blob/main/public/images/game-items/beemine.png",
+      "owner": "Klei Entertainment",
+      "mirror": "fankimm/dst-craft",
+      "sha256": "ffdcf0e6a5c6760ffb34ed296307f85c295387917656f0515d5701fc131c7571",
+      "bytes": 4921,
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "bee-queen",
+      "title": "蜂后",
+      "file": "public/images/wiki/bee-queen.png",
+      "sourceUrl": "https://dontstarve.wiki.gg/wiki/Special:Redirect/file/Bee_Queen.png",
+      "sourcePage": "https://dontstarve.wiki.gg/wiki/Special:Redirect/file/Bee_Queen.png",
+      "owner": "Klei Entertainment",
+      "mirror": "dontstarve.wiki.gg",
+      "sha256": "35cd43fca1f93e248b0166ec1f23c87ae216d686dcf56df7f5e993cbf8456544",
+      "bytes": 273021,
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "beefalo",
@@ -110,7 +242,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "b79ce7e0fb13f1b0ed3281dfcfcdc0cce7f1f587e993eb62e77d085dbc665bc0",
       "bytes": 4493,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "beefalo-hat",
@@ -122,7 +254,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "065325b217f03f3d22f199e850e7180009ddb0d649a3b50920417f7480fdc096",
       "bytes": 4641,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "beefalo-horn",
@@ -134,7 +266,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "ee23abbd7eb5bd2bb47c54cffd919ac372092060ed8984558b91b41fe461c9f1",
       "bytes": 4725,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "beefalo-wool",
@@ -146,7 +278,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "ad878c2c3a09a4be329b0f3a018de6e8c5c55a787bf244ce59d9affcfe443215",
       "bytes": 4595,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "berries",
@@ -158,7 +290,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "f2d73203434eea8f43e1e03ec30e751ae00588efabd1ee95527f889793ec82b3",
       "bytes": 2494,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "birchnut",
@@ -170,7 +302,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "ed8e9e9c13c9085591500e96b0ae9bb9fe80a7fb6893749d9d91f80a5bc6cfda",
       "bytes": 3649,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "bird-trap",
@@ -182,7 +314,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "635cce9368978a468e818b26de55717f9848cfa03e53231156157cf4b7f8db11",
       "bytes": 6803,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "birdcage",
@@ -194,7 +326,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "4139e73474fc91db5b4493e6f05ee384fb7e94b47dc536ade25afbc7edffcbf8",
       "bytes": 4720,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "blue-gem",
@@ -206,7 +338,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "20bd3f5790c5901c4245d99016825bedc4788fd94cfb51433f7705bc18ccab0b",
       "bytes": 4023,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "boards",
@@ -218,7 +350,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "e41d12391e1bc1bb7388901287b72121851519ea0e032adc9fdd2073a14acee6",
       "bytes": 4633,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "boat-kit",
@@ -230,7 +362,31 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "c174e89ed0c03a6b05ae9ca25a7d13abba6b33adb1caab592fe5e0680e9fbd68",
       "bytes": 4988,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "boat-lantern",
+      "title": "甲板照明灯",
+      "file": "public/images/wiki/boat-lantern.png",
+      "sourceUrl": "https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items/mastupgrade_lamp_item.png",
+      "sourcePage": "https://github.com/fankimm/dst-craft/blob/main/public/images/game-items/mastupgrade_lamp_item.png",
+      "owner": "Klei Entertainment",
+      "mirror": "fankimm/dst-craft",
+      "sha256": "181cdda3047b34f443f63ee318b3f40f8fe9f95be8bd80d78dab541775be8478",
+      "bytes": 4531,
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "boat-patch",
+      "title": "船补丁",
+      "file": "public/images/wiki/boat-patch.png",
+      "sourceUrl": "https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items/boatpatch.png",
+      "sourcePage": "https://github.com/fankimm/dst-craft/blob/main/public/images/game-items/boatpatch.png",
+      "owner": "Klei Entertainment",
+      "mirror": "fankimm/dst-craft",
+      "sha256": "c843d14134808a0c267fe23af82603304fd53a67d65c76c3dbbc2815c8b2760e",
+      "bytes": 5496,
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "bone-shards",
@@ -242,7 +398,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "e95adf6bfadc1526bdc1311dcaa0b343d700c5616d8a32c4702461dc40ecb6c0",
       "bytes": 2994,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "booster-shot",
@@ -254,7 +410,79 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "849916e1abfef0d8d9e7144e08c09138f486ebb2661888fc8b0fc57baedea1be",
       "bytes": 3542,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "brightshade-armour",
+      "title": "亮茄盔甲",
+      "file": "public/images/wiki/brightshade-armour.png",
+      "sourceUrl": "https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items/armor_lunarplant.png",
+      "sourcePage": "https://github.com/fankimm/dst-craft/blob/main/public/images/game-items/armor_lunarplant.png",
+      "owner": "Klei Entertainment",
+      "mirror": "fankimm/dst-craft",
+      "sha256": "0ce45c8fdcc5a653396f4246c78a72300060612d141de302313304f19deb2b18",
+      "bytes": 4820,
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "brightshade-bomb",
+      "title": "亮茄炸弹",
+      "file": "public/images/wiki/brightshade-bomb.png",
+      "sourceUrl": "https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items/bomb_lunarplant.png",
+      "sourcePage": "https://github.com/fankimm/dst-craft/blob/main/public/images/game-items/bomb_lunarplant.png",
+      "owner": "Klei Entertainment",
+      "mirror": "fankimm/dst-craft",
+      "sha256": "4dc04cf06460216043efd4548bf583b905f2fba847b3458990c0a287a6ae3f2a",
+      "bytes": 5247,
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "brightshade-helm",
+      "title": "亮茄头盔",
+      "file": "public/images/wiki/brightshade-helm.png",
+      "sourceUrl": "https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items/lunarplanthat.png",
+      "sourcePage": "https://github.com/fankimm/dst-craft/blob/main/public/images/game-items/lunarplanthat.png",
+      "owner": "Klei Entertainment",
+      "mirror": "fankimm/dst-craft",
+      "sha256": "f6f2ce44c595ad48a3dbc569906ee1f9dbe8b2e548c1c60e0d236963a0ab00df",
+      "bytes": 6141,
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "brightshade-husk",
+      "title": "亮茄外壳",
+      "file": "public/images/wiki/brightshade-husk.png",
+      "sourceUrl": "https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items/lunarplant_husk.png",
+      "sourcePage": "https://github.com/fankimm/dst-craft/blob/main/public/images/game-items/lunarplant_husk.png",
+      "owner": "Klei Entertainment",
+      "mirror": "fankimm/dst-craft",
+      "sha256": "43b967818187e44c6142492db4a289e95f603eab1807e8d4f846c31b0183a520",
+      "bytes": 4942,
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "brightshade-staff",
+      "title": "亮茄魔杖",
+      "file": "public/images/wiki/brightshade-staff.png",
+      "sourceUrl": "https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items/staff_lunarplant.png",
+      "sourcePage": "https://github.com/fankimm/dst-craft/blob/main/public/images/game-items/staff_lunarplant.png",
+      "owner": "Klei Entertainment",
+      "mirror": "fankimm/dst-craft",
+      "sha256": "8ce90deb3221003e240ba3f69b2e63e4092541d90303270d207aacf7fd5ae1d2",
+      "bytes": 3625,
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "brightshade-sword",
+      "title": "亮茄剑",
+      "file": "public/images/wiki/brightshade-sword.png",
+      "sourceUrl": "https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items/sword_lunarplant.png",
+      "sourcePage": "https://github.com/fankimm/dst-craft/blob/main/public/images/game-items/sword_lunarplant.png",
+      "owner": "Klei Entertainment",
+      "mirror": "fankimm/dst-craft",
+      "sha256": "4b2d23081d337b20f30179d79d889075bfa4aceee5a1cb5d2758d20db3fc6ce7",
+      "bytes": 6390,
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "bug-net",
@@ -266,7 +494,19 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "32f886bac4966095a14e67aa71eca2fc23ce9a5f900015fba6432bb3ec0dd4fd",
       "bytes": 6391,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "bunnyman",
+      "title": "兔人",
+      "file": "public/images/wiki/bunnyman.png",
+      "sourceUrl": "https://dontstarve.wiki.gg/wiki/Special:Redirect/file/Bunnyman.png",
+      "sourcePage": "https://dontstarve.wiki.gg/wiki/Special:Redirect/file/Bunnyman.png",
+      "owner": "Klei Entertainment",
+      "mirror": "dontstarve.wiki.gg",
+      "sha256": "95c168ac5bbde256c24daaaa969237803f829cf8d103810e02c85482337b39f1",
+      "bytes": 76450,
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "butter",
@@ -278,7 +518,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "3fdd2a0a752d2ec0a2fe594dc869c709b7c6e0eae1973d27790245b547af7aa8",
       "bytes": 3701,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "butter-muffin",
@@ -290,7 +530,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "02798c873241e5318ce9dc8812867058ea38b32a3c57ababa7a08d73ebd28594",
       "bytes": 4024,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "butterfly-wings",
@@ -302,7 +542,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "f829669449452cccfa4768b3b01e192b6a0c89924ce59a94f906a98c1b095ea1",
       "bytes": 4598,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "cactus-flesh",
@@ -314,7 +554,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "35122f8384badf56b3faa8ead061c6804e74e69e72dde47ec2eb217b2a67a60e",
       "bytes": 3612,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "cactus-flower",
@@ -326,7 +566,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "488e3184ef56e7348b7e747ef71e8cffb92ecc52d2d57ac3de0cabafb3b011c9",
       "bytes": 4296,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "campfire",
@@ -338,7 +578,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "5680c2d550470cf018d792448b2df72923daac0d411a619d16d067672fc1c4ef",
       "bytes": 4271,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "carrot",
@@ -350,7 +590,43 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "6ad4cca878ecd45a35518abb037054d4f8ffb7ee0a801157d4ddf2d9a9e7f3cc",
       "bytes": 3243,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "cave-entrance",
+      "title": "洞穴入口",
+      "file": "public/images/wiki/cave-entrance.png",
+      "sourceUrl": "https://dontstarve.wiki.gg/images/Sinkhole.png?ef9ea5",
+      "sourcePage": "https://dontstarve.wiki.gg/images/Sinkhole.png?ef9ea5",
+      "owner": "Klei Entertainment",
+      "mirror": "dontstarve.wiki.gg",
+      "sha256": "c63f8c08843ec20720de1bcb948cc71a5b883380eeb94e014144881d73e698c2",
+      "bytes": 86652,
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "celestial-altar",
+      "title": "天体祭坛",
+      "file": "public/images/wiki/celestial-altar.png",
+      "sourceUrl": "https://dontstarve.wiki.gg/images/Celestial_Altar.png?6223d1",
+      "sourcePage": "https://dontstarve.wiki.gg/images/Celestial_Altar.png?6223d1",
+      "owner": "Klei Entertainment",
+      "mirror": "dontstarve.wiki.gg",
+      "sha256": "6d5ec70fef776ce84ca781cc3c087b220be911d88b35e0155893e3c010648580",
+      "bytes": 198171,
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "celestial-champion",
+      "title": "天体英雄",
+      "file": "public/images/wiki/celestial-champion.png",
+      "sourceUrl": "https://dontstarve.wiki.gg/images/Celestial_Champion_Phase_3.png?18cdc3",
+      "sourcePage": "https://dontstarve.wiki.gg/images/Celestial_Champion_Phase_3.png?18cdc3",
+      "owner": "Klei Entertainment",
+      "mirror": "dontstarve.wiki.gg",
+      "sha256": "5219b2ccf48b9752cdc1ac1fbdb13406159226e4b9805df8a6e16b41916180b0",
+      "bytes": 916843,
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "celestial-orb",
@@ -362,7 +638,19 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "5a82bee033005249539c5393cd6d25168e100e531215f5ce66212ad2401dd505",
       "bytes": 4595,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "celestial-portal",
+      "title": "天体传送门",
+      "file": "public/images/wiki/celestial-portal.png",
+      "sourceUrl": "https://dontstarve.wiki.gg/images/Celestial_Portal.png?b13281",
+      "sourcePage": "https://dontstarve.wiki.gg/images/Celestial_Portal.png?b13281",
+      "owner": "Klei Entertainment",
+      "mirror": "dontstarve.wiki.gg",
+      "sha256": "2baf8db1502d28f9eee7b988f6365172aefefc56f9707be36f1d57bcd15a3533",
+      "bytes": 6878,
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "charcoal",
@@ -374,7 +662,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "b5f680d83085bff8359c8357c0a0e953dccb5b7506a83678e979094955bfc3c0",
       "bytes": 3610,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "chest",
@@ -386,7 +674,19 @@
       "mirror": "dontstarve.wiki.gg",
       "sha256": "d1887226389df627c202455c0b31bdc786bedd68c533d68a580ebd4cac1f1a80",
       "bytes": 3171,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "chilled-amulet",
+      "title": "寒冰护符",
+      "file": "public/images/wiki/chilled-amulet.png",
+      "sourceUrl": "https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items/blueamulet.png",
+      "sourcePage": "https://github.com/fankimm/dst-craft/blob/main/public/images/game-items/blueamulet.png",
+      "owner": "Klei Entertainment",
+      "mirror": "fankimm/dst-craft",
+      "sha256": "ee0f4055abbcf2473dba0b67cd87dc80b474619e69f62bb173ef193f08b367e9",
+      "bytes": 3411,
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "clockwork-knight",
@@ -398,7 +698,19 @@
       "mirror": "dontstarve.wiki.gg",
       "sha256": "1a59734df89ba9185086d797fcc440e0386820b58a4764209d20fc455842d42a",
       "bytes": 45122,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "cookie-cutter",
+      "title": "饼干切割机",
+      "file": "public/images/wiki/cookie-cutter.png",
+      "sourceUrl": "https://dontstarve.wiki.gg/images/Cookie_Cutter.png?725d8d",
+      "sourcePage": "https://dontstarve.wiki.gg/images/Cookie_Cutter.png?725d8d",
+      "owner": "Klei Entertainment",
+      "mirror": "dontstarve.wiki.gg",
+      "sha256": "531e1d218fab2f4ecfa9f856f0ca14e49ac56c384b96baf2e635ff78a3064064",
+      "bytes": 21035,
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "corn",
@@ -410,7 +722,19 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "218fe01021b313f971c9c9b382bad97cfef2bc9d22de8d9686bacd8f993b2469",
       "bytes": 3654,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "crab-king",
+      "title": "帝王蟹",
+      "file": "public/images/wiki/crab-king.png",
+      "sourceUrl": "https://dontstarve.wiki.gg/wiki/Special:Redirect/file/Crab_King.png",
+      "sourcePage": "https://dontstarve.wiki.gg/wiki/Special:Redirect/file/Crab_King.png",
+      "owner": "Klei Entertainment",
+      "mirror": "dontstarve.wiki.gg",
+      "sha256": "3e21606ad1e9a6e8f85e519e9611a331dbb0c7dd6bdcb3be24e9d2116dce7944",
+      "bytes": 1969470,
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "creamy-potato-puree",
@@ -422,7 +746,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "877908629ccb76091a8241bd21641d56921447ae02e920f1d876d272f90298f3",
       "bytes": 3380,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "crock-pot",
@@ -434,7 +758,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "a97848a3fede3af7cbbfd87ba7409bbd158ee2b633f331633112f273129065a6",
       "bytes": 5280,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "cut-grass",
@@ -446,7 +770,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "ed6fae53dc73a266399db90cb793fa3bf77a72cf2ea546e5b5ca14434bcdc5fd",
       "bytes": 4497,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "cut-reeds",
@@ -458,7 +782,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "8c2c2917134f12e235802040440034f397b533e5bda451703f465c09125a8e00",
       "bytes": 5934,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "cut-stone",
@@ -470,7 +794,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "9feeb51377517b10a72a14f639f1d9b247de7eb9e58da74459fedbea5dccbf64",
       "bytes": 5026,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "dark-sword",
@@ -482,7 +806,43 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "7b0a9ecef58c8e0e081ca08388dcb6ab35384fb8c5cad56089c0f4aff32ccdf2",
       "bytes": 3071,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "deadly-brightshade",
+      "title": "致命亮茄",
+      "file": "public/images/wiki/deadly-brightshade.png",
+      "sourceUrl": "https://dontstarve.wiki.gg/images/Deadly_Brightshade.png?7e4470",
+      "sourcePage": "https://dontstarve.wiki.gg/images/Deadly_Brightshade.png?7e4470",
+      "owner": "Klei Entertainment",
+      "mirror": "dontstarve.wiki.gg",
+      "sha256": "f9a2ec779d2e5d707b13493e04ddd10b7c295ce47ff6760947016b8aa8b4448c",
+      "bytes": 69048,
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "deconstruction-staff",
+      "title": "解构魔杖",
+      "file": "public/images/wiki/deconstruction-staff.png",
+      "sourceUrl": "https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items/greenstaff.png",
+      "sourcePage": "https://github.com/fankimm/dst-craft/blob/main/public/images/game-items/greenstaff.png",
+      "owner": "Klei Entertainment",
+      "mirror": "fankimm/dst-craft",
+      "sha256": "7cc829f266e81ccc081bb0257333d7cccbb39a124bdda47e17ac0b49ebb6293c",
+      "bytes": 3291,
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "deerclops",
+      "title": "独眼巨鹿",
+      "file": "public/images/wiki/deerclops.png",
+      "sourceUrl": "https://dontstarve.wiki.gg/wiki/Special:Redirect/file/Deerclops.png",
+      "sourcePage": "https://dontstarve.wiki.gg/wiki/Special:Redirect/file/Deerclops.png",
+      "owner": "Klei Entertainment",
+      "mirror": "dontstarve.wiki.gg",
+      "sha256": "bade0e4b570202df70dd1f08a26064d9e4131f5ba31ce6c7abe6df4664ef6f72",
+      "bytes": 672964,
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "deerclops-eyeball",
@@ -494,7 +854,31 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "bf0dd8315e081ade9a7821542dd8227a3f6e306d7f1a47f242c3da9b8f5ec9f6",
       "bytes": 3320,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "depth-worm",
+      "title": "洞穴蠕虫",
+      "file": "public/images/wiki/depth-worm.png",
+      "sourceUrl": "https://dontstarve.wiki.gg/wiki/Special:Redirect/file/Depths_Worm.png",
+      "sourcePage": "https://dontstarve.wiki.gg/wiki/Special:Redirect/file/Depths_Worm.png",
+      "owner": "Klei Entertainment",
+      "mirror": "dontstarve.wiki.gg",
+      "sha256": "ee8c7f009d122187f914ce009e1e92385105696754c3769e053519175b91fcd7",
+      "bytes": 221320,
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "desert-goggles",
+      "title": "沙漠护目镜",
+      "file": "public/images/wiki/desert-goggles.png",
+      "sourceUrl": "https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items/deserthat.png",
+      "sourcePage": "https://github.com/fankimm/dst-craft/blob/main/public/images/game-items/deserthat.png",
+      "owner": "Klei Entertainment",
+      "mirror": "fankimm/dst-craft",
+      "sha256": "0155d1daeccd6ea2a6e704e90ca86542cb8c89da758f96c4fbd631d750c8f81e",
+      "bytes": 4781,
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "dragon-fruit",
@@ -506,7 +890,19 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "90b88f8cf75dad997492793b8c5cb5c01952b58cdc758089b88196e9145be1b6",
       "bytes": 3911,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "dragonfly",
+      "title": "龙蝇",
+      "file": "public/images/wiki/dragonfly.png",
+      "sourceUrl": "https://dontstarve.wiki.gg/wiki/Special:Redirect/file/Dragonfly.png",
+      "sourcePage": "https://dontstarve.wiki.gg/wiki/Special:Redirect/file/Dragonfly.png",
+      "owner": "Klei Entertainment",
+      "mirror": "dontstarve.wiki.gg",
+      "sha256": "727086f5cd0e17d0eec0d674ef016fcc5fea227ebf93bdc1b72b99d6f0d7656c",
+      "bytes": 1248894,
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "dragonpie",
@@ -518,7 +914,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "dae84ad19b2c7506d32418b738111f3963e23c1177d60fa963e8e1bf82e63d92",
       "bytes": 4059,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "dreadstone",
@@ -530,7 +926,31 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "c19fb967adaf72ade000d4247fc348b24426f4cec6a94453f7424424e6aad8bc",
       "bytes": 4249,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "dreadstone-armour",
+      "title": "绝望石盔甲",
+      "file": "public/images/wiki/dreadstone-armour.png",
+      "sourceUrl": "https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items/armordreadstone.png",
+      "sourcePage": "https://github.com/fankimm/dst-craft/blob/main/public/images/game-items/armordreadstone.png",
+      "owner": "Klei Entertainment",
+      "mirror": "fankimm/dst-craft",
+      "sha256": "9ed98eb2588a8f157aaa31262c9231a99a47f5b66e2ffe261ec7ff03c20ef8ec",
+      "bytes": 5155,
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "dreadstone-helm",
+      "title": "绝望石头盔",
+      "file": "public/images/wiki/dreadstone-helm.png",
+      "sourceUrl": "https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items/dreadstonehat.png",
+      "sourcePage": "https://github.com/fankimm/dst-craft/blob/main/public/images/game-items/dreadstonehat.png",
+      "owner": "Klei Entertainment",
+      "mirror": "fankimm/dst-craft",
+      "sha256": "e14f0e7c7dc702dd802e40d92f35e15f220bd511f1fc8f9e404ee992d43a32a2",
+      "bytes": 4709,
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "drumstick",
@@ -542,7 +962,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "7ffb4ff28a2b3c7e17fc187dd3b3d5ad25d73faa5fcd2c46c4e95175cd522ca1",
       "bytes": 4110,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "drying-rack",
@@ -554,7 +974,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "dbf07a61e29ee2ca761a25828e97aa60a767c6c92532f24172f854f50d752aca",
       "bytes": 5105,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "egg",
@@ -566,7 +986,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "bdd299062d551f4b70079f194f1873cd92aea8125df4d22156e9d2ba56cc5470",
       "bytes": 3470,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "eggplant",
@@ -578,7 +998,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "b682220ee1aefb3a019bd3c335e47dcbc8bcd43c77a0074b3aeb9f5644075511",
       "bytes": 2744,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "electric-milk",
@@ -590,7 +1010,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "2daaad894122ce5ee94e0155fe97c1582cebe05f0654381af2e899b0e45cba4a",
       "bytes": 3077,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "electrical-doodad",
@@ -602,7 +1022,67 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "f580ee6f76f17576f22df1657ea759429b3551b5a48bf34d1cedff28da0bfee8",
       "bytes": 3403,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "endothermic-fire",
+      "title": "吸热营火",
+      "file": "public/images/wiki/endothermic-fire.png",
+      "sourceUrl": "https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items/coldfire.png",
+      "sourcePage": "https://github.com/fankimm/dst-craft/blob/main/public/images/game-items/coldfire.png",
+      "owner": "Klei Entertainment",
+      "mirror": "fankimm/dst-craft",
+      "sha256": "fd0696486c79631ccd0aea1bb50786b293f1e1822be9f23500b9bb938b2cf2ce",
+      "bytes": 3903,
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "endothermic-fire-pit",
+      "title": "吸热火坑",
+      "file": "public/images/wiki/endothermic-fire-pit.png",
+      "sourceUrl": "https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items/coldfirepit.png",
+      "sourcePage": "https://github.com/fankimm/dst-craft/blob/main/public/images/game-items/coldfirepit.png",
+      "owner": "Klei Entertainment",
+      "mirror": "fankimm/dst-craft",
+      "sha256": "a35f5be97f76bbac017b1ec25d761c24831f091948fa944fd707d6b6c2fa2d89",
+      "bytes": 5259,
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "enlightened-crown",
+      "title": "启迪之冠",
+      "file": "public/images/wiki/enlightened-crown.png",
+      "sourceUrl": "https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items/alterguardianhat.png",
+      "sourcePage": "https://github.com/fankimm/dst-craft/blob/main/public/images/game-items/alterguardianhat.png",
+      "owner": "Klei Entertainment",
+      "mirror": "fankimm/dst-craft",
+      "sha256": "67d391d338454f83550a43637a487968d39b31ea32e92a82639c4006eb5642ce",
+      "bytes": 4165,
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "eye-of-terror",
+      "title": "恐怖之眼",
+      "file": "public/images/wiki/eye-of-terror.png",
+      "sourceUrl": "https://dontstarve.wiki.gg/images/Eye_of_Terror_Phase_1.png?1e50f7",
+      "sourcePage": "https://dontstarve.wiki.gg/images/Eye_of_Terror_Phase_1.png?1e50f7",
+      "owner": "Klei Entertainment",
+      "mirror": "dontstarve.wiki.gg",
+      "sha256": "292991e2941d58b4e98463574238f6b69c4a05b4de793439a461872d2be3aea1",
+      "bytes": 192922,
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "eyebrella",
+      "title": "眼球伞",
+      "file": "public/images/wiki/eyebrella.png",
+      "sourceUrl": "https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items/eyebrellahat.png",
+      "sourcePage": "https://github.com/fankimm/dst-craft/blob/main/public/images/game-items/eyebrellahat.png",
+      "owner": "Klei Entertainment",
+      "mirror": "fankimm/dst-craft",
+      "sha256": "ed19a1e19a6e33ebfc8e3ab0a1b9376b7e6c8e3f27d2039ab99faa71ecd1d6b0",
+      "bytes": 4532,
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "fire-pit",
@@ -614,7 +1094,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "5ec338f4b881f789b0d013e237afc5c11183ff19e13337911290b9093341b756",
       "bytes": 5342,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "fireflies",
@@ -626,7 +1106,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "97056ae018fb417de2e881ddcc3c9cbf47cd9f775a5cd23cbc98dfb7f3e3530a",
       "bytes": 6832,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "fishing-rod",
@@ -638,7 +1118,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "a43102c68df1de6ff027fe5d8db156a05c6050b56ea2498d85501063b55dd645",
       "bytes": 3010,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "fishsticks",
@@ -650,7 +1130,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "ecede7644db16344971d890648a60d4e5bbd8ebae66d0669f599ba8217769fa2",
       "bytes": 4714,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "fist-full-of-jam",
@@ -662,7 +1142,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "ed15e9e388004c8f627d4f20724c8d276245530bdced7783f5882a4f448baf88",
       "bytes": 3331,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "flint",
@@ -674,7 +1154,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "d51df1fdf5612eadd6331ef8c6e76c9f15e0e8246d633f615132962f9e01e07f",
       "bytes": 4270,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "flower-salad",
@@ -686,7 +1166,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "dc798a3acd3b8689c239f9aabaecb656bc8b68e89d734f7d65d2825385722d6a",
       "bytes": 4843,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "football-helmet",
@@ -698,7 +1178,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "f141bbf8d54d718aed0746a6a12a3e0053f3f992679df7ba473b7241736feb42",
       "bytes": 4841,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "freshwater-fish",
@@ -710,7 +1190,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "98399f94bfc2413b7c25d4d6e0755f60c8d0746fa1894eb59720a63b211c7d58",
       "bytes": 5128,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "frog",
@@ -722,7 +1202,7 @@
       "mirror": "dontstarve.wiki.gg",
       "sha256": "c5c8e63ea298d555504d72814f1bdd4f2b547dd5fe0dfb5383f73d492c39428c",
       "bytes": 22694,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "frog-legs",
@@ -734,7 +1214,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "07c5c7fff619447f9af12fe11fbb65419cbbe4a97ba830956c05cf6de7190694",
       "bytes": 3757,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "froggle-bunwich",
@@ -746,7 +1226,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "4338ac8c3170de1ab32c669510ee1405afaaf0c2e8d3e932fa89a05ddd06318c",
       "bytes": 3754,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "garlic",
@@ -758,7 +1238,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "a30f325c827ffe131d7ed2e5a766824d20b1dc1d7425f59abeeda94ea7b09f25",
       "bytes": 4220,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "gears",
@@ -770,7 +1250,31 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "c99c171f0719548e049d3e2c7026454e08e68eb8ae409d508188dd8eb985d6d5",
       "bytes": 4275,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "geothermite",
+      "title": "地热螨",
+      "file": "public/images/wiki/geothermite.png",
+      "sourceUrl": "https://dontstarve.wiki.gg/images/Geothermite.png?a79ca6",
+      "sourcePage": "https://dontstarve.wiki.gg/images/Geothermite.png?a79ca6",
+      "owner": "Klei Entertainment",
+      "mirror": "dontstarve.wiki.gg",
+      "sha256": "ca0515e54b1aa1addfa176fcf3a25118900137c3a4208ed6a0f87af4b9f887ca",
+      "bytes": 74149,
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "glass-cutter",
+      "title": "玻璃刀",
+      "file": "public/images/wiki/glass-cutter.png",
+      "sourceUrl": "https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items/glasscutter.png",
+      "sourcePage": "https://github.com/fankimm/dst-craft/blob/main/public/images/game-items/glasscutter.png",
+      "owner": "Klei Entertainment",
+      "mirror": "fankimm/dst-craft",
+      "sha256": "fac96e789f046709f474f427608c71770ae89f58f4c16143ecdaa2b43e8df646",
+      "bytes": 3972,
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "glommer-flower",
@@ -782,7 +1286,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "39aaf8a314ceadf8f3922afe6b77bb27d073b0e9953f818bca561c309748533f",
       "bytes": 5304,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "gold-nugget",
@@ -794,7 +1298,19 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "fdd7ae30c5f4fede03a804a500d734ea3acf487a915a10d64edb15c2c836cad3",
       "bytes": 4091,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "grazer",
+      "title": "啃食者",
+      "file": "public/images/wiki/grazer.png",
+      "sourceUrl": "https://dontstarve.wiki.gg/wiki/Special:Redirect/file/Grazer.png",
+      "sourcePage": "https://dontstarve.wiki.gg/wiki/Special:Redirect/file/Grazer.png",
+      "owner": "Klei Entertainment",
+      "mirror": "dontstarve.wiki.gg",
+      "sha256": "e64b5ce50a72a2eb51b6604196dfcb10f1d7b14dec6c4f85b83ffb5d64c8e58f",
+      "bytes": 13299,
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "guacamole",
@@ -806,7 +1322,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "0e9188c246c033cd0ecb9e0cc3f2d13a7a6e70e31793f7c97a98316271dcf6a0",
       "bytes": 5292,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "guardian-horn",
@@ -818,7 +1334,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "7f2141350797210b1d58fe8045cd4c55df1374211a9a6f5c63ca10e5889bd461",
       "bytes": 3616,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "hambat",
@@ -830,7 +1346,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "62600f571ece3bb42117bbe2a48290a2048338261d21fc01cfad85e2f6e01480",
       "bytes": 3930,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "hammer",
@@ -842,7 +1358,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "4cd339c34bfb182608305add39bfb3ce71b216b2e27567ab245b0fc8f43c61ec",
       "bytes": 3464,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "healing-salve",
@@ -854,7 +1370,19 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "3c6ea8fa4aa4a7dce6bf306b872ffc3e0d32d776c48caf0991926d06b0475f10",
       "bytes": 3897,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "heat-gland",
+      "title": "热腺体",
+      "file": "public/images/wiki/heat-gland.png",
+      "sourceUrl": "https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items/mitegland.png",
+      "sourcePage": "https://github.com/fankimm/dst-craft/blob/main/public/images/game-items/mitegland.png",
+      "owner": "Klei Entertainment",
+      "mirror": "fankimm/dst-craft",
+      "sha256": "85db941a7c66acc4929406b165c5c407646d28f9cefb5281da5c8aa4ba70adc7",
+      "bytes": 2975,
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "honey",
@@ -866,7 +1394,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "ce8d3063cec81757ad7924030766de1fc66b090153b9908a1cc31303eb75e267",
       "bytes": 2346,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "honey-ham",
@@ -878,7 +1406,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "d3c42d810d44a4b3c7e8f82a4feb373f3c23656af86bcfcf6f3fde8464b13d3a",
       "bytes": 4509,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "honey-nuggets",
@@ -890,7 +1418,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "d802a84e0419c5fea9b998051d437bc6ce79711305abe3f986918e388c7494b6",
       "bytes": 4494,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "honeycomb",
@@ -902,7 +1430,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "f7f2a03a7382b23ab71f00ba4f24eaf4b9141d390b127a48f7c5f82b04756503",
       "bytes": 3045,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "hound",
@@ -914,7 +1442,7 @@
       "mirror": "dontstarve.wiki.gg",
       "sha256": "3cb489aaf7519d087a54aa9b06bae94f26228656bd4c6152758df235f784ec4b",
       "bytes": 64305,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "hound-tooth",
@@ -926,7 +1454,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "0d3aaaf422b6fd625d9d83f5b96d648e36ba0347cdd7a984157992fa2bd4f220",
       "bytes": 2385,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "ice",
@@ -938,7 +1466,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "dcf4e3a9f2857c40c42358a19548628a3681fbc564a01721acb4733f964e0055",
       "bytes": 4167,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "ice-box",
@@ -950,7 +1478,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "63e2cd16e415a93e5c7663a007c61442ce80f29b3d376fe9ba8c5c54487c41ed",
       "bytes": 4272,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "ice-cream",
@@ -962,7 +1490,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "d84ab702ae88e0ec8dd264b0ba90575f8ccefefe4a28f938371d9bea17c0510f",
       "bytes": 4151,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "ice-flingomatic",
@@ -974,7 +1502,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "6d3e45a8dc0426e390086fcd440fb8001484c603984c477c01ba0387d789ec5c",
       "bytes": 4716,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "iridescent-gem",
@@ -986,7 +1514,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "906d824c7e589fd086efd51741168185cfc2b0057613d3dbf7e22dc364303ac9",
       "bytes": 3989,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "jellybeans",
@@ -998,7 +1526,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "1da2296e136dc0130df377a7ad5f54b632199d96dacea831373ac78d5e8a7460",
       "bytes": 5188,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "kabobs",
@@ -1010,7 +1538,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "655f6bd70bb2eb8dfc4870f4a48fc0bca3a34a343dc419840c78c321204a24b1",
       "bytes": 3651,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "kelp-fronds",
@@ -1022,7 +1550,43 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "3a867193804e83fc9644feb2322b3751e83df8399b1f0c70551f1599c3a187e9",
       "bytes": 3917,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "kelp-stalk",
+      "title": "海带茎",
+      "file": "public/images/wiki/kelp-stalk.png",
+      "sourceUrl": "https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items/kelp.png",
+      "sourcePage": "https://github.com/fankimm/dst-craft/blob/main/public/images/game-items/kelp.png",
+      "owner": "Klei Entertainment",
+      "mirror": "fankimm/dst-craft",
+      "sha256": "3a867193804e83fc9644feb2322b3751e83df8399b1f0c70551f1599c3a187e9",
+      "bytes": 3917,
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "keystone",
+      "title": "钥石",
+      "file": "public/images/wiki/keystone.png",
+      "sourceUrl": "https://dontstarve.wiki.gg/images/Keystone.png?efda91",
+      "sourcePage": "https://dontstarve.wiki.gg/images/Keystone.png?efda91",
+      "owner": "Klei Entertainment",
+      "mirror": "dontstarve.wiki.gg",
+      "sha256": "b7ecb4ab8aaac9a55ef5c0aadc8a59bd703ebfce99135caa9d679838af145ebc",
+      "bytes": 4062,
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "klaus",
+      "title": "克劳斯",
+      "file": "public/images/wiki/klaus.png",
+      "sourceUrl": "https://dontstarve.wiki.gg/wiki/Special:Redirect/file/Klaus.png",
+      "sourcePage": "https://dontstarve.wiki.gg/wiki/Special:Redirect/file/Klaus.png",
+      "owner": "Klei Entertainment",
+      "mirror": "dontstarve.wiki.gg",
+      "sha256": "fcf14ceefb95fb5064ab908b97f31d68131dc4349e90bcd003ec3aa7ea88159c",
+      "bytes": 859735,
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "koalefant",
@@ -1034,7 +1598,7 @@
       "mirror": "dontstarve.wiki.gg",
       "sha256": "45ad2eedcec62b9abff11d0d5a1c89906001f049a0aef05a48ddc0d344e77842",
       "bytes": 61382,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "lantern",
@@ -1046,7 +1610,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "ec6ddfaceee8043a501bd70bc314cc9e76f921a7d371ea33c3d307c485e29f7d",
       "bytes": 5726,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "life-giving-amulet",
@@ -1058,7 +1622,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "342f135fe82b748d4e3ce4f6df21942b3157476f1d34423114eadb82e16e7490",
       "bytes": 3414,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "light-bulb",
@@ -1070,7 +1634,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "916255a52d0d57160774e2846dc503c9b677adf16f80198eb0dc090d5b7a8f89",
       "bytes": 2262,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "lightning-rod",
@@ -1082,7 +1646,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "3c245ea04e5da7e0c5e4c67b4aaa03918b05b199f4117c059dfb28855e4881bf",
       "bytes": 3184,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "living-log",
@@ -1094,7 +1658,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "ccb49fbfbfb196c5ccbe93b95fb04425183f481d64f1e562752dc8d55b14c643",
       "bytes": 5527,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "log",
@@ -1106,7 +1670,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "309d47e66f23770963abcd4f8d431949f4f5de1530ffec772f1fe5d5276722b0",
       "bytes": 5045,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "log-suit",
@@ -1118,7 +1682,55 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "dab4c7714f39f2aceb40b0e46183f025064a284786cf0ff9296a7da4b53e4c56",
       "bytes": 5149,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "lunar-island",
+      "title": "月岛",
+      "file": "public/images/wiki/lunar-island.png",
+      "sourceUrl": "https://dontstarve.wiki.gg/images/Lunar_Island.png?a901f4",
+      "sourcePage": "https://dontstarve.wiki.gg/images/Lunar_Island.png?a901f4",
+      "owner": "Klei Entertainment",
+      "mirror": "dontstarve.wiki.gg",
+      "sha256": "38833c147bc4ebc381066f8ebaa3fd5d7f40f597c8c014ccc04358895c6c0460",
+      "bytes": 127789,
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "lunar-rift",
+      "title": "月亮裂隙",
+      "file": "public/images/wiki/lunar-rift.png",
+      "sourceUrl": "https://dontstarve.wiki.gg/images/Lunar_Rift_Phase_3.png?2baa26",
+      "sourcePage": "https://dontstarve.wiki.gg/images/Lunar_Rift_Phase_3.png?2baa26",
+      "owner": "Klei Entertainment",
+      "mirror": "dontstarve.wiki.gg",
+      "sha256": "d10588c0c2adf245d15721bacc0556eae0f000a550f017410d369bfc18cefba8",
+      "bytes": 597659,
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "luxury-fan",
+      "title": "羽毛扇",
+      "file": "public/images/wiki/luxury-fan.png",
+      "sourceUrl": "https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items/featherfan.png",
+      "sourcePage": "https://github.com/fankimm/dst-craft/blob/main/public/images/game-items/featherfan.png",
+      "owner": "Klei Entertainment",
+      "mirror": "fankimm/dst-craft",
+      "sha256": "71e67129e2ee5063726ce312161f74465e3ab87d43c03f6e0202a16229c6c5ef",
+      "bytes": 4195,
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "malbatross",
+      "title": "邪天翁",
+      "file": "public/images/wiki/malbatross.png",
+      "sourceUrl": "https://dontstarve.wiki.gg/wiki/Special:Redirect/file/Malbatross.png",
+      "sourcePage": "https://dontstarve.wiki.gg/wiki/Special:Redirect/file/Malbatross.png",
+      "owner": "Klei Entertainment",
+      "mirror": "dontstarve.wiki.gg",
+      "sha256": "0f699d48e67a51b32f0d214ee3c1de1d9ecf6b09dcd2039f7ecc00307a10afd4",
+      "bytes": 1056024,
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "mandrake",
@@ -1130,7 +1742,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "f6f8783f4abd54234cf49fa77c93fcba4c87dcb169c77a90747f74fb31a38ce3",
       "bytes": 6530,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "manure",
@@ -1142,7 +1754,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "f42d7e43176600ee3082cfd8b0917ca99559182f0c611a9dd3186c1a61ef9fe5",
       "bytes": 2939,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "marble",
@@ -1154,7 +1766,31 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "7b363932bf56a68070a1769a0f8be7c904ae77f3318ecde01d231f1d87aacec9",
       "bytes": 3995,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "marble-suit",
+      "title": "大理石甲",
+      "file": "public/images/wiki/marble-suit.png",
+      "sourceUrl": "https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items/armormarble.png",
+      "sourcePage": "https://github.com/fankimm/dst-craft/blob/main/public/images/game-items/armormarble.png",
+      "owner": "Klei Entertainment",
+      "mirror": "fankimm/dst-craft",
+      "sha256": "d2934accfacb077b85a1100a4b090b119ca3b6bd3a45b8bd86c9e66da68777d2",
+      "bytes": 5085,
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "mast",
+      "title": "桅杆",
+      "file": "public/images/wiki/mast.png",
+      "sourceUrl": "https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items/mast_item.png",
+      "sourcePage": "https://github.com/fankimm/dst-craft/blob/main/public/images/game-items/mast_item.png",
+      "owner": "Klei Entertainment",
+      "mirror": "fankimm/dst-craft",
+      "sha256": "8a32147c9ab02ba1b6dcaf6f0eba8ccead0ba8a5ae217b56bbb043858afc3c48",
+      "bytes": 4729,
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "meat",
@@ -1166,7 +1802,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "d98da8b93b18aea761759b5ce70588b063a09d7e173789c6a24874e25a63ce9a",
       "bytes": 4193,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "meatballs",
@@ -1178,7 +1814,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "70a22770cbd7d82260d5e40db2e903f4daa9806abf8d1f70dabd31369b71775b",
       "bytes": 3681,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "meaty-stew",
@@ -1190,7 +1826,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "fee91fc564853ea960f7264966e84de5417b31846100e812d01778aa2401bc25",
       "bytes": 3633,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "miner-hat",
@@ -1202,7 +1838,19 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "699e6721df29093865c9178b5263f84d6d679451528f29bdd8801007b0ee7b16",
       "bytes": 4786,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "moggles",
+      "title": "鼹鼠帽",
+      "file": "public/images/wiki/moggles.png",
+      "sourceUrl": "https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items/molehat.png",
+      "sourcePage": "https://github.com/fankimm/dst-craft/blob/main/public/images/game-items/molehat.png",
+      "owner": "Klei Entertainment",
+      "mirror": "fankimm/dst-craft",
+      "sha256": "1caf019fb299a8e451a89cc25e88155c4e02c462b43ce88ba3dd6d52e9dc3251",
+      "bytes": 4057,
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "moleworm",
@@ -1214,7 +1862,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "34c4b7201326238822f35ecbee545b18a4d11ff877ef8d5133a2c91e6b6b43e5",
       "bytes": 4609,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "monster-lasagna",
@@ -1226,7 +1874,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "fb68832917e6f5ed90eec77007b7c8d782252c5e0f802b50c25deddcdbc5224f",
       "bytes": 4474,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "monster-meat",
@@ -1238,7 +1886,31 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "dc70fdaa41aad75359e1ab4defcd8ddba3ed5f88715065b6a9ff65354b2ca4b6",
       "bytes": 3966,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "moon-dial",
+      "title": "月晷",
+      "file": "public/images/wiki/moon-dial.png",
+      "sourceUrl": "https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items/moondial.png",
+      "sourcePage": "https://github.com/fankimm/dst-craft/blob/main/public/images/game-items/moondial.png",
+      "owner": "Klei Entertainment",
+      "mirror": "fankimm/dst-craft",
+      "sha256": "2cfc4d742a5aef2b260c0d57d1767aec76a8bf849f7ba719a3e01bfe24b6f9be",
+      "bytes": 4655,
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "moon-moth",
+      "title": "月蛾",
+      "file": "public/images/wiki/moon-moth.png",
+      "sourceUrl": "https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items/moonbutterfly.png",
+      "sourcePage": "https://github.com/fankimm/dst-craft/blob/main/public/images/game-items/moonbutterfly.png",
+      "owner": "Klei Entertainment",
+      "mirror": "fankimm/dst-craft",
+      "sha256": "5e76db1b74a218048a32ec10992792fb7e2873559acc3184a3cea762fd22defb",
+      "bytes": 4628,
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "moon-rock",
@@ -1250,7 +1922,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "18e27282774d5d3f5c36aa2c8016b008e2ce4c02897485894400398cf21be596",
       "bytes": 3794,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "moon-shard",
@@ -1262,7 +1934,31 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "602b70ebd7b6c858cd379c91f9d0be4f7f07558accd2bfa9c523e04697ced974",
       "bytes": 5449,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "moon-storm",
+      "title": "月亮风暴",
+      "file": "public/images/wiki/moon-storm.png",
+      "sourceUrl": "https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items/moonstorm_static_item.png",
+      "sourcePage": "https://github.com/fankimm/dst-craft/blob/main/public/images/game-items/moonstorm_static_item.png",
+      "owner": "Klei Entertainment",
+      "mirror": "fankimm/dst-craft",
+      "sha256": "d30f028272bc9f56f7c2ecf957dfcd1827873984a8e6a9e564dbc7d42ddabcef",
+      "bytes": 5634,
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "moose-goose",
+      "title": "麋鹿鹅",
+      "file": "public/images/wiki/moose-goose.png",
+      "sourceUrl": "https://dontstarve.wiki.gg/images/Goose.png?6fad68",
+      "sourcePage": "https://dontstarve.wiki.gg/images/Goose.png?6fad68",
+      "owner": "Klei Entertainment",
+      "mirror": "dontstarve.wiki.gg",
+      "sha256": "0cb218d69241ee6b4bcf115a93f2cbab988d68d3edbda6dfa521a11ee23855e8",
+      "bytes": 500423,
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "morsel",
@@ -1274,7 +1970,31 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "326c3528acd0d8c01bb56d163f32defad23dd22e8ffdf0a052eb533b23d7172b",
       "bytes": 4392,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "mushroom-planter",
+      "title": "蘑菇农场",
+      "file": "public/images/wiki/mushroom-planter.png",
+      "sourceUrl": "https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items/mushroom_farm.png",
+      "sourcePage": "https://github.com/fankimm/dst-craft/blob/main/public/images/game-items/mushroom_farm.png",
+      "owner": "Klei Entertainment",
+      "mirror": "fankimm/dst-craft",
+      "sha256": "453bb37c1c1b83773171b0f4840aa6a5807872968d3cfea0e8bed34fed6ee0d3",
+      "bytes": 5410,
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "night-armour",
+      "title": "暗夜甲",
+      "file": "public/images/wiki/night-armour.png",
+      "sourceUrl": "https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items/armor_sanity.png",
+      "sourcePage": "https://github.com/fankimm/dst-craft/blob/main/public/images/game-items/armor_sanity.png",
+      "owner": "Klei Entertainment",
+      "mirror": "fankimm/dst-craft",
+      "sha256": "118951cefb2b5b5186ac4ee5c30ec27b00a5d1fae29925c00189f3bea6d16578",
+      "bytes": 3292,
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "nightmare-fuel",
@@ -1286,7 +2006,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "2cc4742bd59a8eead3c95084b4e99564e21073b8dec668f28dced2db32b1b71b",
       "bytes": 3026,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "nitre",
@@ -1298,7 +2018,19 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "9fe7f0eb34bfb7a8cf8d8a1007dde04144df23108451e3a24d962e52db95f9d1",
       "bytes": 4781,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "oar",
+      "title": "船桨",
+      "file": "public/images/wiki/oar.png",
+      "sourceUrl": "https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items/oar.png",
+      "sourcePage": "https://github.com/fankimm/dst-craft/blob/main/public/images/game-items/oar.png",
+      "owner": "Klei Entertainment",
+      "mirror": "fankimm/dst-craft",
+      "sha256": "1576f60441854a08d4e12b7462406fa47202b3e3c01c30c70ea08ffa8dd0d27c",
+      "bytes": 3135,
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "onion",
@@ -1310,7 +2042,19 @@
       "mirror": "dontstarve.wiki.gg",
       "sha256": "2efc7954891de33185474150ac3dd2f7c762ed1f41cbdf8cc1d2ac4ae20be908",
       "bytes": 2939,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "pan-flute",
+      "title": "排箫",
+      "file": "public/images/wiki/pan-flute.png",
+      "sourceUrl": "https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items/panflute.png",
+      "sourcePage": "https://github.com/fankimm/dst-craft/blob/main/public/images/game-items/panflute.png",
+      "owner": "Klei Entertainment",
+      "mirror": "fankimm/dst-craft",
+      "sha256": "73dff2ba620c4180eb1a127191de6d83bfc5127457827c469761635bcf6143cf",
+      "bytes": 4029,
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "papyrus",
@@ -1322,7 +2066,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "3448ee6b4453c31061df3d7482e5e36d29e65e50269136e854c648002686c44f",
       "bytes": 4494,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "pepper",
@@ -1334,7 +2078,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "037da4460203cec3369f60a1ee6554a53a0605ce3011e177cef7e91134e0e26a",
       "bytes": 2953,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "pickaxe",
@@ -1346,7 +2090,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "e945f3adce2556fc9aac5f9651d543bd818e5934477feb02f13436d995116d1d",
       "bytes": 3698,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "pierogi",
@@ -1358,7 +2102,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "b56de7b880dc9c1fd8942d3b64d52836ec6ae0a2d5a5ecdf80f0ea1bf644bbea",
       "bytes": 4298,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "pig-house",
@@ -1370,7 +2114,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "a7009e64165743df62ab4187d2d7b5c537d247afd4045c31f74b40df9756951a",
       "bytes": 5048,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "pig-king",
@@ -1382,7 +2126,7 @@
       "mirror": "dontstarve.wiki.gg",
       "sha256": "4aa9a54bc99a18d1170788c21ed1d7cddbddbbfeb7afa6905466c23fc0a621a7",
       "bytes": 786851,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "pig-skin",
@@ -1394,7 +2138,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "c1e6697257f5f328a31ad11085980f819491b97a5bee8ab9b509ea5559f870ae",
       "bytes": 3925,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "piggyback",
@@ -1406,7 +2150,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "7e6c726f40e9c8707e4ade03c600b77d5ffc40b1b926f1cfbdbec5c860645f7d",
       "bytes": 5061,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "pigman",
@@ -1418,7 +2162,7 @@
       "mirror": "dontstarve.wiki.gg",
       "sha256": "b8da847e002b6d4eaa74a8f2acf3da429f0c08557d5b1bde1374fcef62a6a166",
       "bytes": 7764,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "potato",
@@ -1430,7 +2174,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "b2ff2e9e786799c63375a67ec3220750cb3d20083b280e0ded7998cd142836f2",
       "bytes": 4179,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "powdercake",
@@ -1442,7 +2186,19 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "4066321d9358f04aa1f6b24179743c424ff294305988d054ef0f89286e579c0a",
       "bytes": 3983,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "puffy-vest",
+      "title": "厚实背心",
+      "file": "public/images/wiki/puffy-vest.png",
+      "sourceUrl": "https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items/trunkvest_winter.png",
+      "sourcePage": "https://github.com/fankimm/dst-craft/blob/main/public/images/game-items/trunkvest_winter.png",
+      "owner": "Klei Entertainment",
+      "mirror": "fankimm/dst-craft",
+      "sha256": "6de26fc3da6669420c4e8ab8997cc2af2d7ba05d55c5491887bebc2d891adb1e",
+      "bytes": 4196,
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "pumpkin",
@@ -1454,7 +2210,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "d9240fc089a536c886b92e71655560b1ebfc4e5fbba999a1bc73a9fba9bd1fbf",
       "bytes": 3474,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "pure-brilliance",
@@ -1466,7 +2222,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "14f92ac1cbbf1f5f188bac63b9732307dc7ad983bf67b6bc2b5dbc3e1ea9e822",
       "bytes": 7049,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "purple-gem",
@@ -1478,7 +2234,19 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "60813934ce250c0aa7c0993abd087eb2769e4f69048ca684e8b56e3873b61b66",
       "bytes": 3354,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "pyretic-pickaxe",
+      "title": "炎热镐",
+      "file": "public/images/wiki/pyretic-pickaxe.png",
+      "sourceUrl": "https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items/fumarolepickaxe.png",
+      "sourcePage": "https://github.com/fankimm/dst-craft/blob/main/public/images/game-items/fumarolepickaxe.png",
+      "owner": "Klei Entertainment",
+      "mirror": "fankimm/dst-craft",
+      "sha256": "a3d76c8f20cfdf6c747a96e258ffe5fb5b3801a19cb54d865153aa826882e8b0",
+      "bytes": 3946,
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "rabbit",
@@ -1490,7 +2258,19 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "14184694c9c39405aa5ede7261ce673e9d67a920602d7bd81e4062202979632f",
       "bytes": 3888,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "rain-coat",
+      "title": "雨衣",
+      "file": "public/images/wiki/rain-coat.png",
+      "sourceUrl": "https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items/raincoat.png",
+      "sourcePage": "https://github.com/fankimm/dst-craft/blob/main/public/images/game-items/raincoat.png",
+      "owner": "Klei Entertainment",
+      "mirror": "fankimm/dst-craft",
+      "sha256": "15585e682d0259afe3d622b851b3892e0a2345e40bb77d1b2ac4b1697ac1cebd",
+      "bytes": 4297,
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "rain-hat",
@@ -1502,7 +2282,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "2f52cd864f60f354be9a9a81a13f5faa8f67f5f149979d281fac77c1993e8f6c",
       "bytes": 3597,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "ratatouille",
@@ -1514,7 +2294,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "23475d3fe97a12c52550cc35fff91644c49e1947c960f730b3176aa286f000bf",
       "bytes": 4127,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "red-gem",
@@ -1526,7 +2306,19 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "b586c50a5fcf31a46284198a982024f6484c123b2e9913e7c0297c07bcf7c990",
       "bytes": 3803,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "restrained-static",
+      "title": "约束静电",
+      "file": "public/images/wiki/restrained-static.png",
+      "sourceUrl": "https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items/moonstorm_static_item.png",
+      "sourcePage": "https://github.com/fankimm/dst-craft/blob/main/public/images/game-items/moonstorm_static_item.png",
+      "owner": "Klei Entertainment",
+      "mirror": "fankimm/dst-craft",
+      "sha256": "d30f028272bc9f56f7c2ecf957dfcd1827873984a8e6a9e564dbc7d42ddabcef",
+      "bytes": 5634,
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "rocks",
@@ -1538,7 +2330,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "6e2840b8b8e3042f108e32bf2bcf618fbfab7ebd1aa4b2edf7bdbdfee07fa890",
       "bytes": 3584,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "rope",
@@ -1550,7 +2342,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "6a3bc108e140561bbdf89e0d327803ada290a172d943f8121e931b31ec36bc06",
       "bytes": 5168,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "rot",
@@ -1562,7 +2354,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "8df39198002e875df83b44db2cadf7271de64c6945225a8818cfb6c10f504a39",
       "bytes": 3352,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "royal-jelly",
@@ -1574,7 +2366,19 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "70c357e2c6d246ac5118e1248575ca101fd8a6066e5310a77d46c504a7e60478",
       "bytes": 5490,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "ruins",
+      "title": "远古遗迹",
+      "file": "public/images/wiki/ruins.png",
+      "sourceUrl": "https://dontstarve.wiki.gg/images/Ruins_Entrance.png?4b188f",
+      "sourcePage": "https://dontstarve.wiki.gg/images/Ruins_Entrance.png?4b188f",
+      "owner": "Klei Entertainment",
+      "mirror": "dontstarve.wiki.gg",
+      "sha256": "58d1a3b9911894ad961daa3a292f40865d09a25bd0a45585db0fe18cffbe6028",
+      "bytes": 18744,
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "salsa-fresca",
@@ -1586,7 +2390,43 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "f28306c4a03815cdfafb4a1de6d01971ced10b1652186938de74ba4f90042cdb",
       "bytes": 3420,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "salt-box",
+      "title": "盐盒",
+      "file": "public/images/wiki/salt-box.png",
+      "sourceUrl": "https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items/saltbox.png",
+      "sourcePage": "https://github.com/fankimm/dst-craft/blob/main/public/images/game-items/saltbox.png",
+      "owner": "Klei Entertainment",
+      "mirror": "fankimm/dst-craft",
+      "sha256": "b1b558665b27deec4e3b8f5edc0a6d256cfdd6945be98829424616c8f591e914",
+      "bytes": 4856,
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "salt-crystals",
+      "title": "盐晶",
+      "file": "public/images/wiki/salt-crystals.png",
+      "sourceUrl": "https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items/saltrock.png",
+      "sourcePage": "https://github.com/fankimm/dst-craft/blob/main/public/images/game-items/saltrock.png",
+      "owner": "Klei Entertainment",
+      "mirror": "fankimm/dst-craft",
+      "sha256": "c3dd1a612a412e7441b1ce0bc7724f446fde645c40fcaba79064003dfbdbbebf",
+      "bytes": 5372,
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "sanctum",
+      "title": "远古圣所",
+      "file": "public/images/wiki/sanctum.png",
+      "sourceUrl": "https://dontstarve.wiki.gg/images/Sanctum_Icon.png?c3d611",
+      "sourcePage": "https://dontstarve.wiki.gg/images/Sanctum_Icon.png?c3d611",
+      "owner": "Klei Entertainment",
+      "mirror": "dontstarve.wiki.gg",
+      "sha256": "22eb1adbf937ccf7dc8869447d195841912a730e8f2f34ace8b54a3b53796110",
+      "bytes": 90721,
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "scales",
@@ -1598,7 +2438,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "c4b600a44a7dc81898b0f7a28062f4c88a0d4ba5de9e0543a5cf22c2f6aff0af",
       "bytes": 4309,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "science-machine",
@@ -1610,7 +2450,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "966e7856a2b0df648b47742c59f461a74b5499a884d2b85ff936ac3bcd8efd6c",
       "bytes": 7009,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "seafood-gumbo",
@@ -1622,7 +2462,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "99cdfff1c0ecfa99159b5dbc9ec19b39c76f8e6c5da20e9232b1f4f6b37311c2",
       "bytes": 4183,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "seeds",
@@ -1634,7 +2474,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "4fd3308a4fb4874b201efe942356282a2bf74e8b2b7e0ae0e51d0e8da2aaf59a",
       "bytes": 3607,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "sewing-kit",
@@ -1646,7 +2486,31 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "8201349f3406a377a924a5c16fa919fb9d5ff803e75888f6b5142c218ddf0594",
       "bytes": 4689,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "shadow-reaper",
+      "title": "暗影收割者",
+      "file": "public/images/wiki/shadow-reaper.png",
+      "sourceUrl": "https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items/voidcloth_scythe.png",
+      "sourcePage": "https://github.com/fankimm/dst-craft/blob/main/public/images/game-items/voidcloth_scythe.png",
+      "owner": "Klei Entertainment",
+      "mirror": "fankimm/dst-craft",
+      "sha256": "b27a53fb7f426d5d14d341d1aa054e5ebe7094cbab7d2f7b9d946f65edc13769",
+      "bytes": 2769,
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "shadow-rift",
+      "title": "暗影裂隙",
+      "file": "public/images/wiki/shadow-rift.png",
+      "sourceUrl": "https://dontstarve.wiki.gg/images/Shadow_Rift_Phase_3.png?55d45c",
+      "sourcePage": "https://dontstarve.wiki.gg/images/Shadow_Rift_Phase_3.png?55d45c",
+      "owner": "Klei Entertainment",
+      "mirror": "dontstarve.wiki.gg",
+      "sha256": "5162cfb251d66396bb9989374f847bfbb6b9d736fa7db3cffd035204193f5c83",
+      "bytes": 795427,
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "shovel",
@@ -1658,7 +2522,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "ab86ccc88a569f1094a139c187a2764dde9ff846565a7042fcce887531664b31",
       "bytes": 4441,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "silk",
@@ -1670,7 +2534,19 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "3a6372552cef56d8e9864649326d6db3462206549d9d26ae77d0fbc125e476ec",
       "bytes": 5621,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "slurper",
+      "title": "啜食者",
+      "file": "public/images/wiki/slurper.png",
+      "sourceUrl": "https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items/slurper.png",
+      "sourcePage": "https://github.com/fankimm/dst-craft/blob/main/public/images/game-items/slurper.png",
+      "owner": "Klei Entertainment",
+      "mirror": "fankimm/dst-craft",
+      "sha256": "f214c9d1e67c68a0e3a86d533fdbe882f451f028a83c36c11b55f876fa0342d5",
+      "bytes": 5423,
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "spear",
@@ -1682,7 +2558,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "05601b714438d867b75e26fa6a80874ed33d3031fc34f932bb5ce129c3c707ab",
       "bytes": 3095,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "spicy-chili",
@@ -1694,7 +2570,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "9c8735cefce186b322dd71cbc1baca1434f0621f0c7f515fd6283e4e8213f62d",
       "bytes": 4723,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "spider",
@@ -1706,7 +2582,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "4bbeacd126fec2571df07025be23b8bef35cde7baf1444499acd21c7352d7023",
       "bytes": 3638,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "spider-gland",
@@ -1718,7 +2594,43 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "ba46dd7f090149d099a3c7524d40be815a27dea7b6026fd207fcfde8e202fabe",
       "bytes": 3409,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "splumonkey",
+      "title": "穴居猴",
+      "file": "public/images/wiki/splumonkey.png",
+      "sourceUrl": "https://dontstarve.wiki.gg/wiki/Special:Redirect/file/Splumonkey.png",
+      "sourcePage": "https://dontstarve.wiki.gg/wiki/Special:Redirect/file/Splumonkey.png",
+      "owner": "Klei Entertainment",
+      "mirror": "dontstarve.wiki.gg",
+      "sha256": "4288c7fc536d66b9b85b5753bc9bb9d9592db4fd8a0b04d84b744284e4652268",
+      "bytes": 69957,
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "star-callers-staff",
+      "title": "唤星者魔杖",
+      "file": "public/images/wiki/star-callers-staff.png",
+      "sourceUrl": "https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items/yellowstaff.png",
+      "sourcePage": "https://github.com/fankimm/dst-craft/blob/main/public/images/game-items/yellowstaff.png",
+      "owner": "Klei Entertainment",
+      "mirror": "fankimm/dst-craft",
+      "sha256": "c8f7adf0d472c6936931d2b02d76c21e7c9f40b1b0e05c2c2261db9c469d223b",
+      "bytes": 3524,
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "steering-wheel",
+      "title": "舵轮",
+      "file": "public/images/wiki/steering-wheel.png",
+      "sourceUrl": "https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items/steeringwheel_item.png",
+      "sourcePage": "https://github.com/fankimm/dst-craft/blob/main/public/images/game-items/steeringwheel_item.png",
+      "owner": "Klei Entertainment",
+      "mirror": "fankimm/dst-craft",
+      "sha256": "c0884635e2f5d7dd438e8e74e83d2614e5b0b91c727df095d260478d62e50a7d",
+      "bytes": 4909,
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "stinger",
@@ -1730,7 +2642,19 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "38d18c7e3405578e66e8203b09f64adfdd9fa80e5604b09438129620caf45908",
       "bytes": 1674,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "stone-fruit",
+      "title": "石果",
+      "file": "public/images/wiki/stone-fruit.png",
+      "sourceUrl": "https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items/rock_avocado_fruit.png",
+      "sourcePage": "https://github.com/fankimm/dst-craft/blob/main/public/images/game-items/rock_avocado_fruit.png",
+      "owner": "Klei Entertainment",
+      "mirror": "fankimm/dst-craft",
+      "sha256": "96973d0cabb491a908ce5329e45699c610d9ab5bf054ecd0cb93cd14122d9b61",
+      "bytes": 4201,
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "straw-hat",
@@ -1742,7 +2666,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "cb71f8c454224e5178152f2264b8462701c8c111b3719c48617260a52e09e970",
       "bytes": 3841,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "stuffed-eggplant",
@@ -1754,7 +2678,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "340c1e3299705cd77106f34d3908fb8110d038d0c6977407820368115db85422",
       "bytes": 4646,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "surf-n-turf",
@@ -1766,7 +2690,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "6f6f2d0d4c6ec6b7166e26349b70d7b1ebb17512e8e1e6e2b8dcb73306fbb2b9",
       "bytes": 5206,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "taffy",
@@ -1778,7 +2702,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "9f8737689a0ea4495e02201da597049e04e4e580f450b27cfe02ae62b37838f5",
       "bytes": 5570,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "tell-tale-heart",
@@ -1790,7 +2714,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "28000afabc1d29503bc1ecb349a87a9dfa9a00694839ab5faed716220783a129",
       "bytes": 5177,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "tent",
@@ -1802,7 +2726,43 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "120a99f41e8e7b704993e91fdcb541ce72dd5efc924fc782c9e93ca8b51af7a3",
       "bytes": 3605,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "tentacle-spike",
+      "title": "触手尖刺",
+      "file": "public/images/wiki/tentacle-spike.png",
+      "sourceUrl": "https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items/tentaclespike.png",
+      "sourcePage": "https://github.com/fankimm/dst-craft/blob/main/public/images/game-items/tentaclespike.png",
+      "owner": "Klei Entertainment",
+      "mirror": "fankimm/dst-craft",
+      "sha256": "04d67f3e4a4ae2f190db1ac0a71e40ca938d7c35b52601a674a366668eff03ba",
+      "bytes": 3705,
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "thermal-balm",
+      "title": "热疗药膏",
+      "file": "public/images/wiki/thermal-balm.png",
+      "sourceUrl": "https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items/healingsalve_fumarole.png",
+      "sourcePage": "https://github.com/fankimm/dst-craft/blob/main/public/images/game-items/healingsalve_fumarole.png",
+      "owner": "Klei Entertainment",
+      "mirror": "fankimm/dst-craft",
+      "sha256": "9189a2421d980a0f451b3c63856b397dd785ef6fb58c5d730938192101eef9a9",
+      "bytes": 4145,
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "thermal-measurer",
+      "title": "温度测量仪",
+      "file": "public/images/wiki/thermal-measurer.png",
+      "sourceUrl": "https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items/winterometer.png",
+      "sourcePage": "https://github.com/fankimm/dst-craft/blob/main/public/images/game-items/winterometer.png",
+      "owner": "Klei Entertainment",
+      "mirror": "fankimm/dst-craft",
+      "sha256": "7a92f0d3258cef1c84058652d8507fcc434425668c53d602a1e8405d143c9054",
+      "bytes": 3506,
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "thermal-stone",
@@ -1814,7 +2774,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "0c6434ba38c5b530f9dbeabfc179056145fa368c82c203a8eff44a5868e1ea35",
       "bytes": 4160,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "thick-fur",
@@ -1826,7 +2786,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "6b51023e360dc3e5750328363a31a4f721aa2b4d564ff572239241e3278ed25d",
       "bytes": 4572,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "thulecite",
@@ -1838,7 +2798,19 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "2d0ddeff5d2a3349d0eda4c330179898f7da8613702f2e423b3de557ae15e9cc",
       "bytes": 4543,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "thulecite-crown",
+      "title": "铥矿皇冠",
+      "file": "public/images/wiki/thulecite-crown.png",
+      "sourceUrl": "https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items/ruinshat.png",
+      "sourcePage": "https://github.com/fankimm/dst-craft/blob/main/public/images/game-items/ruinshat.png",
+      "owner": "Klei Entertainment",
+      "mirror": "fankimm/dst-craft",
+      "sha256": "54bcdb66fad2da9a4c3f6039d0d4d171057ca178a485e3f0832bafede336d646",
+      "bytes": 4404,
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "thulecite-fragments",
@@ -1850,7 +2822,31 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "b8c747d27e649f5249eab9e560b6ffe8e7a9e78ea40b500499c808295db0362b",
       "bytes": 4151,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "thulecite-suit",
+      "title": "铥矿甲",
+      "file": "public/images/wiki/thulecite-suit.png",
+      "sourceUrl": "https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items/armorruins.png",
+      "sourcePage": "https://github.com/fankimm/dst-craft/blob/main/public/images/game-items/armorruins.png",
+      "owner": "Klei Entertainment",
+      "mirror": "fankimm/dst-craft",
+      "sha256": "9b2baddb81644405da904e6b9edc324f4b806bdc5bb7c75eeb2eba3eb79119a8",
+      "bytes": 4392,
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "toadstool",
+      "title": "蟾蜍王",
+      "file": "public/images/wiki/toadstool.png",
+      "sourceUrl": "https://dontstarve.wiki.gg/wiki/Special:Redirect/file/Toadstool.png",
+      "sourcePage": "https://dontstarve.wiki.gg/wiki/Special:Redirect/file/Toadstool.png",
+      "owner": "Klei Entertainment",
+      "mirror": "dontstarve.wiki.gg",
+      "sha256": "0199452ee8f42767ab414e090ece711cb7f1cdba258b45500a387456d2a6fac0",
+      "bytes": 1112126,
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "tomato",
@@ -1862,7 +2858,19 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "72136142de56a1183d7cd0c7be6e16454c3a60be62e502e50411cd5f1da6181b",
       "bytes": 3970,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "tooth-trap",
+      "title": "犬牙陷阱",
+      "file": "public/images/wiki/tooth-trap.png",
+      "sourceUrl": "https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items/trap_teeth.png",
+      "sourcePage": "https://github.com/fankimm/dst-craft/blob/main/public/images/game-items/trap_teeth.png",
+      "owner": "Klei Entertainment",
+      "mirror": "fankimm/dst-craft",
+      "sha256": "9ebfec0d41e806558ebb19497febac8574c4c3098a65d66a57b8f6c2b49ec365",
+      "bytes": 3540,
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "top-hat",
@@ -1874,7 +2882,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "2b51bb7a02f6930a0d399d45cde400e3416117dcad1a26283e58333ea956223b",
       "bytes": 3657,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "torch",
@@ -1886,7 +2894,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "e991a90250bef01627f4dfb94081486cfddee3caed7607dd8f0bf48623b01cf0",
       "bytes": 4261,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "touch-stone",
@@ -1898,7 +2906,7 @@
       "mirror": "dontstarve.wiki.gg",
       "sha256": "495e900348c79e976419d1d049b07eedc386624e0d659646f38e1eede5f8ccd8",
       "bytes": 63697,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "trail-mix",
@@ -1910,7 +2918,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "fdd462e3195fa24506f01ee4f896cf6906df017f6f1602eba11927562796b50f",
       "bytes": 4796,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "trap",
@@ -1922,7 +2930,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "9ce674e2ddb4c07ddaab072f0b4e9843e362e97595e8eb2ef69a0f7c57008fd3",
       "bytes": 6092,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "turkey-dinner",
@@ -1934,7 +2942,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "f5f9b69b50ef95e8db802d80c9f7f1ee8c3972ccfbe5f38076d96413d646fb6f",
       "bytes": 5037,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "twigs",
@@ -1946,7 +2954,19 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "98b7ee4582880412a01021ff14aee2f06514f60a84eeb5be3a79da5c52e3890b",
       "bytes": 4026,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "twins-of-terror",
+      "title": "双子魔眼",
+      "file": "public/images/wiki/twins-of-terror.png",
+      "sourceUrl": "https://dontstarve.wiki.gg/images/Retinazor.png?6e12b3",
+      "sourcePage": "https://dontstarve.wiki.gg/images/Retinazor.png?6e12b3",
+      "owner": "Klei Entertainment",
+      "mirror": "dontstarve.wiki.gg",
+      "sha256": "0da2cbef1dd13fdb4b69a486817a200d4293a1081ab795862e4ad90763a81b88",
+      "bytes": 334407,
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "umbrella",
@@ -1958,7 +2978,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "2dfd413aa63982ea8e5fe1b53feb8d529eed2846a1454818cbd6acac5eb929ca",
       "bytes": 3272,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "vegetable-stinger",
@@ -1970,7 +2990,31 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "abaf8e84cfb9c7a88958c2586e4036b849138c3c24714fedcf487f8a5d732b76",
       "bytes": 3949,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "void-cowl",
+      "title": "虚空风帽",
+      "file": "public/images/wiki/void-cowl.png",
+      "sourceUrl": "https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items/voidclothhat.png",
+      "sourcePage": "https://github.com/fankimm/dst-craft/blob/main/public/images/game-items/voidclothhat.png",
+      "owner": "Klei Entertainment",
+      "mirror": "fankimm/dst-craft",
+      "sha256": "aafb475391afde69bf2b122d618f666b789a3a801f757bca5f182d983f0badcd",
+      "bytes": 4242,
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "void-robe",
+      "title": "虚空长袍",
+      "file": "public/images/wiki/void-robe.png",
+      "sourceUrl": "https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items/armor_voidcloth.png",
+      "sourcePage": "https://github.com/fankimm/dst-craft/blob/main/public/images/game-items/armor_voidcloth.png",
+      "owner": "Klei Entertainment",
+      "mirror": "fankimm/dst-craft",
+      "sha256": "44caa8ca8005c5e9e54e6f588e344c452daae11d4d3e5d16bf5a2ed87820e236",
+      "bytes": 5098,
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "waffles",
@@ -1982,7 +3026,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "5f3e7c27bcdcc57e96c80f2777a4750c0f6c9a7b2f5d63f06efda4c45912f7cc",
       "bytes": 4752,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "walking-cane",
@@ -1994,7 +3038,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "b83bb125cc94e1e4aa52e80633e8de5c9e2f4c11372b18c31b92feb3928ad2d4",
       "bytes": 3344,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "walrus-tusk",
@@ -2006,7 +3050,7 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "c0a5df33243353def2dba40b9becca303a0a611b53581f717f4d1920204ed0f7",
       "bytes": 2893,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
     },
     {
       "slug": "watermelon",
@@ -2018,7 +3062,43 @@
       "mirror": "fankimm/dst-craft",
       "sha256": "f052ff6e36425d92ea15eb56ce529079dbb1a040cbba6edb385eee91ae6a5bd8",
       "bytes": 4078,
-      "verifiedAt": "2026-07-31"
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "waymark-compass",
+      "title": "路标罗盘",
+      "file": "public/images/wiki/waymark-compass.png",
+      "sourceUrl": "https://dontstarve.wiki.gg/images/Waymark_Compass.png?ffd7f3",
+      "sourcePage": "https://dontstarve.wiki.gg/images/Waymark_Compass.png?ffd7f3",
+      "owner": "Klei Entertainment",
+      "mirror": "dontstarve.wiki.gg",
+      "sha256": "a7114b46247f7758daeb5f50c0eb70be36eb0bd9c2d30dac6ff7fc8a66e650ff",
+      "bytes": 3536,
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "weather-pain",
+      "title": "天气风向标",
+      "file": "public/images/wiki/weather-pain.png",
+      "sourceUrl": "https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items/staff_tornado.png",
+      "sourcePage": "https://github.com/fankimm/dst-craft/blob/main/public/images/game-items/staff_tornado.png",
+      "owner": "Klei Entertainment",
+      "mirror": "fankimm/dst-craft",
+      "sha256": "83ab0696ec3fe8dfe2af8bf955c1155fd1169cea46ec1374a6c9da8a89e02c34",
+      "bytes": 3447,
+      "verifiedAt": "2026-08-08"
+    },
+    {
+      "slug": "winter-hat",
+      "title": "冬帽",
+      "file": "public/images/wiki/winter-hat.png",
+      "sourceUrl": "https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items/winterhat.png",
+      "sourcePage": "https://github.com/fankimm/dst-craft/blob/main/public/images/game-items/winterhat.png",
+      "owner": "Klei Entertainment",
+      "mirror": "fankimm/dst-craft",
+      "sha256": "dc583217e36cc750f71862cdf68c06712c6d701cf77e6ef5b6b63b755c59bf2a",
+      "bytes": 4842,
+      "verifiedAt": "2026-08-08"
     }
   ]
 }

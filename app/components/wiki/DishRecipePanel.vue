@@ -28,7 +28,7 @@ defineProps<{ dish: DishInfo }>()
       <div class="dish-slots">
         <WikiIngredientChip
           v-for="ingredient in example.ingredients"
-          :key="`${example.label}-${ingredient.slug}`"
+          :key="`${example.label}-${ingredient.slug || ingredient.name}`"
           :ingredient="ingredient"
           compact
         />

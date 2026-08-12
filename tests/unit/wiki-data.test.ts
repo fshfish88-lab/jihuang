@@ -3,7 +3,7 @@ import { wikiEntries } from '../../app/data/wiki'
 
 describe('wiki data', () => {
   it('contains the first complete core batch', () => {
-    expect(wikiEntries.length).toBeGreaterThanOrEqual(120)
+    expect(wikiEntries).toHaveLength(258)
     expect(wikiEntries.filter(item => item.category === '料理')).toHaveLength(30)
   })
 
@@ -38,7 +38,8 @@ describe('wiki data', () => {
         ...(item.dish?.examples.flatMap(example => example.ingredients) || [])
       ]
       for (const ingredient of ingredients) {
-        expect(slugs.has(ingredient.slug), `${item.slug} -> ${ingredient.slug}`).toBe(true)
+        expect(ingredient.name.length, `${item.slug} ingredient name`).toBeGreaterThan(0)
+        if (ingredient.slug) expect(slugs.has(ingredient.slug), `${item.slug} -> ${ingredient.slug}`).toBe(true)
       }
     }
   })

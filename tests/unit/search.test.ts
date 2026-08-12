@@ -25,5 +25,16 @@ describe('alias-aware search', () => {
     expect(index.search('四格食谱', { limit: 10 }).some(result => result.item.slug === 'meatballs')).toBe(true)
     expect(index.search('季节与探索', { limit: 10 }).length).toBeGreaterThan(0)
   })
+
+  it.each([
+    ['眼球伞', 'eyebrella'],
+    ['犀牛', 'ancient-guardian'],
+    ['帝王蟹', 'crab-king'],
+    ['亮茄炸弹', 'brightshade-bomb'],
+    ['圣所', 'sanctum'],
+    ['热腺体', 'heat-gland']
+  ])('finds advanced query %s as %s', (query, slug) => {
+    expect(index.search(query, { limit: 5 }).map(result => result.item.slug)).toContain(slug)
+  })
 })
 

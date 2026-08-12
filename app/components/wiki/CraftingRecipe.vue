@@ -19,7 +19,7 @@ defineProps<{ crafting: CraftingInfo }>()
         <div class="recipe-route__ingredients">
           <WikiIngredientChip
             v-for="ingredient in crafting.ingredients"
-            :key="ingredient.slug"
+            :key="ingredient.slug || ingredient.name"
             :ingredient="ingredient"
           />
         </div>

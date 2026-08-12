@@ -6,8 +6,8 @@ describe('content registry', () => {
     expect(guideEntries.filter(item => item.kind === 'beginner')).toHaveLength(5)
     expect(guideEntries.filter(item => item.kind === 'character')).toHaveLength(5)
     expect(guideEntries.filter(item => item.kind === 'boss')).toHaveLength(5)
-    expect(guideEntries.filter(item => item.kind === 'progression')).toHaveLength(3)
-    expect(guideEntries.filter(item => item.kind === 'wiki').length).toBeGreaterThanOrEqual(120)
+    expect(guideEntries.filter(item => item.kind === 'progression')).toHaveLength(9)
+    expect(guideEntries.filter(item => item.kind === 'wiki')).toHaveLength(258)
   })
 
   it('gives every entry a stable internal route and real local image', () => {

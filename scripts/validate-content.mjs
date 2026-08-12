@@ -1,5 +1,7 @@
+import { execFileSync } from 'node:child_process'
 import { readdir, readFile } from 'node:fs/promises'
 import { extname, join, relative } from 'node:path'
+import { fileURLToPath } from 'node:url'
 
 const root = new URL('..', import.meta.url)
 const contentDir = new URL('../content/', import.meta.url)
@@ -14,7 +16,15 @@ for (const collection of collections) {
   }
 }
 
-const slugs = new Set(files.map(file => file.pathname.split('/').pop().replace(/\.md$/, '')))
+const wikiEntries = JSON.parse(execFileSync(
+  process.execPath,
+  [fileURLToPath(new URL('./sync-wiki-icons.mjs', import.meta.url)), '--list'],
+  { encoding: 'utf8' }
+))
+const slugs = new Set([
+  ...files.map(file => file.pathname.split('/').pop().replace(/\.md$/, '')),
+  ...wikiEntries.map(entry => entry.slug)
+])
 const errors = []
 
 function frontmatter(text) {

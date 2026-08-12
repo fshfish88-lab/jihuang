@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto'
 import { execFileSync } from 'node:child_process'
-import { readFile, stat } from 'node:fs/promises'
+import { access, readFile, stat } from 'node:fs/promises'
 import { resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -13,10 +13,26 @@ const entries = JSON.parse(listOutput)
 const manifest = JSON.parse(await readFile(manifestPath, 'utf8'))
 const manifestBySlug = new Map(manifest.entries.map(entry => [entry.slug, entry]))
 const errors = []
+const routeGuides = [
+  'seasonal-cycle',
+  'ruins-expedition',
+  'ocean-lunar-expedition',
+  'boss-logistics',
+  'celestial-lunar-rift',
+  'shadow-sanctum'
+]
 
-if (entries.length < 120) errors.push(`structured wiki has only ${entries.length} entries`)
+if (entries.length < 258) errors.push(`structured wiki has only ${entries.length} entries`)
 if (new Set(entries.map(entry => entry.slug)).size !== entries.length) errors.push('structured wiki contains duplicate slugs')
 if (manifest.count !== entries.length) errors.push(`manifest count ${manifest.count} does not match ${entries.length} entries`)
+
+for (const slug of routeGuides) {
+  try {
+    await access(resolve(root, 'content', 'progression', `${slug}.md`))
+  } catch {
+    errors.push(`${slug}: route guide file is missing`)
+  }
+}
 
 for (const entry of entries) {
   const record = manifestBySlug.get(entry.slug)

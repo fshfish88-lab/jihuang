@@ -11,6 +11,7 @@ const assetPath = useAssetPath()
 
 <template>
   <NuxtLink
+    v-if="ingredient.slug"
     class="ingredient-chip"
     :class="{ 'ingredient-chip--compact': compact }"
     :to="`/wiki/${ingredient.slug}`"
@@ -28,4 +29,13 @@ const assetPath = useAssetPath()
     <span class="ingredient-chip__name">{{ ingredient.name }}</span>
     <strong class="ingredient-chip__amount">× {{ ingredient.amount }}</strong>
   </NuxtLink>
+  <div
+    v-else
+    class="ingredient-chip ingredient-chip--text-only"
+    :aria-label="`${ingredient.name}，数量 ${ingredient.amount}；暂未建立独立百科`"
+  >
+    <span class="ingredient-chip__name">{{ ingredient.name }}</span>
+    <strong class="ingredient-chip__amount">× {{ ingredient.amount }}</strong>
+    <small class="ingredient-chip__note">未单独建档</small>
+  </div>
 </template>

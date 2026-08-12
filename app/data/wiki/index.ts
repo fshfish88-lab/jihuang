@@ -1,9 +1,15 @@
 import type { WikiEntry, WikiRoute } from '~/types/wiki'
+import { bossCombatEntries } from './boss-combat'
+import { advancedCaveEntries } from './caves-advanced'
 import { creatureEntries } from './creatures'
 import { dishEntries } from './dishes'
 import { equipmentEntries } from './equipment'
 import { explorationEntries } from './exploration'
 import { materialEntries } from './materials'
+import { lunarRiftEntries } from './lunar-rift'
+import { oceanLunarEntries } from './ocean-lunar'
+import { seasonalEntries } from './seasonal'
+import { shadowSanctumEntries } from './shadow-sanctum'
 import { structureEntries } from './structures'
 
 export const wikiEntries: WikiEntry[] = [
@@ -12,7 +18,13 @@ export const wikiEntries: WikiEntry[] = [
   ...structureEntries,
   ...dishEntries,
   ...creatureEntries,
-  ...explorationEntries
+  ...explorationEntries,
+  ...seasonalEntries,
+  ...advancedCaveEntries,
+  ...oceanLunarEntries,
+  ...bossCombatEntries,
+  ...lunarRiftEntries,
+  ...shadowSanctumEntries
 ]
 
 export function getWikiEntry(slug: string): WikiEntry | undefined {
