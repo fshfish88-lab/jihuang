@@ -16,6 +16,12 @@ const missingMaterialLinks: Record<string, string> = {
   '暗影碎布': 'dark-tatters'
 }
 const requiredMissingMaterials = Object.values(missingMaterialLinks)
+const featherUses: Record<string, string[]> = {
+  'jet-feather': ['催眠吹箭', '鞍具脱卸器'],
+  'crimson-feather': ['火焰吹箭'],
+  'azure-feather': ['攻击吹箭'],
+  'saffron-feather': ['电击吹箭']
+}
 
 describe('wiki data', () => {
   it('contains at least 312 wiki entries', () => {
@@ -29,6 +35,21 @@ describe('wiki data', () => {
   it.each(requiredMissingMaterials)('contains required material %s', (slug) => {
     const slugs = new Set(wikiEntries.map(item => item.slug))
     expect(slugs.has(slug), `missing material ${slug}`).toBe(true)
+  })
+
+  it.each(Object.entries(featherUses))('maps %s to its current crafting uses', (slug, expectedUses) => {
+    const entry = wikiEntries.find(item => item.slug === slug)
+    expect(entry, `missing feather ${slug}`).toBeDefined()
+    expect(entry?.category).toBe('资源')
+    expect(entry?.crafting.craftable).toBe(false)
+    for (const expectedUse of expectedUses) {
+      expect(entry?.uses.some(use => use.includes(expectedUse)), `${slug} -> ${expectedUse}`).toBe(true)
+    }
+  })
+
+  it('does not map azure feather to Electric Dart', () => {
+    const entry = wikiEntries.find(item => item.slug === 'azure-feather')
+    expect(entry?.uses.some(use => use.includes('电击吹箭') || use.includes('带电吹箭'))).toBe(false)
   })
 
   it('defines exactly 30 required craftables', () => {

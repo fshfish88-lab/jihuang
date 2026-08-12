@@ -79,11 +79,11 @@ export const expandedMaterialEntries: WikiEntry[] = [
     aliases: ['黑色羽毛', '乌鸦羽毛', 'Jet Feather'],
     category: '资源',
     stage: '第一周',
-    summary: '黑色羽毛主要来自乌鸦，是催眠吹箭和羽毛帽使用的基础鸟类材料。',
+    summary: '黑色羽毛主要来自乌鸦，是催眠吹箭、羽毛帽和鞍具脱卸器使用的基础鸟类材料。',
     acquisition: [
       acquire('掉落', '捕捉或猎取乌鸦', '在地面放置捕鸟器，可用种子提高引鸟效率。', '处理捕获的乌鸦，或用远程手段猎取落地乌鸦，反复收集羽毛。')
     ],
-    uses: ['制作催眠吹箭。', '与红色羽毛等材料一起制作羽毛帽。'],
+    uses: ['制作催眠吹箭和鞍具脱卸器。', '与红色羽毛等材料一起制作羽毛帽。'],
     tips: ['捕鸟器比追着落地鸟近战更稳定，基地附近留一处不受干扰的诱捕区。', '需要批量制作吹箭时同步储备芦苇和蜂刺。'],
     mistakes: ['认为每只乌鸦都一定给羽毛；处理鸟类也可能得到小肉。', '为取羽毛清空鸟笼中的长期换蛋用鸟。'],
     related: ['birdcage', 'cut-reeds', 'stinger']
@@ -96,11 +96,11 @@ export const expandedMaterialEntries: WikiEntry[] = [
     aliases: ['蓝色羽毛', '雪雀羽毛', 'Azure Feather'],
     category: '资源',
     stage: '冬季',
-    summary: '蓝色羽毛主要来自冬季出现的雪雀，是攻击吹箭等远程武器的季节性材料。',
+    summary: '蓝色羽毛主要来自冬季出现的雪雀，是制作攻击吹箭的季节性材料。',
     acquisition: [
       acquire('掉落', '冬季捕捉或猎取雪雀', '冬季在地面布置捕鸟器，并用种子吸引雪雀。', '处理捕获的雪雀，或用远程手段猎取，持续收集蓝色羽毛。')
     ],
-    uses: ['制作攻击吹箭。', '用于带电吹箭等需要蓝色羽毛的远程武器。'],
+    uses: ['与芦苇和犬牙一起制作攻击吹箭。'],
     tips: ['它的常规鸟类来源具有季节性，冬季结束前为后续吹箭预留库存。', '批量制作攻击吹箭时同步准备芦苇和犬牙。'],
     mistakes: ['错过冬季后才开始依赖雪雀来源收集。', '把名称中的“蓝色”理解成蓝宝石材料；它是鸟类羽毛。'],
     related: ['birdcage', 'cut-reeds', 'hound-tooth']
@@ -121,6 +121,23 @@ export const expandedMaterialEntries: WikiEntry[] = [
     tips: ['冬季红雀来源会受限，入冬前留出计划用量。', '制作火焰吹箭前同时储备芦苇和木炭。'],
     mistakes: ['把红雀当作全年都同样容易获得的鸟类来源。', '在基地可燃物附近试射火焰吹箭。'],
     related: ['birdcage', 'cut-reeds', 'charcoal']
+  }),
+  simpleEntry({
+    slug: 'saffron-feather',
+    prefab: 'feather_canary',
+    title: '黄色羽毛',
+    english: 'Saffron Feather',
+    aliases: ['黄色羽毛', '金丝雀羽毛', 'Saffron Feather'],
+    category: '资源',
+    stage: '前中期捕鸟',
+    summary: '黄色羽毛主要来自金丝雀，是制作电击吹箭所需的鸟类材料。',
+    acquisition: [
+      acquire('掉落', '捕捉或猎取金丝雀', '在金丝雀活动区域放置捕鸟器，并用种子吸引它落入陷阱。', '处理捕获的金丝雀，或用远程手段猎取落地金丝雀，反复收集黄色羽毛。')
+    ],
+    uses: ['与芦苇和金块一起制作电击吹箭。'],
+    tips: ['先用捕鸟器建立稳定来源，避免徒步追逐会受惊飞走的鸟。', '准备批量制作电击吹箭时，同步储备芦苇和金块。'],
+    mistakes: ['把黄色羽毛与蓝色羽毛混用；电击吹箭要求黄色羽毛，攻击吹箭要求蓝色羽毛。', '认为每只金丝雀都一定给羽毛；处理鸟类也可能得到小肉。'],
+    related: ['birdcage', 'cut-reeds', 'gold-nugget']
   }),
   simpleEntry({
     slug: 'steel-wool',
