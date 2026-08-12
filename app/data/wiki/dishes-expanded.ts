@@ -98,9 +98,9 @@ export const expandedDishEntries: WikiEntry[] = [
     summary: '用三点水果度制作的降温甜品，恢复 20 生命但饱食收益一般。',
     health: 20, hunger: 25, sanity: 5, perishDays: 6, cookTimeSeconds: 10, priority: 0,
     rules: ['水果度 ≥ 3。'], forbidden: ['不可含肉度。', '不可含蔬菜度。'],
-    conflicts: ['火龙果会优先触发火龙果派；普通浆果只有 0.5 水果度，不能用三颗浆果凑够。'],
-    example: [amount('watermelon', '西瓜', 3), amount('ice', '冰', 1)],
-    note: '三颗西瓜提供 3 点水果度；不要改用火龙果。'
+    conflicts: ['冰等可食用填充会让配方与同为优先级 0 的果酱冲突；火龙果则会优先触发火龙果派。'],
+    example: [amount('watermelon', '西瓜', 3), amount('twigs', '树枝', 1)],
+    note: '三颗西瓜提供 3 点水果度；树枝带不可食用度，可排除不接受树枝的果酱。'
   }),
   dish({
     slug: 'fish-tacos', prefab: 'fishtacos', title: '鱼肉玉米卷', english: 'Fish Tacos',

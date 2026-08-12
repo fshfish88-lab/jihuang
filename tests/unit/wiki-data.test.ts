@@ -25,6 +25,7 @@ const requiredExpandedDishes = [
   'beefy-greens', 'jelly-salad', 'frozen-banana-daiquiri'
 ] as const
 const canonicalDishExamples: Record<string, Record<string, number>> = {
+  'fruit-medley': { watermelon: 3, twigs: 1 },
   'lobster-dinner': { wobster: 1, butter: 1, berries: 2 },
   'lobster-bisque': { wobster: 1, ice: 1, berries: 2 },
   'california-roll': { 'kelp-fronds': 2, 'freshwater-fish': 2 },
@@ -65,6 +66,18 @@ describe('wiki data', () => {
     expect(entry, `missing dish ${slug}`).toBeDefined()
     expect(Object.fromEntries(entry?.dish?.examples[0]?.ingredients.map(item => [item.slug, item.amount]) || [])).toEqual(expected)
   })
+
+  it.each(['potato-souffle', 'volt-goat-chaud-froid'])(
+    '%s is explicitly Warly-exclusive and uses his portable crock pot',
+    (slug) => {
+      const entry = wikiEntries.find(item => item.slug === slug)
+
+      expect(entry?.crafting.station).toBe('不是制作栏物品；必须使用沃利的便携烹饪锅烹饪。')
+      expect(entry?.facts).toContainEqual({ label: '烹饪限制', value: '仅沃利可用便携烹饪锅制作' })
+      expect(entry?.dish?.rules).toContain('必须由沃利用便携烹饪锅制作。')
+      expect(entry?.dish?.examples[0]?.label).toBe('沃利便携烹饪锅四格配方')
+    },
+  )
 
   it('uses current Live Eel inventory metadata for icon discovery', () => {
     const entry = wikiEntries.find(item => item.slug === 'eel')
