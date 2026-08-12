@@ -1,6 +1,6 @@
 {
   "title": "火堆边百科物品图标来源清单",
-  "note": "图标为 Klei Entertainment 游戏素材；本站为免费、非官方玩家攻略站。下载镜像仅用于取得对应原版图标。",
+  "note": "图标为 Klei Entertainment 游戏素材；本站为免费、非官方玩家攻略站。PNG 随仓库提交，清单中的字节数与 SHA-256 是信任锚；上游 main 变化会导致同步失败，不会静默替换。",
   "generatedAt": "2026-08-12T17:53:57.647Z",
   "count": 328,
   "entries": [

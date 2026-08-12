@@ -5,6 +5,7 @@ const root = process.cwd()
 const sharedSource = readFileSync(`${root}/app/data/wiki/shared.ts`, 'utf8')
 const syncSource = readFileSync(`${root}/scripts/sync-wiki-icons.mjs`, 'utf8')
 const validatorSource = readFileSync(`${root}/scripts/validate-wiki-data.mjs`, 'utf8')
+const contactSheetSource = readFileSync(`${root}/scripts/generate-icon-contact-sheet.py`, 'utf8')
 
 function parseOverrides(source: string, declaration: string): Record<string, string> {
   const body = source.match(new RegExp(`(?:const|export const) ${declaration}(?:[^=]*)= \\{([\\s\\S]*?)\\n\\}`))?.[1]
@@ -18,8 +19,12 @@ function parseOverrides(source: string, declaration: string): Record<string, str
 
 describe('wiki icon source contract', () => {
   it('keeps the runtime and downloader source overrides identical', () => {
-    expect(parseOverrides(sharedSource, 'imageSourceOverrides'))
-      .toEqual(parseOverrides(syncSource, 'sourceOverrides'))
+    const runtimeOverrides = parseOverrides(sharedSource, 'imageSourceOverrides')
+    const downloaderOverrides = parseOverrides(syncSource, 'sourceOverrides')
+
+    expect(Object.keys(runtimeOverrides)).toHaveLength(43)
+    expect(Object.keys(downloaderOverrides)).toHaveLength(43)
+    expect(runtimeOverrides).toEqual(downloaderOverrides)
   })
 
   it('dates image verification separately from factual entry verification', () => {
@@ -31,5 +36,9 @@ describe('wiki icon source contract', () => {
 
   it('requires the current 328-entry icon corpus', () => {
     expect(validatorSource).toContain('if (entries.length < 328)')
+  })
+
+  it('derives contact-sheet rows from the number of audited icons', () => {
+    expect(contactSheetSource).toContain('ROWS = ceil(len(ITEMS) / COLS)')
   })
 })

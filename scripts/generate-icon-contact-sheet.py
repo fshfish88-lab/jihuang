@@ -1,3 +1,4 @@
+from math import ceil
 from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont
@@ -31,7 +32,7 @@ ITEMS = [
 ]
 
 COLS = 5
-ROWS = 4
+ROWS = ceil(len(ITEMS) / COLS)
 CELL_W = 280
 CELL_H = 250
 MARGIN = 28

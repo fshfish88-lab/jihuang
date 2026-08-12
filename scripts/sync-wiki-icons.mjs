@@ -1,14 +1,22 @@
-import { createHash } from 'node:crypto'
 import { execFile } from 'node:child_process'
-import { access, mkdir, readFile, readdir, rename, unlink, writeFile } from 'node:fs/promises'
+import { mkdir, readFile, readdir, rename, unlink } from 'node:fs/promises'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { promisify } from 'node:util'
+import {
+  readPriorManifest,
+  removeStaleParts,
+  replaceManifestAtomically,
+  validateIconBytes,
+  validateTrustedLocalIcon
+} from './wiki-icon-integrity.mjs'
 
 const root = fileURLToPath(new URL('..', import.meta.url))
 const dataDir = join(root, 'app', 'data', 'wiki')
 const outputDir = join(root, 'public', 'images', 'wiki')
 const materialDir = join(root, '素材文件', '物品图标')
+const manifestPath = join(materialDir, '来源清单.json')
+// The mutable upstream is only a retrieval source. Vendored PNGs and the checked-in manifest hashes are trusted.
 const mirrorBase = 'https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items'
 const execFileAsync = promisify(execFile)
 const sourceOverrides = {
@@ -85,21 +93,42 @@ if (process.argv.includes('--list')) {
   process.exit(0)
 }
 
+await removeStaleParts(outputDir, manifestPath)
+const priorManifest = await readPriorManifest(manifestPath)
+const expectedBySlug = new Map((priorManifest.entries || []).map(record => [record.slug, record]))
 const manifest = []
 const errors = []
+const pendingRenames = []
 
 async function download(entry) {
   const url = sourceOverrides[entry.slug] || `${mirrorBase}/${entry.prefab}.png`
   const target = join(outputDir, `${entry.slug}.png`)
+  const expected = expectedBySlug.get(entry.slug)
   try {
-    await access(target)
     const bytes = await readFile(target)
+    try {
+      validateTrustedLocalIcon(bytes, expected, `${entry.slug} local icon`)
+    } catch (error) {
+      if (!expected) {
+        errors.push(error.message)
+        return
+      }
+      // A damaged trusted icon may be recovered, but only from bytes matching its checked-in hash.
+      return downloadTrustedReplacement(entry, url, target, expected)
+    }
     manifest.push(manifestEntry(entry, url, bytes))
     return
-  } catch {
-    // Missing local icon: continue with network download.
+  } catch (error) {
+    if (error.code !== 'ENOENT') {
+      errors.push(`${entry.slug}: cannot read local icon (${error.message})`)
+      return
+    }
   }
 
+  return downloadTrustedReplacement(entry, url, target, expected)
+}
+
+async function downloadTrustedReplacement(entry, url, target, expected) {
   let lastError
   for (let attempt = 1; attempt <= 3; attempt += 1) {
     const temporary = `${target}.part`
@@ -131,11 +160,8 @@ async function download(entry) {
         ])
       }
       const bytes = await readFile(temporary)
-      if (bytes.length < 100) throw new Error(`image too small (${bytes.length} bytes)`)
-      if (!bytes.subarray(0, 8).equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]))) {
-        throw new Error('downloaded file is not a PNG')
-      }
-      await rename(temporary, target)
+      validateIconBytes(bytes, expected, `${entry.slug} downloaded icon`)
+      pendingRenames.push({ temporary, target })
       manifest.push(manifestEntry(entry, url, bytes))
       return
     } catch (error) {
@@ -149,6 +175,7 @@ async function download(entry) {
 
 function manifestEntry(entry, url, bytes) {
   const fromWiki = Boolean(sourceOverrides[entry.slug])
+  const integrity = validateIconBytes(bytes, undefined, entry.slug)
   return {
     slug: entry.slug,
     title: entry.title,
@@ -159,8 +186,8 @@ function manifestEntry(entry, url, bytes) {
       : `https://github.com/fankimm/dst-craft/blob/main/public/images/game-items/${entry.prefab}.png`,
     owner: 'Klei Entertainment',
     mirror: fromWiki ? 'dontstarve.wiki.gg' : 'fankimm/dst-craft',
-    sha256: createHash('sha256').update(bytes).digest('hex'),
-    bytes: bytes.length,
+    sha256: integrity.sha256,
+    bytes: integrity.bytes,
     verifiedAt: '2026-08-13'
   }
 }
@@ -170,20 +197,36 @@ for (let index = 0; index < unique.length; index += 3) {
 }
 
 manifest.sort((a, b) => a.slug.localeCompare(b.slug))
-await writeFile(
-  join(materialDir, '来源清单.json'),
-  `${JSON.stringify({
-    title: '火堆边百科物品图标来源清单',
-    note: '图标为 Klei Entertainment 游戏素材；本站为免费、非官方玩家攻略站。下载镜像仅用于取得对应原版图标。',
-    generatedAt: new Date().toISOString(),
-    count: manifest.length,
-    entries: manifest
-  }, null, 2)}\n`,
-  'utf8'
-)
-
-console.log(`Downloaded ${manifest.length}/${unique.length} wiki icons.`)
 if (errors.length) {
+  await Promise.all(pendingRenames.map(({ temporary }) => unlink(temporary).catch(() => {})))
   console.error(errors.join('\n'))
   process.exit(1)
 }
+
+for (const { temporary, target } of pendingRenames) await rename(temporary, target)
+
+const manifestHeader = {
+  title: '火堆边百科物品图标来源清单',
+  note: '图标为 Klei Entertainment 游戏素材；本站为免费、非官方玩家攻略站。PNG 随仓库提交，清单中的字节数与 SHA-256 是信任锚；上游 main 变化会导致同步失败，不会静默替换。',
+  count: manifest.length,
+  entries: manifest
+}
+const priorComparable = {
+  title: priorManifest.title,
+  note: priorManifest.note,
+  count: priorManifest.count,
+  entries: priorManifest.entries
+}
+const changed = JSON.stringify(manifestHeader) !== JSON.stringify(priorComparable)
+if (changed) {
+  const nextManifest = {
+    title: manifestHeader.title,
+    note: manifestHeader.note,
+    generatedAt: new Date().toISOString(),
+    count: manifestHeader.count,
+    entries: manifestHeader.entries
+  }
+  await replaceManifestAtomically(manifestPath, `${JSON.stringify(nextManifest, null, 2)}\n`, errors)
+}
+
+console.log(`Verified ${manifest.length}/${unique.length} wiki icons; manifest ${changed ? 'updated atomically' : 'unchanged'}.`)
