@@ -4,6 +4,7 @@ import { advancedCaveEntries } from './caves-advanced'
 import { creatureEntries } from './creatures'
 import { craftingExpandedEntries } from './crafting-expanded'
 import { dishEntries } from './dishes'
+import { expandedDishEntries } from './dishes-expanded'
 import { equipmentEntries } from './equipment'
 import { explorationEntries } from './exploration'
 import { materialEntries } from './materials'
@@ -21,6 +22,7 @@ export const wikiEntries: WikiEntry[] = [
   ...equipmentEntries,
   ...structureEntries,
   ...dishEntries,
+  ...expandedDishEntries,
   ...creatureEntries,
   ...explorationEntries,
   ...seasonalEntries,

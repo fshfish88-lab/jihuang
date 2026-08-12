@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { wikiEntries } from '../../app/data/wiki'
+import { expandedDishEntries } from '../../app/data/wiki/dishes-expanded'
 
 const requiredCraftables = [
   'razor', 'pitchfork', 'garden-hoe', 'watering-can', 'golden-axe', 'golden-pickaxe',
@@ -16,6 +17,23 @@ const missingMaterialLinks: Record<string, string> = {
   '暗影碎布': 'dark-tatters'
 }
 const requiredMissingMaterials = Object.values(missingMaterialLinks)
+const requiredExpandedDishes = [
+  'mandrake-soup', 'pumpkin-cookies', 'fruit-medley', 'fish-tacos', 'unagi',
+  'banana-pop', 'asparagus-soup', 'stuffed-pepper-poppers', 'potato-souffle',
+  'volt-goat-chaud-froid', 'lobster-dinner', 'lobster-bisque', 'california-roll',
+  'barnacle-linguine', 'stuffed-fish-heads', 'barnacle-nigiri', 'leafy-meatloaf',
+  'beefy-greens', 'jelly-salad', 'frozen-banana-daiquiri'
+] as const
+const canonicalDishExamples: Record<string, Record<string, number>> = {
+  'lobster-dinner': { wobster: 1, butter: 1, berries: 2 },
+  'lobster-bisque': { wobster: 1, ice: 1, berries: 2 },
+  'california-roll': { 'kelp-fronds': 2, 'freshwater-fish': 2 },
+  'barnacle-linguine': { barnacles: 2, asparagus: 2 },
+  'stuffed-fish-heads': { barnacles: 1, 'freshwater-fish': 2, potato: 1 },
+  'barnacle-nigiri': { barnacles: 1, 'kelp-fronds': 2, egg: 1 },
+  'jelly-salad': { 'leafy-meat': 2, honey: 2 },
+  'frozen-banana-daiquiri': { banana: 1, ice: 1, berries: 2 }
+}
 const featherUses: Record<string, string[]> = {
   'jet-feather': ['催眠吹箭', '鞍具脱卸器'],
   'crimson-feather': ['火焰吹箭'],
@@ -36,6 +54,18 @@ const canonicalRecipeContracts: Record<string, { ingredients: Record<string, num
 }
 
 describe('wiki data', () => {
+  it('contains exactly the 20 expanded practical crock pot dishes', () => {
+    expect(requiredExpandedDishes).toHaveLength(20)
+    expect(expandedDishEntries).toHaveLength(20)
+    expect(expandedDishEntries.map(item => item.slug).sort()).toEqual([...requiredExpandedDishes].sort())
+  })
+
+  it.each(Object.entries(canonicalDishExamples))('keeps a canonical four-slot example for %s', (slug, expected) => {
+    const entry = wikiEntries.find(item => item.slug === slug)
+    expect(entry, `missing dish ${slug}`).toBeDefined()
+    expect(Object.fromEntries(entry?.dish?.examples[0]?.ingredients.map(item => [item.slug, item.amount]) || [])).toEqual(expected)
+  })
+
   it('contains at least 312 wiki entries', () => {
     expect(wikiEntries.length).toBeGreaterThanOrEqual(312)
   })
