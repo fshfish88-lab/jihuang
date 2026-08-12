@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { wikiEntries } from '../../app/data/wiki'
 
-const requiredMissingMaterials = ['glow-berry', 'infused-moon-shard', 'pure-horror', 'dark-tatters']
 const requiredCraftables = [
   'razor', 'pitchfork', 'garden-hoe', 'watering-can', 'golden-axe', 'golden-pickaxe',
   'golden-shovel', 'compass', 'boomerang', 'blow-dart', 'sleep-dart', 'fire-dart',
@@ -16,21 +15,30 @@ const missingMaterialLinks: Record<string, string> = {
   '纯粹恐惧': 'pure-horror',
   '暗影碎布': 'dark-tatters'
 }
+const requiredMissingMaterials = Object.values(missingMaterialLinks)
 
 describe('wiki data', () => {
-  it('contains the expanded core batch', () => {
+  it('contains at least 312 wiki entries', () => {
     expect(wikiEntries.length).toBeGreaterThanOrEqual(312)
-    expect(wikiEntries.filter(item => item.category === '料理').length).toBeGreaterThanOrEqual(50)
+  })
 
+  it('contains at least 50 dishes', () => {
+    expect(wikiEntries.filter(item => item.category === '料理').length).toBeGreaterThanOrEqual(50)
+  })
+
+  it.each(requiredMissingMaterials)('contains required material %s', (slug) => {
     const slugs = new Set(wikiEntries.map(item => item.slug))
-    for (const slug of requiredMissingMaterials) {
-      expect(slugs.has(slug), `missing material ${slug}`).toBe(true)
-    }
-    for (const slug of requiredCraftables) {
-      const entry = wikiEntries.find(item => item.slug === slug)
-      expect(entry, `missing craftable ${slug}`).toBeDefined()
-      expect(entry?.crafting.craftable, `${slug} is craftable`).toBe(true)
-    }
+    expect(slugs.has(slug), `missing material ${slug}`).toBe(true)
+  })
+
+  it('defines exactly 30 required craftables', () => {
+    expect(requiredCraftables).toHaveLength(30)
+  })
+
+  it.each(requiredCraftables)('contains required craftable %s', (slug) => {
+    const entry = wikiEntries.find(item => item.slug === slug)
+    expect(entry, `missing craftable ${slug}`).toBeDefined()
+    expect(entry?.crafting.craftable, `${slug} is craftable`).toBe(true)
   })
 
   it('has valid crafting or acquisition data', () => {
@@ -67,13 +75,21 @@ describe('wiki data', () => {
       ]
       for (const ingredient of ingredients) {
         expect(ingredient.name.length, `${item.slug} ingredient name`).toBeGreaterThan(0)
-        const expectedSlug = missingMaterialLinks[ingredient.name]
-        if (expectedSlug) {
-          expect(ingredient.slug, `${item.slug} ingredient ${ingredient.name}`).toBe(expectedSlug)
-          expect(slugs.has(expectedSlug), `${item.slug} -> ${expectedSlug}`).toBe(true)
-        }
         if (ingredient.slug) expect(slugs.has(ingredient.slug), `${item.slug} -> ${ingredient.slug}`).toBe(true)
       }
+    }
+  })
+
+  it.each(Object.entries(missingMaterialLinks))('links every %s ingredient to %s', (name, expectedSlug) => {
+    const slugs = new Set(wikiEntries.map(item => item.slug))
+    const matches = wikiEntries.flatMap(item => item.crafting.ingredients
+      .filter(ingredient => ingredient.name === name)
+      .map(ingredient => ({ item, ingredient })))
+
+    expect(matches.length, `no crafting ingredient named ${name}`).toBeGreaterThan(0)
+    for (const { item, ingredient } of matches) {
+      expect(ingredient.slug, `${item.slug} ingredient ${name}`).toBe(expectedSlug)
+      expect(slugs.has(expectedSlug), `${item.slug} -> ${expectedSlug}`).toBe(true)
     }
   })
 })
