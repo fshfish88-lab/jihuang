@@ -236,6 +236,28 @@ describe('atomic static-site export', () => {
     expect(await readFile(join(target, 'old-only.txt'), 'utf8')).toBe('trusted old artifact')
   })
 
+  it('rejects deletion of the old target during copy instead of publishing staging', async () => {
+    const { exportSiteAtomically } = await helpers()
+    const root = await temporaryDirectory()
+    const source = await createSource(root)
+    const target = await createOldTarget(root)
+
+    await expect(exportSiteAtomically({
+      source,
+      target,
+      buildInfo: buildInfo(),
+      operations: {
+        cp: async (...args: Parameters<typeof cp>) => {
+          await cp(...args)
+          await rm(target, { recursive: true })
+        },
+      },
+    })).rejects.toThrow(/target|identity|changed|deleted/i)
+
+    await expect(stat(target)).rejects.toMatchObject({ code: 'ENOENT' })
+    await expect(stat(join(dirname(target), '.github-pages.export.lock'))).rejects.toMatchObject({ code: 'ENOENT' })
+  })
+
   it('preserves the old artifact when build-info writing fails', async () => {
     const { exportSiteAtomically } = await helpers()
     const root = await temporaryDirectory()
@@ -370,6 +392,34 @@ describe('atomic static-site export', () => {
     await expect(stat(lock)).rejects.toMatchObject({ code: 'ENOENT' })
   })
 
+  it('verifies the renamed backup identity and restores external bytes before promotion', async () => {
+    const { exportSiteAtomically } = await helpers()
+    const root = await temporaryDirectory()
+    const source = await createSource(root)
+    const target = await createOldTarget(root)
+    let targetBackupRenameSeen = false
+
+    await expect(exportSiteAtomically({
+      source,
+      target,
+      buildInfo: buildInfo(),
+      uniqueId: () => 'backup-identity',
+      operations: {
+        rename: async (from: string, to: string) => {
+          if (from === target && to.endsWith('.backup-backup-identity')) {
+            await writeFile(join(target, 'old-only.txt'), 'external bytes before rename')
+            targetBackupRenameSeen = true
+          }
+          await rename(from, to)
+        },
+      },
+    })).rejects.toThrow(/backup|identity|changed/i)
+
+    expect(targetBackupRenameSeen).toBe(true)
+    expect(await readFile(join(target, 'old-only.txt'), 'utf8')).toBe('external bytes before rename')
+    await expect(stat(join(dirname(target), '.github-pages.backup-backup-identity'))).rejects.toMatchObject({ code: 'ENOENT' })
+  })
+
   it('replaces the artifact only after a verified staging copy is complete', async () => {
     const { exportSiteAtomically } = await helpers()
     const root = await temporaryDirectory()
@@ -433,6 +483,53 @@ describe('atomic static-site export', () => {
 
     expect(JSON.parse(await readFile(join(lock, 'transaction.json'), 'utf8'))).toMatchObject({ token: 'live', pid: 4242 })
     expect(await readFile(join(target, 'old-only.txt'), 'utf8')).toBe('trusted old artifact')
+  })
+
+  it('clears a complete dead acquiring-phase journal with no side effects and continues', async () => {
+    const { artifactIdentity, exportSiteAtomically } = await helpers()
+    const root = await temporaryDirectory()
+    const source = await createSource(root)
+    const target = await createOldTarget(root)
+    const staging = join(dirname(target), '.github-pages.staging-acquiring')
+    const backup = join(dirname(target), '.github-pages.backup-acquiring')
+    const oldTargetIdentity = await artifactIdentity(target)
+    const lock = await createTransactionLock(target, {
+      token: 'acquiring', pid: 4747, startedAt: '2026-08-13T00:00:00.000Z', target, staging, backup,
+      phase: 'acquiring', oldTargetIdentity,
+    })
+
+    await expect(exportSiteAtomically({
+      source,
+      target,
+      buildInfo: buildInfo(),
+      isProcessAlive: () => false,
+      operations: { cp: async () => { throw new Error('continued after acquiring recovery') } },
+    })).rejects.toThrow(/continued after acquiring recovery/i)
+
+    expect(await readFile(join(target, 'old-only.txt'), 'utf8')).toBe('trusted old artifact')
+    await expect(stat(lock)).rejects.toMatchObject({ code: 'ENOENT' })
+  })
+
+  it('preserves an acquiring-phase lock when side-effect paths or identity are inconsistent', async () => {
+    const { artifactIdentity, exportSiteAtomically } = await helpers()
+    const root = await temporaryDirectory()
+    const source = await createSource(root)
+    const target = await createOldTarget(root)
+    const staging = join(dirname(target), '.github-pages.staging-acquiring')
+    const backup = join(dirname(target), '.github-pages.backup-acquiring')
+    const oldTargetIdentity = await artifactIdentity(target)
+    await mkdir(staging)
+    const lock = await createTransactionLock(target, {
+      token: 'acquiring', pid: 4747, startedAt: '2026-08-13T00:00:00.000Z', target, staging, backup,
+      phase: 'acquiring', oldTargetIdentity,
+    })
+
+    await expect(exportSiteAtomically({
+      source, target, buildInfo: buildInfo(), isProcessAlive: () => false,
+    })).rejects.toThrow(/acquiring|side effect|staging|refus/i)
+
+    expect(await stat(lock)).toMatchObject({})
+    expect(await stat(staging)).toMatchObject({})
   })
 
   it('recovers a dead copying-phase transaction only when the untouched target identity matches', async () => {

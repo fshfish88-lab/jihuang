@@ -165,6 +165,17 @@ async function recoverDeadTransaction({ lock, target, operations, isProcessAlive
   const backupNames = (await operations.readdir(parent)).filter(name => name.startsWith(backupPrefix))
   const targetExists = await pathExists(target, operations)
   const stagingExists = await pathExists(journal.staging, operations)
+  if (journal.phase === 'acquiring' && backupNames.length === 0) {
+    if (stagingExists) {
+      throw new Error(`Dead acquiring-phase export already has staging side effects; preserving lock and staging: ${lock}`)
+    }
+    const currentIdentity = await artifactIdentity(target, operations)
+    if (!identitiesMatch(journal.oldTargetIdentity, currentIdentity)) {
+      throw new Error(`Dead acquiring-phase export target identity changed; preserving target and lock: ${lock}`)
+    }
+    await operations.rm(lock, { recursive: true })
+    return
+  }
   if (['prepared', 'copying'].includes(journal.phase) && backupNames.length === 0) {
     if (stagingExists) await operations.rm(journal.staging, { recursive: true, force: true })
     const currentIdentity = await artifactIdentity(target, operations)
@@ -217,6 +228,7 @@ async function verifyCompletedExportTarget(target, operations) {
 }
 
 async function acquireTransactionLock({ lock, journal, target, operations, isProcessAlive }) {
+  let recoveredPreviousTransaction = false
   for (let attempt = 0; attempt < 2; attempt += 1) {
     try {
       await operations.mkdir(lock)
@@ -230,11 +242,12 @@ async function acquireTransactionLock({ lock, journal, target, operations, isPro
         }
         throw error
       }
-      return
+      return recoveredPreviousTransaction
     } catch (error) {
       if (error?.code !== 'EEXIST') throw error
       if (attempt > 0) throw new Error(`Static-site export lock could not be acquired after recovery: ${lock}`, { cause: error })
       await recoverDeadTransaction({ lock, target, operations, isProcessAlive })
+      recoveredPreviousTransaction = true
     }
   }
 }
@@ -308,7 +321,11 @@ export async function exportSiteAtomically({
   const staging = join(parent, `.${targetName}.staging-${runId}`)
   const backup = join(parent, `.${targetName}.backup-${runId}`)
   const lock = join(parent, `.${targetName}.export.lock`)
-  const journal = transactionJournal({ token: runId, target, staging, backup, phase: 'acquiring' })
+  const oldTargetIdentity = await artifactIdentity(target, operations)
+  const journal = {
+    ...transactionJournal({ token: runId, target, staging, backup, phase: 'acquiring' }),
+    oldTargetIdentity,
+  }
   let lockAcquired = false
   let stagingCreated = false
   let backupCreated = false
@@ -318,10 +335,16 @@ export async function exportSiteAtomically({
 
   await operations.mkdir(parent, { recursive: true })
   try {
-    await acquireTransactionLock({ lock, journal, target, operations, isProcessAlive })
+    const recoveredPreviousTransaction = await acquireTransactionLock({ lock, journal, target, operations, isProcessAlive })
     lockAcquired = true
 
-    journal.oldTargetIdentity = await artifactIdentity(target, operations)
+    const targetIdentityAfterLock = await artifactIdentity(target, operations)
+    if (recoveredPreviousTransaction) {
+      journal.oldTargetIdentity = targetIdentityAfterLock
+      await writeJournal(lock, journal, operations)
+    } else if (!identitiesMatch(journal.oldTargetIdentity, targetIdentityAfterLock)) {
+      throw new Error('Static export target changed while the transaction lock was being acquired')
+    }
     journal.phase = 'prepared'
     await writeJournal(lock, journal, operations)
     journal.phase = 'copying'
@@ -361,11 +384,11 @@ export async function exportSiteAtomically({
       throw new Error('Build-info verification failed: written bytes do not match the expected size and SHA-256')
     }
 
-    if (await pathExists(target, operations)) {
-      const currentTargetIdentity = await artifactIdentity(target, operations)
-      if (!identitiesMatch(journal.oldTargetIdentity, currentTargetIdentity)) {
-        throw new Error('Static export target changed before backup; refusing to replace externally modified artifact')
-      }
+    const currentTargetIdentity = await artifactIdentity(target, operations)
+    if (!identitiesMatch(journal.oldTargetIdentity, currentTargetIdentity)) {
+      throw new Error('Static export target changed or was deleted before backup; refusing to publish staging')
+    }
+    if (currentTargetIdentity.exists) {
       journal.phase = 'backing-up'
       await writeJournal(lock, journal, operations)
       // On Windows this is a lock-protected, crash-recoverable two-rename exchange.
@@ -373,6 +396,20 @@ export async function exportSiteAtomically({
       await operations.rename(target, backup)
       backupCreated = true
       preserveRecoveryJournal = true
+      const backupIdentity = await artifactIdentity(backup, operations)
+      if (!identitiesMatch(journal.oldTargetIdentity, backupIdentity)) {
+        try {
+          await operations.rename(backup, target)
+          backupCreated = false
+          preserveRecoveryJournal = false
+        } catch (restoreError) {
+          throw new AggregateError(
+            [new Error('Renamed backup identity changed before promotion'), restoreError],
+            `Backup identity verification failed; recovery evidence preserved at lock ${lock}, journal ${join(lock, 'transaction.json')}, backup ${backup}`,
+          )
+        }
+        throw new Error('Renamed backup identity changed before promotion; external bytes were restored to target')
+      }
     }
 
     try {
