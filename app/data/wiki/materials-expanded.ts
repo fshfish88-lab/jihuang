@@ -4,10 +4,10 @@ import { acquire, simpleEntry } from './shared'
 export const expandedMaterialEntries: WikiEntry[] = [
   simpleEntry({
     slug: 'eel',
-    prefab: 'eel',
+    prefab: 'pondeel',
     title: '鳗鱼',
-    english: 'Eel',
-    aliases: ['鳗鱼', '洞穴鳗鱼', 'Eel'],
+    english: 'Live Eel',
+    aliases: ['鳗鱼', '活鳗鱼', '洞穴鳗鱼', 'Live Eel'],
     category: '资源',
     stage: '洞穴探索',
     summary: '鳗鱼是洞穴池塘中的鱼类食材，是制作鳗鱼寿司的必需原料。',

@@ -66,6 +66,13 @@ describe('wiki data', () => {
     expect(Object.fromEntries(entry?.dish?.examples[0]?.ingredients.map(item => [item.slug, item.amount]) || [])).toEqual(expected)
   })
 
+  it('uses current Live Eel inventory metadata for icon discovery', () => {
+    const entry = wikiEntries.find(item => item.slug === 'eel')
+    expect(entry?.english).toBe('Live Eel')
+    expect(entry?.aliases).toContain('活鳗鱼')
+    expect(entry?.image.sourceUrl).toMatch(/\/pondeel\.png$/)
+  })
+
   it('contains at least 312 wiki entries', () => {
     expect(wikiEntries.length).toBeGreaterThanOrEqual(312)
   })
