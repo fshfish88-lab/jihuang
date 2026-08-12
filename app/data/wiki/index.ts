@@ -2,6 +2,7 @@ import type { WikiEntry, WikiRoute } from '~/types/wiki'
 import { bossCombatEntries } from './boss-combat'
 import { advancedCaveEntries } from './caves-advanced'
 import { creatureEntries } from './creatures'
+import { craftingExpandedEntries } from './crafting-expanded'
 import { dishEntries } from './dishes'
 import { equipmentEntries } from './equipment'
 import { explorationEntries } from './exploration'
@@ -16,6 +17,7 @@ import { structureEntries } from './structures'
 export const wikiEntries: WikiEntry[] = [
   ...materialEntries,
   ...expandedMaterialEntries,
+  ...craftingExpandedEntries,
   ...equipmentEntries,
   ...structureEntries,
   ...dishEntries,

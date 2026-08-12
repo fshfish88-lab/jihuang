@@ -22,6 +22,14 @@ const featherUses: Record<string, string[]> = {
   'azure-feather': ['攻击吹箭'],
   'saffron-feather': ['电击吹箭']
 }
+const featherRecipeContracts: Record<string, Record<string, number>> = {
+  'blow-dart': { 'cut-reeds': 2, 'hound-tooth': 1, 'azure-feather': 1 },
+  'sleep-dart': { 'cut-reeds': 2, stinger: 1, 'jet-feather': 1 },
+  'fire-dart': { 'cut-reeds': 2, charcoal: 1, 'crimson-feather': 1 },
+  'electric-dart': { 'cut-reeds': 2, 'gold-nugget': 1, 'saffron-feather': 1 },
+  saddlehorn: { twigs: 2, 'bone-shards': 2, 'jet-feather': 1 },
+  'feather-hat': { 'crimson-feather': 2, 'jet-feather': 3, 'tentacle-spots': 2 }
+}
 
 describe('wiki data', () => {
   it('contains at least 312 wiki entries', () => {
@@ -69,6 +77,12 @@ describe('wiki data', () => {
     const entry = wikiEntries.find(item => item.slug === slug)
     expect(entry, `missing craftable ${slug}`).toBeDefined()
     expect(entry?.crafting.craftable, `${slug} is craftable`).toBe(true)
+  })
+
+  it.each(Object.entries(featherRecipeContracts))('uses the exact current feather recipe for %s', (slug, expected) => {
+    const entry = wikiEntries.find(item => item.slug === slug)
+    expect(entry, `missing feather recipe ${slug}`).toBeDefined()
+    expect(Object.fromEntries(entry?.crafting.ingredients.map(item => [item.slug, item.amount]) || [])).toEqual(expected)
   })
 
   it('has valid crafting or acquisition data', () => {
