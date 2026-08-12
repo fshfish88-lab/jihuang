@@ -1,4 +1,4 @@
-import { cp, mkdir, readFile, readdir, rename, rm, stat, writeFile } from 'node:fs/promises'
+import { cp, mkdir, readFile, realpath, readdir, rename, rm, stat, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { basename, dirname, join } from 'node:path'
 import { afterEach, describe, expect, it } from 'vitest'
@@ -23,6 +23,13 @@ async function createSource(root: string): Promise<string> {
     writeFile(join(source, 'index.html'), '<h1>new home</h1>'),
     writeFile(join(source, 'wiki', 'index.html'), '<h1>new wiki</h1>'),
   ])
+  const { writeCompletedBuildManifest } = await import('../../scripts/build-manifest.mjs')
+  await writeCompletedBuildManifest({
+    source,
+    commit: 'generated-commit',
+    baseURL: '/jihuang/',
+    generatedAt: '2026-08-13T00:00:00.000Z',
+  })
   return source
 }
 
@@ -40,8 +47,6 @@ function buildInfo() {
   return {
     name: 'campfire-wiki',
     version: '0.1.0',
-    commit: 'test-commit',
-    builtAt: '2026-08-13T00:00:00.000Z',
   }
 }
 
@@ -50,11 +55,69 @@ async function siblingResidues(target: string): Promise<string[]> {
   return (await readdir(dirname(target))).filter(name => name.startsWith(prefix))
 }
 
+async function createTransactionLock(target: string, transaction: Record<string, unknown>) {
+  const lock = join(dirname(target), `.${basename(target)}.export.lock`)
+  await mkdir(lock, { recursive: true })
+  await writeFile(join(lock, 'transaction.json'), `${JSON.stringify(transaction)}\n`)
+  return lock
+}
+
 afterEach(async () => {
   await Promise.all(temporaryDirectories.splice(0).map(directory => rm(directory, { recursive: true, force: true })))
 })
 
 describe('atomic static-site export', () => {
+  it('rejects an ancestor target before any mkdir and preserves unrelated files', async () => {
+    const { exportSiteAtomically } = await helpers()
+    const root = await temporaryDirectory()
+    const source = await createSource(root)
+    const unrelated = join(root, 'unrelated.txt')
+    await writeFile(unrelated, 'must survive')
+    let mkdirCalls = 0
+
+    await expect(exportSiteAtomically({
+      source,
+      target: root,
+      buildInfo: buildInfo(),
+      operations: {
+        mkdir: async () => {
+          mkdirCalls += 1
+          throw new Error('mkdir must not be reached')
+        },
+      },
+    })).rejects.toThrow(/overlap|ancestor|descendant/i)
+
+    expect(mkdirCalls).toBe(0)
+    expect(await readFile(unrelated, 'utf8')).toBe('must survive')
+    expect(await readFile(join(source, 'index.html'), 'utf8')).toContain('new home')
+  })
+
+  it('rejects a realpath alias overlap before any target-side mkdir', async () => {
+    const { exportSiteAtomically } = await helpers()
+    const root = await temporaryDirectory()
+    const source = await createSource(root)
+    const alias = join(root, 'apparent-independent-target')
+    await mkdir(alias)
+    let mkdirCalls = 0
+
+    await expect(exportSiteAtomically({
+      source,
+      target: alias,
+      buildInfo: buildInfo(),
+      operations: {
+        realpath: async (path: Parameters<typeof realpath>[0]) => (
+          String(path) === alias ? realpath(source) : realpath(path)
+        ),
+        mkdir: async () => {
+          mkdirCalls += 1
+          throw new Error('mkdir must not be reached')
+        },
+      },
+    })).rejects.toThrow(/overlap/i)
+
+    expect(mkdirCalls).toBe(0)
+  })
+
   it.each([
     ['missing', async (root: string) => join(root, '.output', 'public')],
     ['non-directory', async (root: string) => {
@@ -108,6 +171,22 @@ describe('atomic static-site export', () => {
     expect(await readFile(join(target, 'index.html'), 'utf8')).toContain('old home')
     expect(await readFile(join(target, 'old-only.txt'), 'utf8')).toBe('trusted old artifact')
     expect(await siblingResidues(target)).toEqual([])
+  })
+
+  it.each(['stale', 'tampered', 'incomplete'])('rejects a %s completed source and preserves the old artifact', async (kind) => {
+    const { exportSiteAtomically } = await helpers()
+    const root = await temporaryDirectory()
+    const source = await createSource(root)
+    const target = await createOldTarget(root)
+    if (kind === 'stale') await writeFile(join(source, 'unlisted-after-generation.html'), 'stale extra output')
+    else if (kind === 'tampered') await writeFile(join(source, 'index.html'), '<h1>tampered</h1>')
+    else await rm(join(source, '.campfire-build.json'))
+
+    await expect(exportSiteAtomically({ source, target, buildInfo: buildInfo() }))
+      .rejects.toThrow(/manifest|snapshot|completed/i)
+
+    expect(await readFile(join(target, 'index.html'), 'utf8')).toContain('old home')
+    expect(await readFile(join(target, 'old-only.txt'), 'utf8')).toBe('trusted old artifact')
   })
 
   it('rejects a same-size corrupted staging copy before changing the old artifact', async () => {
@@ -214,6 +293,44 @@ describe('atomic static-site export', () => {
     expect(await siblingResidues(target)).toEqual([])
   })
 
+  it('preserves and reports the backup path when promotion and rollback both fail', async () => {
+    const { exportSiteAtomically } = await helpers()
+    const root = await temporaryDirectory()
+    const source = await createSource(root)
+    const target = await createOldTarget(root)
+    let renameCount = 0
+    let caught: unknown
+
+    try {
+      await exportSiteAtomically({
+        source,
+        target,
+        buildInfo: buildInfo(),
+        uniqueId: () => 'rollback-failure',
+        operations: {
+          rename: async (from: string, to: string) => {
+            renameCount += 1
+            if (renameCount === 2) throw new Error('primary promotion failure')
+            if (renameCount === 3) throw new Error('secondary restore failure')
+            await rename(from, to)
+          },
+        },
+      })
+    } catch (error) {
+      caught = error
+    }
+
+    const backup = join(dirname(target), '.github-pages.backup-rollback-failure')
+    expect(caught).toBeInstanceOf(AggregateError)
+    expect((caught as Error).message).toMatch(/backup-rollback-failure/i)
+    expect((caught as AggregateError).errors.map(error => (error as Error).message)).toEqual([
+      'primary promotion failure',
+      'secondary restore failure',
+    ])
+    expect(await readFile(join(backup, 'old-only.txt'), 'utf8')).toBe('trusted old artifact')
+    await expect(stat(target)).rejects.toMatchObject({ code: 'ENOENT' })
+  })
+
   it('replaces the artifact only after a verified staging copy is complete', async () => {
     const { exportSiteAtomically } = await helpers()
     const root = await temporaryDirectory()
@@ -225,7 +342,12 @@ describe('atomic static-site export', () => {
     expect(await readFile(join(target, 'index.html'), 'utf8')).toContain('new home')
     expect(await readFile(join(target, 'wiki', 'index.html'), 'utf8')).toContain('new wiki')
     await expect(readFile(join(target, 'old-only.txt'))).rejects.toMatchObject({ code: 'ENOENT' })
-    expect(JSON.parse(await readFile(join(target, 'build-info.json'), 'utf8'))).toEqual(buildInfo())
+    expect(JSON.parse(await readFile(join(target, 'build-info.json'), 'utf8'))).toEqual({
+      ...buildInfo(),
+      commit: 'generated-commit',
+      baseURL: '/jihuang/',
+      generatedAt: '2026-08-13T00:00:00.000Z',
+    })
     expect(await siblingResidues(target)).toEqual([])
   })
 
@@ -253,6 +375,112 @@ describe('atomic static-site export', () => {
     })).rejects.toThrow(/injected failure after lock/i)
 
     await expect(stat(lock)).rejects.toMatchObject({ code: 'ENOENT' })
+  })
+
+  it('rejects a live transaction lock without changing its recorded paths', async () => {
+    const { exportSiteAtomically } = await helpers()
+    const root = await temporaryDirectory()
+    const source = await createSource(root)
+    const target = await createOldTarget(root)
+    const staging = join(dirname(target), '.github-pages.staging-live')
+    const backup = join(dirname(target), '.github-pages.backup-live')
+    const lock = await createTransactionLock(target, {
+      token: 'live', pid: 4242, startedAt: '2026-08-13T00:00:00.000Z', target, staging, backup, phase: 'copying',
+    })
+
+    await expect(exportSiteAtomically({
+      source, target, buildInfo: buildInfo(), isProcessAlive: () => true,
+    })).rejects.toThrow(/already running|live|4242/i)
+
+    expect(JSON.parse(await readFile(join(lock, 'transaction.json'), 'utf8'))).toMatchObject({ token: 'live', pid: 4242 })
+    expect(await readFile(join(target, 'old-only.txt'), 'utf8')).toBe('trusted old artifact')
+  })
+
+  it('recovers the unique old backup from a dead transaction before starting', async () => {
+    const { exportSiteAtomically } = await helpers()
+    const root = await temporaryDirectory()
+    const source = await createSource(root)
+    const target = await createOldTarget(root)
+    const staging = join(dirname(target), '.github-pages.staging-dead')
+    const backup = join(dirname(target), '.github-pages.backup-dead')
+    await rename(target, backup)
+    await mkdir(staging)
+    await writeFile(join(staging, 'partial.txt'), 'partial')
+    const lock = await createTransactionLock(target, {
+      token: 'dead', pid: 4343, startedAt: '2026-08-13T00:00:00.000Z', target, staging, backup, phase: 'promoting',
+    })
+
+    await expect(exportSiteAtomically({
+      source,
+      target,
+      buildInfo: buildInfo(),
+      isProcessAlive: () => false,
+      operations: { cp: async () => { throw new Error('stop after recovery') } },
+    })).rejects.toThrow(/stop after recovery/i)
+
+    expect(await readFile(join(target, 'old-only.txt'), 'utf8')).toBe('trusted old artifact')
+    await expect(stat(staging)).rejects.toMatchObject({ code: 'ENOENT' })
+    await expect(stat(lock)).rejects.toMatchObject({ code: 'ENOENT' })
+  })
+
+  it('preserves ambiguous dead-transaction backups and refuses recovery', async () => {
+    const { exportSiteAtomically } = await helpers()
+    const root = await temporaryDirectory()
+    const source = await createSource(root)
+    const target = await createOldTarget(root)
+    const staging = join(dirname(target), '.github-pages.staging-dead')
+    const backup = join(dirname(target), '.github-pages.backup-dead')
+    const otherBackup = join(dirname(target), '.github-pages.backup-other')
+    await rename(target, backup)
+    await mkdir(staging)
+    await writeFile(join(staging, 'partial.txt'), 'safe to clean')
+    await mkdir(otherBackup)
+    await writeFile(join(otherBackup, 'other.txt'), 'other backup')
+    const lock = await createTransactionLock(target, {
+      token: 'dead', pid: 4343, startedAt: '2026-08-13T00:00:00.000Z', target, staging, backup, phase: 'promoting',
+    })
+
+    await expect(exportSiteAtomically({
+      source, target, buildInfo: buildInfo(), isProcessAlive: () => false,
+    })).rejects.toThrow(/ambiguous|backup|refus/i)
+
+    expect(await readFile(join(backup, 'old-only.txt'), 'utf8')).toBe('trusted old artifact')
+    expect(await readFile(join(otherBackup, 'other.txt'), 'utf8')).toBe('other backup')
+    await expect(stat(staging)).rejects.toMatchObject({ code: 'ENOENT' })
+    expect(await stat(lock)).toMatchObject({})
+  })
+
+  it('keeps the primary failure first and appends staging and lock cleanup failures', async () => {
+    const { exportSiteAtomically } = await helpers()
+    const root = await temporaryDirectory()
+    const source = await createSource(root)
+    const target = await createOldTarget(root)
+
+    let caught: unknown
+    try {
+      await exportSiteAtomically({
+        source,
+        target,
+        buildInfo: buildInfo(),
+        operations: {
+          cp: async () => { throw new Error('primary copy failure') },
+          rm: async (path: Parameters<typeof rm>[0], ...args: any[]) => {
+            if (String(path).includes('.staging-')) throw new Error('secondary staging cleanup failure')
+            if (String(path).endsWith('.export.lock')) throw new Error('tertiary lock cleanup failure')
+            return (rm as any)(path, ...args)
+          },
+        },
+      })
+    } catch (error) {
+      caught = error
+    }
+
+    expect(caught).toBeInstanceOf(AggregateError)
+    expect((caught as AggregateError).errors.map(error => (error as Error).message)).toEqual([
+      'primary copy failure',
+      'secondary staging cleanup failure',
+      'tertiary lock cleanup failure',
+    ])
   })
 
   it('releases the export lock even when staging cleanup also fails', async () => {

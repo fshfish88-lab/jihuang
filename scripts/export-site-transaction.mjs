@@ -3,15 +3,22 @@ import {
   cp,
   mkdir,
   readFile,
+  realpath,
   readdir,
   rename,
   rm,
   stat,
   writeFile,
 } from 'node:fs/promises'
-import { basename, dirname, join, relative } from 'node:path'
+import { basename, dirname, join, relative, resolve, sep } from 'node:path'
+import { readAndVerifyBuildManifest } from './build-manifest.mjs'
 
-const defaultOperations = { cp, mkdir, readFile, readdir, rename, rm, stat, writeFile }
+const defaultOperations = { cp, mkdir, readFile, realpath, readdir, rename, rm, stat, writeFile }
+
+/** @returns {string} */
+function createToken() {
+  return randomUUID()
+}
 
 function formatFsError(error) {
   return error instanceof Error ? error.message : String(error)
@@ -80,39 +87,185 @@ function snapshotsMatch(expected, actual) {
   return expected.length === actual.length && expected.every((entry, index) => entry === actual[index])
 }
 
+function defaultIsProcessAlive(pid) {
+  try {
+    process.kill(pid, 0)
+    return true
+  } catch (error) {
+    if (error?.code === 'ESRCH') return false
+    if (error?.code === 'EPERM') return true
+    throw error
+  }
+}
+
+function transactionJournal({ token, target, staging, backup, phase }) {
+  return { token, pid: process.pid, startedAt: new Date().toISOString(), target, staging, backup, phase }
+}
+
+async function writeJournal(lock, journal, operations) {
+  await operations.writeFile(join(lock, 'transaction.json'), `${JSON.stringify(journal, null, 2)}\n`)
+}
+
+function validateRecordedTransaction(journal, target) {
+  if (
+    !journal
+    || typeof journal.token !== 'string'
+    || !/^[a-zA-Z0-9-]+$/.test(journal.token)
+    || !Number.isSafeInteger(journal.pid)
+    || typeof journal.startedAt !== 'string'
+    || typeof journal.phase !== 'string'
+    || typeof journal.target !== 'string'
+    || typeof journal.staging !== 'string'
+    || typeof journal.backup !== 'string'
+  ) throw new Error('Existing export lock has an invalid or incomplete transaction journal')
+
+  const parent = dirname(target)
+  const targetName = basename(target)
+  const expectedStaging = join(parent, `.${targetName}.staging-${journal.token}`)
+  const expectedBackup = join(parent, `.${targetName}.backup-${journal.token}`)
+  if (
+    normalizedWindowsPath(journal.target) !== normalizedWindowsPath(target)
+    || normalizedWindowsPath(journal.staging) !== normalizedWindowsPath(expectedStaging)
+    || normalizedWindowsPath(journal.backup) !== normalizedWindowsPath(expectedBackup)
+  ) throw new Error('Existing export lock journal paths do not match this export target; refusing recovery')
+}
+
+async function recoverDeadTransaction({ lock, target, operations, isProcessAlive }) {
+  let journal
+  try {
+    journal = JSON.parse(await operations.readFile(join(lock, 'transaction.json'), 'utf8'))
+  } catch (error) {
+    throw new Error(`Existing export lock cannot be safely inspected; refusing recovery: ${lock}`, { cause: error })
+  }
+  validateRecordedTransaction(journal, target)
+  if (isProcessAlive(journal.pid)) {
+    throw new Error(`Static-site export is already running with live PID ${journal.pid} (lock: ${lock})`)
+  }
+
+  const parent = dirname(target)
+  const backupPrefix = `.${basename(target)}.backup-`
+  const backupNames = (await operations.readdir(parent)).filter(name => name.startsWith(backupPrefix))
+  const targetExists = await pathExists(target, operations)
+  if (await pathExists(journal.staging, operations)) {
+    await operations.rm(journal.staging, { recursive: true, force: true })
+  }
+  if (!targetExists) {
+    if (backupNames.length !== 1 || normalizedWindowsPath(join(parent, backupNames[0])) !== normalizedWindowsPath(journal.backup)) {
+      throw new Error(`Dead export recovery is ambiguous; preserving lock and ${backupNames.length} backup path(s): ${lock}`)
+    }
+    await operations.rename(journal.backup, target)
+  } else {
+    throw new Error(`Dead export recovery is ambiguous because the target still exists; preserving target, backups, and lock: ${lock}`)
+  }
+  await operations.rm(lock, { recursive: true })
+}
+
+async function acquireTransactionLock({ lock, journal, target, operations, isProcessAlive }) {
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    try {
+      await operations.mkdir(lock)
+      try {
+        await writeJournal(lock, journal, operations)
+      } catch (error) {
+        try {
+          await operations.rm(lock, { recursive: true })
+        } catch (cleanupError) {
+          throw new AggregateError([error, cleanupError], `Export lock initialization failed and lock cleanup also failed: ${lock}`)
+        }
+        throw error
+      }
+      return
+    } catch (error) {
+      if (error?.code !== 'EEXIST') throw error
+      if (attempt > 0) throw new Error(`Static-site export lock could not be acquired after recovery: ${lock}`, { cause: error })
+      await recoverDeadTransaction({ lock, target, operations, isProcessAlive })
+    }
+  }
+}
+
+function combinedTransactionError(primaryError, cleanupErrors) {
+  const errors = []
+  if (primaryError instanceof AggregateError) errors.push(...primaryError.errors)
+  else if (primaryError) errors.push(primaryError)
+  errors.push(...cleanupErrors)
+  if (errors.length === 1) return errors[0]
+  const primaryMessage = primaryError instanceof AggregateError
+    ? primaryError.message
+    : primaryError ? formatFsError(primaryError) : ''
+  const cleanupMessage = cleanupErrors.map(error => formatFsError(error)).join('; ')
+  return new AggregateError(errors, [primaryMessage, cleanupMessage].filter(Boolean).join('; '))
+}
+
+async function canonicalPath(path, operations) {
+  let candidate = resolve(path)
+  const missingSegments = []
+  while (true) {
+    try {
+      return resolve(await operations.realpath(candidate), ...missingSegments.reverse())
+    } catch (error) {
+      if (error?.code !== 'ENOENT') throw error
+      const parent = dirname(candidate)
+      if (parent === candidate) throw error
+      missingSegments.push(basename(candidate))
+      candidate = parent
+    }
+  }
+}
+
+function normalizedWindowsPath(path) {
+  return resolve(path).replaceAll('/', '\\').replace(/[\\]+$/, '').toLocaleLowerCase('en-US')
+}
+
+async function rejectOverlappingPaths(source, target, operations) {
+  const sourcePath = normalizedWindowsPath(await canonicalPath(source, operations))
+  const targetPath = normalizedWindowsPath(await canonicalPath(target, operations))
+  const separator = sep === '/' ? '\\' : sep
+  if (
+    sourcePath === targetPath
+    || sourcePath.startsWith(`${targetPath}${separator}`)
+    || targetPath.startsWith(`${sourcePath}${separator}`)
+  ) {
+    throw new Error(`Static export source and target overlap (same path or ancestor/descendant): ${source} <-> ${target}`)
+  }
+}
+
 export async function exportSiteAtomically({
   source,
   target,
   buildInfo,
   operations: operationOverrides = {},
-  uniqueId = randomUUID,
+  uniqueId = createToken,
+  isProcessAlive = defaultIsProcessAlive,
 }) {
   const operations = { ...defaultOperations, ...operationOverrides }
 
-  // Source validation is deliberately completed before any target-side path is created.
+  // Canonical overlap and completed-source validation finish before any target-side mkdir/rename.
+  await rejectOverlappingPaths(source, target, operations)
   const sourceSnapshot = await validateSource(source, operations)
+  const buildManifest = await readAndVerifyBuildManifest(source, operations)
   const parent = dirname(target)
   const targetName = basename(target)
   const runId = uniqueId()
+  if (typeof runId !== 'string' || !/^[a-zA-Z0-9-]+$/.test(runId)) {
+    throw new Error('Static export transaction token contains unsafe path characters')
+  }
   const staging = join(parent, `.${targetName}.staging-${runId}`)
   const backup = join(parent, `.${targetName}.backup-${runId}`)
   const lock = join(parent, `.${targetName}.export.lock`)
+  const journal = transactionJournal({ token: runId, target, staging, backup, phase: 'acquiring' })
   let lockAcquired = false
   let stagingCreated = false
   let backupCreated = false
+  let primaryError
+  let result
 
   await operations.mkdir(parent, { recursive: true })
   try {
-    try {
-      await operations.mkdir(lock)
-      lockAcquired = true
-    } catch (error) {
-      if (error?.code === 'EEXIST') {
-        throw new Error(`Another static-site export is already running (lock: ${lock})`, { cause: error })
-      }
-      throw error
-    }
+    await acquireTransactionLock({ lock, journal, target, operations, isProcessAlive })
+    lockAcquired = true
 
+    journal.phase = 'copying'
+    await writeJournal(lock, journal, operations)
     await operations.mkdir(staging)
     stagingCreated = true
     await operations.cp(source, staging, { recursive: true })
@@ -121,9 +274,18 @@ export async function exportSiteAtomically({
     if (!snapshotsMatch(sourceSnapshot, copiedSnapshot)) {
       throw new Error('Staging verification failed: copied files do not match the static export source')
     }
+    const stagedBuildManifest = await readAndVerifyBuildManifest(staging, operations)
+    if (JSON.stringify(stagedBuildManifest) !== JSON.stringify(buildManifest)) {
+      throw new Error('Staging build manifest does not match the completed source manifest')
+    }
 
     const buildInfoPath = join(staging, 'build-info.json')
-    const expectedBuildInfo = Buffer.from(`${JSON.stringify(buildInfo, null, 2)}\n`)
+    const expectedBuildInfo = Buffer.from(`${JSON.stringify({
+      ...buildInfo,
+      commit: buildManifest.commit,
+      baseURL: buildManifest.baseURL,
+      generatedAt: buildManifest.generatedAt,
+    }, null, 2)}\n`)
     await operations.writeFile(buildInfoPath, expectedBuildInfo)
     await requireDirectory(staging, operations, 'Static export staging directory')
     await requireIndex(staging, operations, 'Static export staging directory')
@@ -135,11 +297,17 @@ export async function exportSiteAtomically({
     }
 
     if (await pathExists(target, operations)) {
+      journal.phase = 'backing-up'
+      await writeJournal(lock, journal, operations)
+      // On Windows this is a lock-protected, crash-recoverable two-rename exchange.
+      // Readers that ignore the lock can briefly observe no target; it is not atomic for them.
       await operations.rename(target, backup)
       backupCreated = true
     }
 
     try {
+      journal.phase = 'promoting'
+      await writeJournal(lock, journal, operations)
       await operations.rename(staging, target)
       stagingCreated = false
     } catch (promotionError) {
@@ -158,17 +326,29 @@ export async function exportSiteAtomically({
     }
 
     if (backupCreated) {
+      journal.phase = 'cleanup'
+      await writeJournal(lock, journal, operations)
       await operations.rm(backup, { recursive: true })
       backupCreated = false
     }
 
-    return { target, staging, backup, lock }
+    result = { target, staging, backup, lock }
+  } catch (error) {
+    primaryError = error
   } finally {
+    const cleanupErrors = []
     try {
       if (stagingCreated) await operations.rm(staging, { recursive: true, force: true })
-      // Never remove an unrestored backup: it is the last byte-identical old artifact.
-    } finally {
-      if (lockAcquired) await operations.rm(lock, { recursive: true })
+    } catch (error) {
+      cleanupErrors.push(error)
     }
+    // Never remove an unrestored backup: it is the last byte-identical old artifact.
+    try {
+      if (lockAcquired) await operations.rm(lock, { recursive: true })
+    } catch (error) {
+      cleanupErrors.push(error)
+    }
+    if (primaryError || cleanupErrors.length > 0) throw combinedTransactionError(primaryError, cleanupErrors)
   }
+  return result
 }
