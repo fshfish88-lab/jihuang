@@ -1,5 +1,5 @@
-import { createHash } from 'node:crypto'
-import { access, readFile, readdir, rename, unlink, writeFile } from 'node:fs/promises'
+import { createHash, randomUUID } from 'node:crypto'
+import { access, mkdtemp, open, readFile, rename, rm, unlink, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 
 const PNG_SIGNATURE = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10])
@@ -28,65 +28,176 @@ export function validateTrustedLocalIcon(bytes, expected, label) {
   return validateIconBytes(bytes, expected, label)
 }
 
+export async function stageTrustedIconReplacement({
+  label,
+  temporary,
+  target,
+  replaceExisting,
+  expected,
+  download,
+  operations = {}
+}) {
+  const fs = { readFile, unlink, ...operations }
+  try {
+    await download(temporary)
+    const bytes = await fs.readFile(temporary)
+    validateIconBytes(bytes, expected, `${label} downloaded icon`)
+    return {
+      bytes,
+      pending: { temporary, target, replaceExisting }
+    }
+  } catch (error) {
+    await fs.unlink(temporary).catch(() => {})
+    throw error
+  }
+}
+
 export async function replaceManifestAtomically(manifestPath, serialized, errors) {
-  const temporary = `${manifestPath}.part`
-  await unlink(temporary).catch(() => {})
   if (errors.length) throw new Error(errors.join('\n'))
-  await writeFile(temporary, serialized, 'utf8')
-  await rename(temporary, manifestPath)
+  const temporary = `${manifestPath}.${randomUUID()}.part`
+  try {
+    await writeFile(temporary, serialized, 'utf8')
+    await rename(temporary, manifestPath)
+  } finally {
+    await unlink(temporary).catch(() => {})
+  }
+}
+
+export async function createIconSyncStaging(outputDir, operations = {}) {
+  const fs = { mkdtemp, ...operations }
+  return fs.mkdtemp(join(outputDir, '.wiki-icon-sync-'))
+}
+
+export async function removeIconSyncStaging(stagingDirectory, operations = {}) {
+  const fs = { rm, ...operations }
+  await fs.rm(stagingDirectory, { recursive: true, force: true })
+}
+
+export async function acquireIconSyncLock(lockPath, options = {}) {
+  const fs = { open, readFile, unlink, ...options.operations }
+  const token = options.token || randomUUID()
+  let handle
+  try {
+    handle = await fs.open(lockPath, 'wx')
+  } catch (error) {
+    if (error.code === 'EEXIST') {
+      throw new Error(`wiki icon sync is already running (lock exists: ${lockPath})`)
+    }
+    throw error
+  }
+
+  try {
+    await handle.writeFile(`${token}\n`, 'utf8')
+  } catch (error) {
+    await handle.close().catch(() => {})
+    await fs.unlink(lockPath).catch(() => {})
+    throw error
+  }
+
+  let released = false
+  return async () => {
+    if (released) return
+    released = true
+    await handle.close()
+    const currentToken = await fs.readFile(lockPath, 'utf8').catch(error => {
+      if (error.code === 'ENOENT') return undefined
+      throw error
+    })
+    if (currentToken === `${token}\n`) {
+      await fs.unlink(lockPath).catch(error => {
+        if (error.code !== 'ENOENT') throw error
+      })
+    }
+  }
 }
 
 export async function commitIconSyncTransaction({
   pendingRenames,
   manifestPath,
+  stagingDirectory,
   serializedManifest,
   manifestChanged,
   operations = {}
 }) {
   const fs = { access, rename, unlink, writeFile, ...operations }
-  const manifestTemporary = `${manifestPath}.part`
-  const promotedNewTargets = []
+  if (!stagingDirectory) throw new Error('icon sync transaction requires a unique staging directory')
+  const manifestTemporary = join(stagingDirectory, 'manifest.next.json')
+  const manifestBackup = join(stagingDirectory, 'manifest.backup')
+  const states = pendingRenames.map((pending, index) => ({
+    ...pending,
+    backup: join(stagingDirectory, `icon-${index}.backup`),
+    backedUp: false,
+    promoted: false
+  }))
+  let manifestBackedUp = false
+  let manifestPromoted = false
 
   try {
-    for (const { target } of pendingRenames) {
+    for (const state of states) {
+      let exists = true
       try {
-        await fs.access(target)
-        throw new Error(`refusing to replace icon target that already exists: ${target}`)
+        await fs.access(state.target)
       } catch (error) {
-        if (error.code !== 'ENOENT') throw error
+        if (error.code === 'ENOENT') exists = false
+        else throw error
+      }
+      if (exists && !state.replaceExisting) {
+        throw new Error(`refusing to replace icon target that already exists: ${state.target}`)
+      }
+      if (!exists && state.replaceExisting) {
+        throw new Error(`cannot replace icon target because it no longer exists: ${state.target}`)
       }
     }
 
-    for (const { temporary, target } of pendingRenames) {
-      await fs.rename(temporary, target)
-      promotedNewTargets.push(target)
+    if (manifestChanged) {
+      await fs.writeFile(manifestTemporary, serializedManifest, 'utf8')
+    }
+
+    for (const state of states) {
+      if (state.replaceExisting) {
+        await fs.rename(state.target, state.backup)
+        state.backedUp = true
+      }
+      await fs.rename(state.temporary, state.target)
+      state.promoted = true
     }
 
     if (manifestChanged) {
-      await fs.unlink(manifestTemporary).catch(() => {})
-      await fs.writeFile(manifestTemporary, serializedManifest, 'utf8')
+      await fs.rename(manifestPath, manifestBackup)
+      manifestBackedUp = true
       await fs.rename(manifestTemporary, manifestPath)
+      manifestPromoted = true
     }
   } catch (error) {
-    await Promise.all(promotedNewTargets.map(target => fs.unlink(target).catch(() => {})))
+    const rollbackErrors = []
+    if (manifestPromoted) {
+      await fs.unlink(manifestPath).catch(rollbackError => rollbackErrors.push(rollbackError))
+    }
+    if (manifestBackedUp) {
+      await fs.rename(manifestBackup, manifestPath).catch(rollbackError => rollbackErrors.push(rollbackError))
+    }
+    for (const state of [...states].reverse()) {
+      if (state.promoted) {
+        await fs.unlink(state.target).catch(rollbackError => {
+          if (rollbackError.code !== 'ENOENT') rollbackErrors.push(rollbackError)
+        })
+      }
+      if (state.backedUp) {
+        await fs.rename(state.backup, state.target).catch(rollbackError => rollbackErrors.push(rollbackError))
+      }
+    }
+    if (rollbackErrors.length) {
+      throw new AggregateError([error, ...rollbackErrors], `icon sync failed and rollback was incomplete: ${error.message}`)
+    }
     throw error
   } finally {
     await Promise.all([
-      ...pendingRenames.map(({ temporary }) => fs.unlink(temporary).catch(() => {})),
-      fs.unlink(manifestTemporary).catch(() => {})
+      ...states.map(state => fs.unlink(state.temporary).catch(() => {})),
+      ...states.map(state => fs.unlink(state.backup).catch(() => {})),
+      fs.unlink(manifestTemporary).catch(() => {}),
+      fs.unlink(manifestBackup).catch(() => {})
     ])
   }
-}
-
-export async function removeStaleParts(outputDir, manifestPath) {
-  const names = await readdir(outputDir).catch(error => {
-    if (error.code === 'ENOENT') return []
-    throw error
-  })
-  await Promise.all([
-    ...names.filter(name => name.endsWith('.part')).map(name => unlink(join(outputDir, name)).catch(() => {})),
-    unlink(`${manifestPath}.part`).catch(() => {})
-  ])
 }
 
 export async function readPriorManifest(manifestPath) {

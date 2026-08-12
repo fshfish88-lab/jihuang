@@ -4,9 +4,12 @@ import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { promisify } from 'node:util'
 import {
+  acquireIconSyncLock,
   commitIconSyncTransaction,
+  createIconSyncStaging,
   readPriorManifest,
-  removeStaleParts,
+  removeIconSyncStaging,
+  stageTrustedIconReplacement,
   validateIconBytes,
   validateTrustedLocalIcon
 } from './wiki-icon-integrity.mjs'
@@ -16,6 +19,7 @@ const dataDir = join(root, 'app', 'data', 'wiki')
 const outputDir = join(root, 'public', 'images', 'wiki')
 const materialDir = join(root, '素材文件', '物品图标')
 const manifestPath = join(materialDir, '来源清单.json')
+const lockPath = join(outputDir, '.wiki-icon-sync.lock')
 // The mutable upstream is only a retrieval source. Vendored PNGs and the checked-in manifest hashes are trusted.
 const mirrorBase = 'https://raw.githubusercontent.com/fankimm/dst-craft/main/public/images/game-items'
 const execFileAsync = promisify(execFile)
@@ -93,7 +97,24 @@ if (process.argv.includes('--list')) {
   process.exit(0)
 }
 
-await removeStaleParts(outputDir, manifestPath)
+let releaseLock
+let stagingDirectory
+try {
+  releaseLock = await acquireIconSyncLock(lockPath)
+  stagingDirectory = await createIconSyncStaging(outputDir)
+  await syncIcons(stagingDirectory)
+} catch (error) {
+  console.error(`icon sync failed: ${error.message}`)
+  process.exitCode = 1
+} finally {
+  try {
+    if (stagingDirectory) await removeIconSyncStaging(stagingDirectory)
+  } finally {
+    if (releaseLock) await releaseLock()
+  }
+}
+
+async function syncIcons(stagingDirectory) {
 const priorManifest = await readPriorManifest(manifestPath)
 const expectedBySlug = new Map((priorManifest.entries || []).map(record => [record.slug, record]))
 const manifest = []
@@ -114,7 +135,7 @@ async function download(entry) {
         return
       }
       // A damaged trusted icon may be recovered, but only from bytes matching its checked-in hash.
-      return downloadTrustedReplacement(entry, url, target, expected)
+      return downloadTrustedReplacement(entry, url, target, expected, true)
     }
     manifest.push(manifestEntry(entry, url, bytes))
     return
@@ -125,43 +146,38 @@ async function download(entry) {
     }
   }
 
-  return downloadTrustedReplacement(entry, url, target, expected)
+  return downloadTrustedReplacement(entry, url, target, expected, false)
 }
 
-async function downloadTrustedReplacement(entry, url, target, expected) {
+async function downloadTrustedReplacement(entry, url, target, expected, replaceExisting) {
   let lastError
   for (let attempt = 1; attempt <= 3; attempt += 1) {
-    const temporary = `${target}.part`
+    const temporary = join(stagingDirectory, `${entry.slug}-${attempt}.png`)
     try {
-      if (process.platform === 'win32') {
-        await execFileAsync('curl.exe', [
-          '--ssl-no-revoke',
-          '--fail',
-          '--location',
-          '--silent',
-          '--show-error',
-          '--connect-timeout', '20',
-          '--max-time', '60',
-          '--user-agent', 'Campfire-Wiki/1.0 (non-commercial DST guide)',
-          '--output', temporary,
-          url
-        ])
-      } else {
-        await execFileAsync('curl', [
-          '--fail',
-          '--location',
-          '--silent',
-          '--show-error',
-          '--connect-timeout', '20',
-          '--max-time', '60',
-          '--user-agent', 'Campfire-Wiki/1.0 (non-commercial DST guide)',
-          '--output', temporary,
-          url
-        ])
-      }
-      const bytes = await readFile(temporary)
-      validateIconBytes(bytes, expected, `${entry.slug} downloaded icon`)
-      pendingRenames.push({ temporary, target })
+      const { bytes, pending } = await stageTrustedIconReplacement({
+        label: entry.slug,
+        temporary,
+        target,
+        replaceExisting,
+        expected,
+        download: async output => {
+          const command = process.platform === 'win32' ? 'curl.exe' : 'curl'
+          const args = [
+            '--fail',
+            '--location',
+            '--silent',
+            '--show-error',
+            '--connect-timeout', '20',
+            '--max-time', '60',
+            '--user-agent', 'Campfire-Wiki/1.0 (non-commercial DST guide)',
+            '--output', output,
+            url
+          ]
+          if (process.platform === 'win32') args.unshift('--ssl-no-revoke')
+          await execFileAsync(command, args)
+        }
+      })
+      pendingRenames.push(pending)
       manifest.push(manifestEntry(entry, url, bytes))
       return
     } catch (error) {
@@ -198,9 +214,7 @@ for (let index = 0; index < unique.length; index += 3) {
 
 manifest.sort((a, b) => a.slug.localeCompare(b.slug))
 if (errors.length) {
-  await Promise.all(pendingRenames.map(({ temporary }) => unlink(temporary).catch(() => {})))
-  console.error(errors.join('\n'))
-  process.exit(1)
+  throw new Error(errors.join('\n'))
 }
 
 const manifestHeader = {
@@ -227,12 +241,13 @@ try {
   await commitIconSyncTransaction({
     pendingRenames,
     manifestPath,
+    stagingDirectory,
     serializedManifest: `${JSON.stringify(nextManifest, null, 2)}\n`,
     manifestChanged: changed
   })
 } catch (error) {
-  console.error(`icon sync commit failed: ${error.message}`)
-  process.exit(1)
+  throw new Error(`icon sync commit failed: ${error.message}`, { cause: error })
 }
 
 console.log(`Verified ${manifest.length}/${unique.length} wiki icons; manifest ${changed ? 'updated atomically' : 'unchanged'}.`)
+}
