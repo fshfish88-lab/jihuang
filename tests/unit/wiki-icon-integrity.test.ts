@@ -206,10 +206,18 @@ describe('wiki icon trust anchor helpers', () => {
     const target = join(directory, 'trusted.png')
     const backup = join(stagingDirectory, 'icon-0.backup')
     await mkdir(stagingDirectory)
-    await writeFile(backup, 'recoverable bytes')
+    const original = Buffer.from('recoverable bytes')
+    await writeFile(backup, original)
     await writeFile(join(stagingDirectory, 'recovery-state.json'), JSON.stringify({
-      version: 1,
-      entries: [{ target, backup }],
+      version: 3,
+      phase: 'promoted',
+      entries: [{
+        target,
+        backup,
+        existedBefore: true,
+        oldSha256: createHash('sha256').update(original).digest('hex'),
+        promotedSha256: createHash('sha256').update('replacement').digest('hex'),
+      }],
       manifest: null,
     }))
     await writeFile(lockPath, JSON.stringify({
@@ -235,10 +243,18 @@ describe('wiki icon trust anchor helpers', () => {
     const target = join(directory, 'trusted.png')
     const backup = join(stagingDirectory, 'icon-0.backup')
     await mkdir(stagingDirectory)
-    await Promise.all([writeFile(target, 'current bytes'), writeFile(backup, 'backup bytes')])
+    const backupBytes = Buffer.from('backup bytes')
+    await Promise.all([writeFile(target, 'current bytes'), writeFile(backup, backupBytes)])
     await writeFile(join(stagingDirectory, 'recovery-state.json'), JSON.stringify({
-      version: 1,
-      entries: [{ target, backup }],
+      version: 3,
+      phase: 'promoted',
+      entries: [{
+        target,
+        backup,
+        existedBefore: true,
+        oldSha256: createHash('sha256').update(backupBytes).digest('hex'),
+        promotedSha256: createHash('sha256').update('promoted bytes').digest('hex'),
+      }],
       manifest: null,
     }))
     const staleOwner = {
@@ -271,17 +287,20 @@ describe('wiki icon trust anchor helpers', () => {
       writeFile(manifestPath, originalManifest),
     ])
     await writeFile(join(stagingDirectory, 'recovery-state.json'), JSON.stringify({
-      version: 2,
+      version: 3,
+      phase: 'promoted',
       entries: [{
         target,
         backup: null,
         existedBefore: false,
+        oldSha256: null,
         promotedSha256: createHash('sha256').update(promoted).digest('hex'),
       }],
       manifest: {
         target: manifestPath,
         backup: join(stagingDirectory, 'manifest.backup'),
         existedBefore: true,
+        oldSha256: createHash('sha256').update(originalManifest).digest('hex'),
         promotedSha256: createHash('sha256').update('{"new":true}\n').digest('hex'),
       },
     }))
@@ -311,11 +330,13 @@ describe('wiki icon trust anchor helpers', () => {
     await mkdir(stagingDirectory)
     await writeFile(target, Buffer.from(promoted).fill(3, 20))
     await writeFile(join(stagingDirectory, 'recovery-state.json'), JSON.stringify({
-      version: 2,
+      version: 3,
+      phase: 'promoted',
       entries: [{
         target,
         backup: null,
         existedBefore: false,
+        oldSha256: null,
         promotedSha256: createHash('sha256').update(promoted).digest('hex'),
       }],
       manifest: null,
@@ -445,6 +466,90 @@ describe('wiki icon trust anchor helpers', () => {
     expect(await readFile(manifestPath)).toEqual(committedManifest)
     expect(JSON.parse(await readFile(lockPath, 'utf8'))).toEqual(staleOwner)
     expect(await access(stagingDirectory)).toBeUndefined()
+  })
+
+  it.each([
+    { kind: 'icon', targetState: 'missing' },
+    { kind: 'icon', targetState: 'promoted' },
+    { kind: 'manifest', targetState: 'missing' },
+    { kind: 'manifest', targetState: 'promoted' },
+  ] as const)(
+    'preserves $kind recovery when its $targetState target has a tampered backup',
+    async ({ kind, targetState }) => {
+      const { acquireIconSyncLock } = await helpers()
+      const directory = await temporaryDirectory()
+      const lockPath = join(directory, '.wiki-icon-sync.lock')
+      const stagingDirectory = join(directory, `.wiki-icon-sync-${kind}-${targetState}`)
+      const target = join(directory, `${kind}.dat`)
+      const backup = join(stagingDirectory, `${kind}.backup`)
+      const oldBytes = Buffer.from(`${kind} original trusted bytes`)
+      const tamperedBackup = Buffer.from(`${kind} externally modified backup`)
+      const promotedBytes = Buffer.from(`${kind} promoted transaction bytes`)
+      await mkdir(stagingDirectory)
+      await writeFile(backup, tamperedBackup)
+      if (targetState === 'promoted') await writeFile(target, promotedBytes)
+      const record = {
+        target,
+        backup,
+        existedBefore: true,
+        oldSha256: createHash('sha256').update(oldBytes).digest('hex'),
+        promotedSha256: createHash('sha256').update(promotedBytes).digest('hex'),
+      }
+      await writeFile(join(stagingDirectory, 'recovery-state.json'), JSON.stringify({
+        version: 3,
+        phase: 'promoted',
+        entries: kind === 'icon' ? [record] : [],
+        manifest: kind === 'manifest' ? record : null,
+      }))
+      const staleOwner = {
+        token: 'dead-owner', pid: 999999, startedAt: '2026-08-12T00:00:00.000Z', recoveryPath: stagingDirectory,
+      }
+      await writeFile(lockPath, JSON.stringify(staleOwner))
+
+      await expect(acquireIconSyncLock(lockPath, {
+        token: 'next-owner',
+        isProcessAlive: async () => false,
+        allowedRoots: [directory],
+      })).rejects.toThrow(new RegExp(`ambiguous recovery for ${kind}.*backup SHA`, 'i'))
+
+      if (targetState === 'missing') {
+        await expect(access(target)).rejects.toMatchObject({ code: 'ENOENT' })
+      } else {
+        expect(await readFile(target)).toEqual(promotedBytes)
+      }
+      expect(await readFile(backup)).toEqual(tamperedBackup)
+      expect(JSON.parse(await readFile(lockPath, 'utf8'))).toEqual(staleOwner)
+      expect(await access(stagingDirectory)).toBeUndefined()
+    },
+  )
+
+  it.each([1, 2])('preserves and refuses legacy v%s recovery without reliable phase and old SHA', async (version) => {
+    const { acquireIconSyncLock } = await helpers()
+    const directory = await temporaryDirectory()
+    const lockPath = join(directory, '.wiki-icon-sync.lock')
+    const stagingDirectory = join(directory, `.wiki-icon-sync-v${version}`)
+    const target = join(directory, 'legacy.png')
+    const backup = join(stagingDirectory, 'icon.backup')
+    await mkdir(stagingDirectory)
+    await writeFile(backup, 'legacy backup')
+    await writeFile(join(stagingDirectory, 'recovery-state.json'), JSON.stringify({
+      version,
+      entries: [{ target, backup, ...(version === 2 ? { existedBefore: true, promotedSha256: '0'.repeat(64) } : {}) }],
+      manifest: null,
+    }))
+    const staleOwner = {
+      token: 'legacy-owner', pid: 999999, startedAt: '2026-08-12T00:00:00.000Z', recoveryPath: stagingDirectory,
+    }
+    await writeFile(lockPath, JSON.stringify(staleOwner))
+
+    await expect(acquireIconSyncLock(lockPath, {
+      isProcessAlive: async () => false,
+      allowedRoots: [directory],
+    })).rejects.toThrow(/legacy recovery v[12].*preserving/i)
+
+    await expect(access(target)).rejects.toMatchObject({ code: 'ENOENT' })
+    expect(await readFile(backup, 'utf8')).toBe('legacy backup')
+    expect(JSON.parse(await readFile(lockPath, 'utf8'))).toEqual(staleOwner)
   })
 
   it.each(['write', 'rename'] as const)(

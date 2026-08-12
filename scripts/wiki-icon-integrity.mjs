@@ -218,6 +218,9 @@ async function recoverDeadOwner(lockPath, rawOwner, owner, fs, allowedRoots) {
     ...(state.entries || []).map(entry => ({ kind: 'icon', ...entry })),
     ...(state.manifest ? [{ kind: 'manifest', ...state.manifest }] : [])
   ]
+  if (state.version !== 3) {
+    throw new Error(`legacy recovery v${state.version ?? 'unknown'} lacks reliable phase and old SHA; preserving ${recoveryPath}`)
+  }
   const phase = state.phase || 'prepared'
   if (phase === 'manifest-committed' || phase === 'cleanup') {
     for (const record of records) {
@@ -251,13 +254,14 @@ async function recoverDeadOwner(lockPath, rawOwner, owner, fs, allowedRoots) {
       backup ? pathExists(backup, fs) : false
     ])
 
-    if (state.version === 1 || record.existedBefore === undefined) {
-      if (!targetExists && backupExists) actions.push({ type: 'restore', backup, target })
-      else if (targetExists && !backupExists) continue
-      else {
-        throw new Error(`ambiguous recovery for ${record.kind}: target=${target} backup=${backup}; preserving ${recoveryPath}`)
+    if (backupExists) {
+      if (!record.oldSha256) {
+        throw new Error(`ambiguous recovery for ${record.kind}: backup has no trusted old SHA; preserving ${recoveryPath}`)
       }
-      continue
+      const backupSha256 = createHash('sha256').update(await fs.readFile(backup)).digest('hex')
+      if (backupSha256 !== record.oldSha256) {
+        throw new Error(`ambiguous recovery for ${record.kind}: backup SHA differs from old SHA; preserving ${recoveryPath}`)
+      }
     }
 
     if (!record.existedBefore) {
@@ -276,7 +280,6 @@ async function recoverDeadOwner(lockPath, rawOwner, owner, fs, allowedRoots) {
     if (!targetExists && backupExists) {
       actions.push({ type: 'restore', backup, target })
     } else if (targetExists && !backupExists) {
-      if (state.version < 3) continue
       const actualSha256 = createHash('sha256').update(await fs.readFile(target)).digest('hex')
       if (record.oldSha256 && actualSha256 === record.oldSha256) continue
       throw new Error(`ambiguous recovery for ${record.kind}: existing target is neither safely backed up nor unchanged; preserving ${recoveryPath}`)
