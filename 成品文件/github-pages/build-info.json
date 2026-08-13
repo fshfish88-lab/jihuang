@@ -1,6 +1,7 @@
 {
   "name": "campfire-wiki",
   "version": "0.1.0",
-  "commit": "68aeaa4bc75e70d46c96ce4d22060dec45983776",
-  "builtAt": "2026-08-12T18:43:12.199Z"
+  "commit": "ef28b29e5061a9be6d15c5db51f1233651eec349",
+  "baseURL": "/jihuang/",
+  "generatedAt": "2026-08-12T20:06:01.963Z"
 }
