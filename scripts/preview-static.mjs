@@ -1,11 +1,15 @@
 import { createReadStream } from 'node:fs'
-import { stat } from 'node:fs/promises'
+import { stat, readFile } from 'node:fs/promises'
 import { createServer } from 'node:http'
 import { extname, join, resolve, sep } from 'node:path'
 
 const port = Number(process.env.CAMPFIRE_PREVIEW_PORT || 4173)
 const basePath = '/jihuang'
-const publicRoot = resolve('.output/public')
+const publicRoot = resolve(process.env.CAMPFIRE_PREVIEW_ROOT || '成品文件/github-pages')
+let manifest
+try { manifest = JSON.parse(await readFile(join(publicRoot, '.campfire-build.json'), 'utf8')) }
+catch { throw new Error(`Preview requires a completed build: ${publicRoot}. Run npm run generate first, then npm run export for the deliverable.`) }
+console.log(`Preview root: ${publicRoot}\nBuild: ${manifest.commit} / ${manifest.generatedAt}`)
 
 const mimeTypes = {
   '.css': 'text/css; charset=utf-8',
@@ -17,10 +21,11 @@ const mimeTypes = {
   '.svg': 'image/svg+xml',
   '.txt': 'text/plain; charset=utf-8',
   '.wasm': 'application/wasm',
+  '.xml': 'application/xml; charset=utf-8',
 }
 
 async function resolveFile(urlPath) {
-  const stripped = urlPath.startsWith(basePath)
+  const stripped = urlPath === basePath || urlPath.startsWith(`${basePath}/`)
     ? urlPath.slice(basePath.length)
     : urlPath
   const decoded = decodeURIComponent(stripped.split('?')[0] || '/')
@@ -72,4 +77,12 @@ const server = createServer(async (request, response) => {
 
 server.listen(port, '127.0.0.1', () => {
   console.log(`Campfire Wiki preview: http://127.0.0.1:${port}${basePath}/`)
+  process.send?.({ type: 'ready' })
+})
+
+process.on('message', message => {
+  if (message === 'shutdown') {
+    server.close(() => process.exit(0))
+    server.closeAllConnections()
+  }
 })

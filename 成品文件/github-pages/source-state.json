@@ -1,0 +1,6 @@
+{
+  "baseCommit": "bb93cba11e9c7e4ccac7f88aaf513c1f9097363b",
+  "workingTreeModified": true,
+  "runtimeSourceSha256": "717052d91f9a3351fcf9a91ad48ad331ade387a25d4f799a444aac6b0628d30f",
+  "note": "baseCommit identifies the checkout base; runtimeSourceSha256 identifies app, content and public file bytes used for this build."
+}

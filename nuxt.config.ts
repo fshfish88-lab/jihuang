@@ -1,8 +1,14 @@
+import { readdirSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
+
+const wikiRoutes = readdirSync(fileURLToPath(new URL('./public/images/wiki/', import.meta.url)))
+  .filter(name => name.endsWith('.png')).map(name => `/wiki/${name.slice(0, -4)}`)
 const isProduction = process.env.NODE_ENV === 'production'
 const baseURL = process.env.NUXT_APP_BASE_URL || (isProduction ? '/jihuang/' : '/')
 
 export default defineNuxtConfig({
   srcDir: 'app/',
+  runtimeConfig: { public: { siteOrigin: 'https://fshfish88-lab.github.io' } },
   dir: {
     public: '../public'
   },
@@ -39,7 +45,7 @@ export default defineNuxtConfig({
   nitro: {
     prerender: {
       crawlLinks: true,
-      routes: ['/'],
+      routes: ['/', ...wikiRoutes],
       concurrency: 1,
       failOnError: true
     }

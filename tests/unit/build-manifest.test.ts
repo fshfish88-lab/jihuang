@@ -23,7 +23,7 @@ afterEach(async () => {
 describe('completed-build manifest', () => {
   it('runs manifest finalization only after Nuxt generation succeeds', async () => {
     const packageJson = JSON.parse(await readFile(join(process.cwd(), 'package.json'), 'utf8'))
-    expect(packageJson.scripts.generate).toBe('nuxt generate && node scripts/write-build-manifest.mjs')
+    expect(packageJson.scripts.generate).toBe('nuxt generate && node scripts/write-sitemap.mjs && node scripts/write-build-manifest.mjs')
   })
 
   it('atomically records every generated file path, size, and SHA-256', async () => {

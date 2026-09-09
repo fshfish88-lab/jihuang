@@ -1,0 +1,44 @@
+{
+  "filterBack": {
+    "count": 328,
+    "active": " 全部 "
+  },
+  "reviveShort": {
+    "count": 5,
+    "titles": [
+      "新手常见误区",
+      "告密的心",
+      "试金石",
+      "强心针",
+      "重生护符"
+    ]
+  },
+  "recipeTop": 914,
+  "checklist": {
+    "routes": [
+      "基础生存线",
+      "洞穴与遗迹线",
+      "月岛与天体线"
+    ],
+    "nodes": 13
+  },
+  "reset320": {
+    "width": 320,
+    "scrollWidth": 320
+  },
+  "characters": [
+    "威尔逊",
+    "温蒂",
+    "沃尔夫冈",
+    "薇格弗德",
+    "WX-78"
+  ],
+  "bosses": [
+    "独眼巨鹿",
+    "熊獾",
+    "蜂后",
+    "克劳斯",
+    "远古守护者"
+  ],
+  "articleSources": []
+}

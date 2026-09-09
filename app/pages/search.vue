@@ -7,6 +7,9 @@ useSeoMeta({
 })
 
 const { query, results } = useSearchIndex()
+const pageValue = useQueryValue('page', false)
+const visibleCount = computed(() => Math.min(results.value.length, Math.max(1, Math.min(100, Number(pageValue.value) || 1)) * 12))
+const visibleResults = computed(() => results.value.slice(0, visibleCount.value))
 const assetPath = useAssetPath()
 const input = ref<HTMLInputElement | null>(null)
 const popular = [
@@ -15,7 +18,7 @@ const popular = [
   ...getEntries('wiki').filter(item => ['torch', 'pierogi'].includes(item.slug))
 ]
 
-onMounted(() => input.value?.focus())
+onMounted(() => { if (!query.value) input.value?.focus({ preventScroll: true }) })
 </script>
 
 <template>
@@ -46,8 +49,8 @@ onMounted(() => input.value?.focus())
           <span>份相关手记</span>
         </div>
         <div v-if="results.length" class="search-results">
-          <NuxtLink v-for="entry in results" :key="entry.slug" :to="entryPath(entry)" class="search-result">
-            <img :src="assetPath(entry.image)" :alt="entry.imageAlt" width="240" height="135">
+          <NuxtLink v-for="entry in visibleResults" :key="entryPath(entry)" :to="entryPath(entry)" class="search-result">
+            <img :class="{ 'search-result__icon': entry.kind === 'wiki' }" :src="assetPath(entry.image)" :alt="entry.imageAlt" width="240" height="135" loading="lazy">
             <div>
               <small>{{ kindLabels[entry.kind] }} · {{ entry.stage }}</small>
               <h2>{{ entry.title }}</h2>
@@ -58,6 +61,10 @@ onMounted(() => input.value?.focus())
             </div>
             <span aria-hidden="true">→</span>
           </NuxtLink>
+        </div>
+        <div v-if="results.length" class="list-pagination">
+          <span>已显示 {{ visibleCount }} / {{ results.length }} 条</span>
+          <button v-if="visibleCount < results.length" type="button" class="filter-button" @click="pageValue = String(Math.floor(visibleCount / 12) + 1)">加载更多结果</button>
         </div>
         <div v-else class="empty-state">
           <h2>手记里暂时没有这个词</h2>
@@ -99,6 +106,7 @@ onMounted(() => input.value?.focus())
   font-size: 1.1rem;
   outline: none;
 }
+.search-box:focus-within { outline: 2px solid var(--blood); outline-offset: 3px; }
 .search-box > button,
 .search-box > span {
   min-width: 5.5rem;
@@ -126,6 +134,7 @@ onMounted(() => input.value?.focus())
 }
 .search-result:hover { color: inherit; background: rgba(203,191,155,.35); }
 .search-result img { width: 10rem; aspect-ratio: 16/9; object-fit: cover; filter: sepia(.15) saturate(.8); }
+.search-result img.search-result__icon { object-fit: contain; padding: .5rem; background: var(--paper-2); }
 .search-result small { color: var(--blood); font: 800 .68rem/1 var(--font-sans); }
 .search-result h2 { margin: .35rem 0; font-size: 1.35rem; }
 .search-result p { margin: 0 0 .6rem; color: var(--ash); font-size: .85rem; line-height: 1.55; }

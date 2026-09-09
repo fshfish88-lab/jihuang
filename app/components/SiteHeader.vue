@@ -1,6 +1,23 @@
 <script setup lang="ts">
 const route = useRoute()
 const menuOpen = ref(false)
+const menuButton = ref<HTMLButtonElement | null>(null)
+const router = useRouter()
+
+function onKey(event: KeyboardEvent) {
+  if (event.key === 'Escape' && menuOpen.value) {
+    menuOpen.value = false
+    menuButton.value?.focus()
+    return
+  }
+  const target = event.target as HTMLElement | null
+  if (event.key !== '/' || event.ctrlKey || event.metaKey || event.altKey || event.isComposing || target?.closest('input, textarea, select, [contenteditable="true"]')) return
+  event.preventDefault()
+  if (route.path === '/search') document.querySelector<HTMLInputElement>('input[type="search"]')?.focus()
+  else void router.push('/search')
+}
+onMounted(() => window.addEventListener('keydown', onKey))
+onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
 
 watch(() => route.fullPath, () => {
   menuOpen.value = false
@@ -34,10 +51,12 @@ const nav = [
       </nav>
 
       <div class="header-actions">
-        <NuxtLink class="search-shortcut" to="/search">
-          <span>搜索攻略</span><kbd>/</kbd>
+        <NuxtLink class="search-shortcut" to="/search" aria-label="搜索攻略" aria-keyshortcuts="/">
+          <svg class="search-symbol" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="10.5" cy="10.5" r="6.5" /><path d="m16 16 5 5" /></svg>
+          <span>搜索攻略</span><kbd aria-hidden="true">/</kbd>
         </NuxtLink>
         <button
+          ref="menuButton"
           class="menu-button"
           type="button"
           :aria-expanded="menuOpen"
@@ -149,6 +168,7 @@ const nav = [
   text-decoration: none;
 }
 .search-shortcut kbd { padding: .3rem .42rem; color: var(--ink); background: var(--paper-2); font-family: var(--font-mono); }
+.search-symbol { flex-shrink: 0; }
 .menu-button {
   display: none;
   width: 2.75rem;
@@ -166,6 +186,8 @@ const nav = [
 }
 @media (max-width: 520px) {
   .search-shortcut span { display: none; }
+  .search-shortcut kbd { display: none; }
+  .search-shortcut { width: 2.75rem; justify-content: center; padding: 0; }
   .site-brand small { display: none; }
 }
 </style>

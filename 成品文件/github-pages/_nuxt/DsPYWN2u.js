@@ -1,0 +1,1 @@
+import{s as c,a6 as l,k as p,I as v,j as d,p as i}from"./CWzTg4xJ.js";function h(u,o=!0){const e=c(),n=l(),r=i(""),t=()=>typeof e.query[u]=="string"?e.query[u]:"";return p(()=>{r.value=t()}),v(()=>e.query[u],()=>{r.value=t()}),d({get:()=>r.value,set:a=>{r.value=a;const s={...e.query,[u]:a||void 0};o&&delete s.page,n.replace({query:s,hash:e.hash})}})}export{h as u};

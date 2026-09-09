@@ -17,9 +17,15 @@ npm.cmd run validate:content
 npm.cmd test
 npm.cmd run generate
 npm.cmd run export
+npm.cmd run test:e2e
+npm.cmd run preview:static
 ```
 
 静态成品会导出到 `成品文件/github-pages/`。推送到 `main` 后，GitHub Actions 会自动发布 `.output/public`。
+
+`preview:static` 默认打开成品目录，启动日志显示目录、基准提交与生成时间。检查新生成但未导出的构建时，设置 `$env:CAMPFIRE_PREVIEW_ROOT = '.output/public'`。浏览器回归默认自动启动新构建预览；Windows 使用已安装的 Chrome，其他平台需先执行 `npx playwright install chromium`。
+
+搜索、百科分类与分页会保存在地址中。任务清单沿用原有浏览器存储键，新增路线后旧勾选保留。`source-state.json` 区分基准提交和未提交工作区，并记录运行内容哈希；构建清单再对全部成品文件做逐字节校验。
 
 ## 目录
 

@@ -1,7 +1,7 @@
 import { guideEntries } from './content'
 
-export const SITE_VERSION = '2026.08'
-export const SITE_UPDATED_AT = '2026-08-13'
+export const SITE_VERSION = '2026.09'
+export const SITE_UPDATED_AT = '2026-09-09'
 
 interface SiteStats {
   totalEntries: number

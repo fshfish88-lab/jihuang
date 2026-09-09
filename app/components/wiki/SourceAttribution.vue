@@ -9,7 +9,7 @@ defineProps<{
 </script>
 
 <template>
-  <footer class="wiki-sources">
+  <footer id="sources" class="wiki-sources">
     <h2>资料来源与图片署名</h2>
     <p>
       内容按《饥荒联机版》整理，核对日期 {{ verifiedAt }}。图片版权归
@@ -25,5 +25,6 @@ defineProps<{
         <small>图像署名</small>
       </li>
     </ul>
+    <NuxtLink class="text-link" to="/about#feedback">发现问题？查看纠错方式</NuxtLink>
   </footer>
 </template>

@@ -1,9 +1,16 @@
 import { describe, expect, it } from 'vitest'
 import { createSearchIndex } from '../../app/composables/useSearchIndex'
+import { searchEntries } from '../../app/utils/search'
 
 const index = createSearchIndex()
 
 describe('alias-aware search', () => {
+  it('answers the homepage question and returns all matching dishes', () => {
+    expect(searchEntries(index, '怎么复活？').map(entry => entry.slug)).toContain('tell-tale-heart')
+    expect(searchEntries(index, '料理').filter(entry => entry.tags.includes('四格食谱'))).toHaveLength(50)
+    expect(searchEntries(index, '机器人')[0]?.slug).toBe('wx-78')
+    expect(searchEntries(index, 'dl')[0]?.slug).toBe('deerclops')
+  })
   it.each([
     ['巨鹿', 'deerclops'],
     ['dl', 'deerclops'],

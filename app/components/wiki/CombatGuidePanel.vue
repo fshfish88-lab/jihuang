@@ -2,10 +2,11 @@
 import type { CombatInfo } from '~/types/wiki'
 
 defineProps<{ combat: CombatInfo }>()
+const prepared = ref<string[]>([])
 </script>
 
 <template>
-  <section class="wiki-section combat-guide paper-card">
+  <section id="combat" class="wiki-section combat-guide paper-card">
     <header class="wiki-section__header">
       <div>
         <p class="eyebrow">Combat File</p>
@@ -21,7 +22,8 @@ defineProps<{ combat: CombatInfo }>()
       </div>
       <div>
         <h3>准备清单</h3>
-        <ul><li v-for="item in combat.preparation" :key="item">{{ item }}</li></ul>
+        <p class="combat-prepared-count">本次准备 {{ prepared.length }} / {{ combat.preparation.length }} · 离开页面后重新核对</p>
+        <ul class="combat-preparation"><li v-for="item in combat.preparation" :key="item"><label><input v-model="prepared" type="checkbox" :value="item"><span>{{ item }}</span></label></li></ul>
       </div>
       <div>
         <h3>处理步骤</h3>
@@ -44,3 +46,10 @@ defineProps<{ combat: CombatInfo }>()
     </ul>
   </section>
 </template>
+<style scoped>
+.combat-prepared-count { color: var(--ash); font-size: .75rem; }
+.combat-preparation { list-style: none; padding: 0; }
+.combat-preparation label { display: flex; gap: .65rem; align-items: baseline; cursor: pointer; padding-block: .3rem; }
+.combat-preparation input { width: 1.1rem; height: 1.1rem; flex-shrink: 0; accent-color: var(--moss); }
+.combat-preparation input:checked + span { text-decoration: line-through; color: var(--ash); }
+</style>

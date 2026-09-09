@@ -37,6 +37,12 @@ useSeoMeta({
 
         <h2>版权声明</h2>
         <p>本站与 Klei Entertainment 无官方关联。游戏名称、角色、图片及相关素材版权归其权利人所有。官方游戏画面仅用于非商业攻略说明与玩家交流。</p>
+        <h2 id="updates">更新记录</h2>
+        <p><strong>2026-09-09 · 查阅体验更新：</strong>搜索支持常用问句和返回恢复；百科增加分页、路线与料理筛选；主线清单覆盖九组路线；补充 Boss 战斗档案入口与文章目录。</p>
+        <p>站点版本表示网站功能更新。攻略中的内容版本、更新日期和百科核对日期单独保留，不代表所有游戏数据均在站点更新当日重新核验。</p>
+        <h2 id="feedback">纠错与建议</h2>
+        <p>反馈时请附上条目名称、页面地址、游戏版本、问题描述与可核对的来源。可以将这些信息发给网站维护者，或在项目仓库提交问题。</p>
+        <p><a href="https://github.com/fshfish88-lab/jihuang/issues/new" target="_blank" rel="noopener noreferrer">打开 GitHub 问题反馈页</a>（需要 GitHub 账号；由你确认后提交）</p>
       </article>
       <aside class="paper-card source-card">
         <span class="stamp">Version</span>

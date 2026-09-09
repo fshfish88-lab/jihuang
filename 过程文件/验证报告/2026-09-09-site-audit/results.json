@@ -1,0 +1,1445 @@
+{
+  "browser": "152.0.7977.76",
+  "pages": [
+    {
+      "route": "/",
+      "status": 200,
+      "title": "从第一团火开始｜火堆边百科",
+      "h1": [
+        "别让黑夜，吃掉你的第一天。"
+      ],
+      "width": 1440,
+      "scrollWidth": 1440,
+      "height": 5637,
+      "cards": 5,
+      "brokenImages": [],
+      "mainCount": 1,
+      "canonical": null,
+      "ogImage": null,
+      "h2": [
+        {
+          "text": "先活下来，再变强。",
+          "id": ""
+        },
+        {
+          "text": "先找适合你的角色。",
+          "id": ""
+        },
+        {
+          "text": "Boss 不是突然开始的。",
+          "id": ""
+        },
+        {
+          "text": "下一步，写在地图上。",
+          "id": ""
+        },
+        {
+          "text": "常用资料，随手一翻。",
+          "id": ""
+        },
+        {
+          "text": "火灭了，还能再点。",
+          "id": ""
+        }
+      ],
+      "loadMs": 40,
+      "resources": 47
+    },
+    {
+      "route": "/beginner",
+      "status": 200,
+      "title": "萌新入门｜火堆边百科",
+      "h1": [
+        "萌新入门"
+      ],
+      "width": 1440,
+      "scrollWidth": 1440,
+      "height": 1605,
+      "cards": 5,
+      "brokenImages": [],
+      "mainCount": 1,
+      "canonical": null,
+      "ogImage": null,
+      "h2": [
+        {
+          "text": "火灭了，还能再点。",
+          "id": ""
+        }
+      ],
+      "loadMs": 48,
+      "resources": 44
+    },
+    {
+      "route": "/beginner/first-day",
+      "status": 200,
+      "title": "第一天生存路线｜火堆边百科",
+      "h1": [
+        "第一天生存路线"
+      ],
+      "width": 1440,
+      "scrollWidth": 1440,
+      "height": 2547,
+      "cards": 0,
+      "brokenImages": [],
+      "mainCount": 1,
+      "canonical": null,
+      "ogImage": "/jihuang/images/official/hero.jpg",
+      "h2": [
+        {
+          "text": "当前目标",
+          "id": "当前目标"
+        },
+        {
+          "text": "准备物品",
+          "id": "准备物品"
+        },
+        {
+          "text": "操作步骤",
+          "id": "操作步骤"
+        },
+        {
+          "text": "常见错误",
+          "id": "常见错误"
+        },
+        {
+          "text": "完成标志",
+          "id": "完成标志"
+        },
+        {
+          "text": "下一步",
+          "id": "下一步"
+        },
+        {
+          "text": "火灭了，还能再点。",
+          "id": ""
+        }
+      ],
+      "loadMs": 82,
+      "resources": 49
+    },
+    {
+      "route": "/characters",
+      "status": 200,
+      "title": "角色攻略｜火堆边百科",
+      "h1": [
+        "角色攻略"
+      ],
+      "width": 1440,
+      "scrollWidth": 1440,
+      "height": 1704,
+      "cards": 5,
+      "brokenImages": [],
+      "mainCount": 1,
+      "canonical": null,
+      "ogImage": null,
+      "h2": [
+        {
+          "text": "火灭了，还能再点。",
+          "id": ""
+        }
+      ],
+      "loadMs": 31,
+      "resources": 44
+    },
+    {
+      "route": "/characters/wendy",
+      "status": 200,
+      "title": "温蒂｜火堆边百科",
+      "h1": [
+        "温蒂"
+      ],
+      "width": 1440,
+      "scrollWidth": 1440,
+      "height": 3432,
+      "cards": 0,
+      "brokenImages": [],
+      "mainCount": 1,
+      "canonical": null,
+      "ogImage": "/jihuang/images/official/hero.jpg",
+      "h2": [
+        {
+          "text": "角色速览",
+          "id": "角色速览"
+        },
+        {
+          "text": "核心机制",
+          "id": "核心机制"
+        },
+        {
+          "text": "开局路线",
+          "id": "开局路线"
+        },
+        {
+          "text": "四阶段建议",
+          "id": "四阶段建议"
+        },
+        {
+          "text": "玩法方案",
+          "id": "玩法方案"
+        },
+        {
+          "text": "Boss 表现",
+          "id": "boss-表现"
+        },
+        {
+          "text": "常见误区",
+          "id": "常见误区"
+        },
+        {
+          "text": "相关条目",
+          "id": "相关条目"
+        },
+        {
+          "text": "火灭了，还能再点。",
+          "id": ""
+        }
+      ],
+      "loadMs": 68,
+      "resources": 57
+    },
+    {
+      "route": "/bosses",
+      "status": 200,
+      "title": "Boss 攻略｜火堆边百科",
+      "h1": [
+        "Boss 攻略"
+      ],
+      "width": 1440,
+      "scrollWidth": 1440,
+      "height": 1735,
+      "cards": 5,
+      "brokenImages": [],
+      "mainCount": 1,
+      "canonical": null,
+      "ogImage": null,
+      "h2": [
+        {
+          "text": "火灭了，还能再点。",
+          "id": ""
+        }
+      ],
+      "loadMs": 47,
+      "resources": 43
+    },
+    {
+      "route": "/bosses/deerclops",
+      "status": 200,
+      "title": "独眼巨鹿｜火堆边百科",
+      "h1": [
+        "独眼巨鹿"
+      ],
+      "width": 1440,
+      "scrollWidth": 1440,
+      "height": 3042,
+      "cards": 0,
+      "brokenImages": [],
+      "mainCount": 1,
+      "canonical": null,
+      "ogImage": "/jihuang/images/official/hero.jpg",
+      "h2": [
+        {
+          "text": "基本信息",
+          "id": "基本信息"
+        },
+        {
+          "text": "挑战前置",
+          "id": "挑战前置"
+        },
+        {
+          "text": "三档配置",
+          "id": "三档配置"
+        },
+        {
+          "text": "战斗节奏",
+          "id": "战斗节奏"
+        },
+        {
+          "text": "两种稳妥打法",
+          "id": "两种稳妥打法"
+        },
+        {
+          "text": "常见失败原因",
+          "id": "常见失败原因"
+        },
+        {
+          "text": "掉落与下一步",
+          "id": "掉落与下一步"
+        },
+        {
+          "text": "火灭了，还能再点。",
+          "id": ""
+        }
+      ],
+      "loadMs": 67,
+      "resources": 51
+    },
+    {
+      "route": "/progression",
+      "status": 200,
+      "title": "世界主线｜火堆边百科",
+      "h1": [
+        "世界主线"
+      ],
+      "width": 1440,
+      "scrollWidth": 1440,
+      "height": 1973,
+      "cards": 9,
+      "brokenImages": [],
+      "mainCount": 1,
+      "canonical": null,
+      "ogImage": null,
+      "h2": [
+        {
+          "text": "火灭了，还能再点。",
+          "id": ""
+        }
+      ],
+      "loadMs": 42,
+      "resources": 46
+    },
+    {
+      "route": "/progression/shadow-sanctum",
+      "status": 200,
+      "title": "暗影裂隙与远古圣所｜火堆边百科",
+      "h1": [
+        "暗影裂隙与远古圣所"
+      ],
+      "width": 1440,
+      "scrollWidth": 1440,
+      "height": 3128,
+      "cards": 0,
+      "brokenImages": [],
+      "mainCount": 1,
+      "canonical": null,
+      "ogImage": "/jihuang/images/official/shadow.jpg",
+      "h2": [
+        {
+          "text": "前置条件",
+          "id": "前置条件"
+        },
+        {
+          "text": "最小准备",
+          "id": "最小准备"
+        },
+        {
+          "text": "节点路线",
+          "id": "节点路线"
+        },
+        {
+          "text": "导航与房间规则",
+          "id": "导航与房间规则"
+        },
+        {
+          "text": "守卫塔战",
+          "id": "守卫塔战"
+        },
+        {
+          "text": "撤退信号",
+          "id": "撤退信号"
+        },
+        {
+          "text": "2026 热能支线",
+          "id": "_2026-热能支线"
+        },
+        {
+          "text": "完成标志",
+          "id": "完成标志"
+        },
+        {
+          "text": "来源",
+          "id": "来源"
+        },
+        {
+          "text": "火灭了，还能再点。",
+          "id": ""
+        }
+      ],
+      "loadMs": 65,
+      "resources": 52
+    },
+    {
+      "route": "/wiki",
+      "status": 200,
+      "title": "百科资料｜火堆边百科",
+      "h1": [
+        "百科资料"
+      ],
+      "width": 1440,
+      "scrollWidth": 1440,
+      "height": 44912,
+      "cards": 328,
+      "brokenImages": [],
+      "mainCount": 1,
+      "canonical": null,
+      "ogImage": null,
+      "h2": [
+        {
+          "text": "火灭了，还能再点。",
+          "id": ""
+        }
+      ],
+      "loadMs": 397,
+      "resources": 250
+    },
+    {
+      "route": "/wiki/torch",
+      "status": 200,
+      "title": "火把｜火堆边百科",
+      "h1": [
+        "火把"
+      ],
+      "width": 1440,
+      "scrollWidth": 1440,
+      "height": 2030,
+      "cards": 0,
+      "brokenImages": [],
+      "mainCount": 2,
+      "canonical": null,
+      "ogImage": "/jihuang/images/wiki/torch.png",
+      "h2": [
+        {
+          "text": "制作方法",
+          "id": "crafting-title"
+        },
+        {
+          "text": "怎么获得",
+          "id": "acquisition-title"
+        },
+        {
+          "text": "用途",
+          "id": ""
+        },
+        {
+          "text": "实战提示",
+          "id": ""
+        },
+        {
+          "text": "继续查阅",
+          "id": ""
+        },
+        {
+          "text": "资料来源与图片署名",
+          "id": ""
+        },
+        {
+          "text": "火灭了，还能再点。",
+          "id": ""
+        }
+      ],
+      "loadMs": 85,
+      "resources": 41
+    },
+    {
+      "route": "/wiki/pierogi",
+      "status": 200,
+      "title": "波兰水饺｜火堆边百科",
+      "h1": [
+        "波兰水饺"
+      ],
+      "width": 1440,
+      "scrollWidth": 1440,
+      "height": 2443,
+      "cards": 0,
+      "brokenImages": [],
+      "mainCount": 2,
+      "canonical": null,
+      "ogImage": "/jihuang/images/wiki/pierogi.png",
+      "h2": [
+        {
+          "text": "烹饪锅食谱",
+          "id": "dish-title"
+        },
+        {
+          "text": "怎么获得",
+          "id": "acquisition-title"
+        },
+        {
+          "text": "用途",
+          "id": ""
+        },
+        {
+          "text": "实战提示",
+          "id": ""
+        },
+        {
+          "text": "常见失误",
+          "id": ""
+        },
+        {
+          "text": "继续查阅",
+          "id": ""
+        },
+        {
+          "text": "资料来源与图片署名",
+          "id": ""
+        },
+        {
+          "text": "火灭了，还能再点。",
+          "id": ""
+        }
+      ],
+      "loadMs": 46,
+      "resources": 47
+    },
+    {
+      "route": "/wiki/ancient-fuelweaver",
+      "status": 200,
+      "title": "远古织影者｜火堆边百科",
+      "h1": [
+        "远古织影者"
+      ],
+      "width": 1440,
+      "scrollWidth": 1440,
+      "height": 2748,
+      "cards": 0,
+      "brokenImages": [],
+      "mainCount": 2,
+      "canonical": null,
+      "ogImage": "/jihuang/images/wiki/ancient-fuelweaver.png",
+      "h2": [
+        {
+          "text": "制作方法",
+          "id": "crafting-title"
+        },
+        {
+          "text": "怎么获得",
+          "id": "acquisition-title"
+        },
+        {
+          "text": "战斗与处理方法",
+          "id": ""
+        },
+        {
+          "text": "用途",
+          "id": ""
+        },
+        {
+          "text": "实战提示",
+          "id": ""
+        },
+        {
+          "text": "常见失误",
+          "id": ""
+        },
+        {
+          "text": "继续查阅",
+          "id": ""
+        },
+        {
+          "text": "资料来源与图片署名",
+          "id": ""
+        },
+        {
+          "text": "火灭了，还能再点。",
+          "id": ""
+        }
+      ],
+      "loadMs": 55,
+      "resources": 43
+    },
+    {
+      "route": "/search",
+      "status": 200,
+      "title": "搜索攻略｜火堆边百科",
+      "h1": [
+        "你要找什么？"
+      ],
+      "width": 1440,
+      "scrollWidth": 1440,
+      "height": 1828,
+      "cards": 6,
+      "brokenImages": [],
+      "mainCount": 1,
+      "canonical": null,
+      "ogImage": null,
+      "h2": [
+        {
+          "text": "新手最常翻的几页",
+          "id": ""
+        },
+        {
+          "text": "火灭了，还能再点。",
+          "id": ""
+        }
+      ],
+      "loadMs": 31,
+      "resources": 48
+    },
+    {
+      "route": "/tools/progression-checklist",
+      "status": 200,
+      "title": "世界主线任务清单｜火堆边百科",
+      "h1": [
+        "世界主线任务清单"
+      ],
+      "width": 1440,
+      "scrollWidth": 1440,
+      "height": 3363,
+      "cards": 0,
+      "brokenImages": [],
+      "mainCount": 1,
+      "canonical": null,
+      "ogImage": null,
+      "h2": [
+        {
+          "text": "下一步：收集草、树枝与燧石",
+          "id": ""
+        },
+        {
+          "text": "基础生存线",
+          "id": ""
+        },
+        {
+          "text": "洞穴与遗迹线",
+          "id": ""
+        },
+        {
+          "text": "月岛与天体线",
+          "id": ""
+        },
+        {
+          "text": "火灭了，还能再点。",
+          "id": ""
+        }
+      ],
+      "loadMs": 111,
+      "resources": 46
+    },
+    {
+      "route": "/about",
+      "status": 200,
+      "title": "关于本站与资料来源｜火堆边百科",
+      "h1": [
+        "关于火堆边百科"
+      ],
+      "width": 1440,
+      "scrollWidth": 1440,
+      "height": 1801,
+      "cards": 0,
+      "brokenImages": [],
+      "mainCount": 1,
+      "canonical": null,
+      "ogImage": null,
+      "h2": [
+        {
+          "text": "本站做什么",
+          "id": ""
+        },
+        {
+          "text": "内容原则",
+          "id": ""
+        },
+        {
+          "text": "资料与外部链接",
+          "id": ""
+        },
+        {
+          "text": "版权声明",
+          "id": ""
+        },
+        {
+          "text": "2026.08",
+          "id": ""
+        },
+        {
+          "text": "火灭了，还能再点。",
+          "id": ""
+        }
+      ],
+      "loadMs": 38,
+      "resources": 36
+    },
+    {
+      "route": "/",
+      "status": 200,
+      "title": "从第一团火开始｜火堆边百科",
+      "h1": [
+        "别让黑夜，吃掉你的第一天。"
+      ],
+      "width": 375,
+      "scrollWidth": 375,
+      "height": 9761,
+      "cards": 5,
+      "brokenImages": [],
+      "mainCount": 1,
+      "canonical": null,
+      "ogImage": null,
+      "h2": [
+        {
+          "text": "先活下来，再变强。",
+          "id": ""
+        },
+        {
+          "text": "先找适合你的角色。",
+          "id": ""
+        },
+        {
+          "text": "Boss 不是突然开始的。",
+          "id": ""
+        },
+        {
+          "text": "下一步，写在地图上。",
+          "id": ""
+        },
+        {
+          "text": "常用资料，随手一翻。",
+          "id": ""
+        },
+        {
+          "text": "火灭了，还能再点。",
+          "id": ""
+        }
+      ],
+      "loadMs": 72,
+      "resources": 33
+    },
+    {
+      "route": "/beginner",
+      "status": 200,
+      "title": "萌新入门｜火堆边百科",
+      "h1": [
+        "萌新入门"
+      ],
+      "width": 375,
+      "scrollWidth": 375,
+      "height": 2807,
+      "cards": 5,
+      "brokenImages": [],
+      "mainCount": 1,
+      "canonical": null,
+      "ogImage": null,
+      "h2": [
+        {
+          "text": "火灭了，还能再点。",
+          "id": ""
+        }
+      ],
+      "loadMs": 33,
+      "resources": 32
+    },
+    {
+      "route": "/beginner/first-day",
+      "status": 200,
+      "title": "第一天生存路线｜火堆边百科",
+      "h1": [
+        "第一天生存路线"
+      ],
+      "width": 375,
+      "scrollWidth": 375,
+      "height": 3707,
+      "cards": 0,
+      "brokenImages": [],
+      "mainCount": 1,
+      "canonical": null,
+      "ogImage": "/jihuang/images/official/hero.jpg",
+      "h2": [
+        {
+          "text": "当前目标",
+          "id": "当前目标"
+        },
+        {
+          "text": "准备物品",
+          "id": "准备物品"
+        },
+        {
+          "text": "操作步骤",
+          "id": "操作步骤"
+        },
+        {
+          "text": "常见错误",
+          "id": "常见错误"
+        },
+        {
+          "text": "完成标志",
+          "id": "完成标志"
+        },
+        {
+          "text": "下一步",
+          "id": "下一步"
+        },
+        {
+          "text": "火灭了，还能再点。",
+          "id": ""
+        }
+      ],
+      "loadMs": 56,
+      "resources": 33
+    },
+    {
+      "route": "/characters",
+      "status": 200,
+      "title": "角色攻略｜火堆边百科",
+      "h1": [
+        "角色攻略"
+      ],
+      "width": 375,
+      "scrollWidth": 375,
+      "height": 2937,
+      "cards": 5,
+      "brokenImages": [],
+      "mainCount": 1,
+      "canonical": null,
+      "ogImage": null,
+      "h2": [
+        {
+          "text": "火灭了，还能再点。",
+          "id": ""
+        }
+      ],
+      "loadMs": 27,
+      "resources": 31
+    },
+    {
+      "route": "/characters/wendy",
+      "status": 200,
+      "title": "温蒂｜火堆边百科",
+      "h1": [
+        "温蒂"
+      ],
+      "width": 375,
+      "scrollWidth": 375,
+      "height": 4521,
+      "cards": 0,
+      "brokenImages": [],
+      "mainCount": 1,
+      "canonical": null,
+      "ogImage": "/jihuang/images/official/hero.jpg",
+      "h2": [
+        {
+          "text": "角色速览",
+          "id": "角色速览"
+        },
+        {
+          "text": "核心机制",
+          "id": "核心机制"
+        },
+        {
+          "text": "开局路线",
+          "id": "开局路线"
+        },
+        {
+          "text": "四阶段建议",
+          "id": "四阶段建议"
+        },
+        {
+          "text": "玩法方案",
+          "id": "玩法方案"
+        },
+        {
+          "text": "Boss 表现",
+          "id": "boss-表现"
+        },
+        {
+          "text": "常见误区",
+          "id": "常见误区"
+        },
+        {
+          "text": "相关条目",
+          "id": "相关条目"
+        },
+        {
+          "text": "火灭了，还能再点。",
+          "id": ""
+        }
+      ],
+      "loadMs": 65,
+      "resources": 39
+    },
+    {
+      "route": "/bosses",
+      "status": 200,
+      "title": "Boss 攻略｜火堆边百科",
+      "h1": [
+        "Boss 攻略"
+      ],
+      "width": 375,
+      "scrollWidth": 375,
+      "height": 2937,
+      "cards": 5,
+      "brokenImages": [],
+      "mainCount": 1,
+      "canonical": null,
+      "ogImage": null,
+      "h2": [
+        {
+          "text": "火灭了，还能再点。",
+          "id": ""
+        }
+      ],
+      "loadMs": 35,
+      "resources": 30
+    },
+    {
+      "route": "/bosses/deerclops",
+      "status": 200,
+      "title": "独眼巨鹿｜火堆边百科",
+      "h1": [
+        "独眼巨鹿"
+      ],
+      "width": 375,
+      "scrollWidth": 375,
+      "height": 4146,
+      "cards": 0,
+      "brokenImages": [],
+      "mainCount": 1,
+      "canonical": null,
+      "ogImage": "/jihuang/images/official/hero.jpg",
+      "h2": [
+        {
+          "text": "基本信息",
+          "id": "基本信息"
+        },
+        {
+          "text": "挑战前置",
+          "id": "挑战前置"
+        },
+        {
+          "text": "三档配置",
+          "id": "三档配置"
+        },
+        {
+          "text": "战斗节奏",
+          "id": "战斗节奏"
+        },
+        {
+          "text": "两种稳妥打法",
+          "id": "两种稳妥打法"
+        },
+        {
+          "text": "常见失败原因",
+          "id": "常见失败原因"
+        },
+        {
+          "text": "掉落与下一步",
+          "id": "掉落与下一步"
+        },
+        {
+          "text": "火灭了，还能再点。",
+          "id": ""
+        }
+      ],
+      "loadMs": 59,
+      "resources": 34
+    },
+    {
+      "route": "/progression",
+      "status": 200,
+      "title": "世界主线｜火堆边百科",
+      "h1": [
+        "世界主线"
+      ],
+      "width": 375,
+      "scrollWidth": 375,
+      "height": 4248,
+      "cards": 9,
+      "brokenImages": [],
+      "mainCount": 1,
+      "canonical": null,
+      "ogImage": null,
+      "h2": [
+        {
+          "text": "火灭了，还能再点。",
+          "id": ""
+        }
+      ],
+      "loadMs": 32,
+      "resources": 33
+    },
+    {
+      "route": "/progression/shadow-sanctum",
+      "status": 200,
+      "title": "暗影裂隙与远古圣所｜火堆边百科",
+      "h1": [
+        "暗影裂隙与远古圣所"
+      ],
+      "width": 375,
+      "scrollWidth": 375,
+      "height": 4372,
+      "cards": 0,
+      "brokenImages": [],
+      "mainCount": 1,
+      "canonical": null,
+      "ogImage": "/jihuang/images/official/shadow.jpg",
+      "h2": [
+        {
+          "text": "前置条件",
+          "id": "前置条件"
+        },
+        {
+          "text": "最小准备",
+          "id": "最小准备"
+        },
+        {
+          "text": "节点路线",
+          "id": "节点路线"
+        },
+        {
+          "text": "导航与房间规则",
+          "id": "导航与房间规则"
+        },
+        {
+          "text": "守卫塔战",
+          "id": "守卫塔战"
+        },
+        {
+          "text": "撤退信号",
+          "id": "撤退信号"
+        },
+        {
+          "text": "2026 热能支线",
+          "id": "_2026-热能支线"
+        },
+        {
+          "text": "完成标志",
+          "id": "完成标志"
+        },
+        {
+          "text": "来源",
+          "id": "来源"
+        },
+        {
+          "text": "火灭了，还能再点。",
+          "id": ""
+        }
+      ],
+      "loadMs": 44,
+      "resources": 32
+    },
+    {
+      "route": "/wiki",
+      "status": 200,
+      "title": "百科资料｜火堆边百科",
+      "h1": [
+        "百科资料"
+      ],
+      "width": 375,
+      "scrollWidth": 375,
+      "height": 129018,
+      "cards": 328,
+      "brokenImages": [],
+      "mainCount": 1,
+      "canonical": null,
+      "ogImage": null,
+      "h2": [
+        {
+          "text": "火灭了，还能再点。",
+          "id": ""
+        }
+      ],
+      "loadMs": 274,
+      "resources": 250
+    },
+    {
+      "route": "/wiki/torch",
+      "status": 200,
+      "title": "火把｜火堆边百科",
+      "h1": [
+        "火把"
+      ],
+      "width": 375,
+      "scrollWidth": 375,
+      "height": 2937,
+      "cards": 0,
+      "brokenImages": [],
+      "mainCount": 2,
+      "canonical": null,
+      "ogImage": "/jihuang/images/wiki/torch.png",
+      "h2": [
+        {
+          "text": "制作方法",
+          "id": "crafting-title"
+        },
+        {
+          "text": "怎么获得",
+          "id": "acquisition-title"
+        },
+        {
+          "text": "用途",
+          "id": ""
+        },
+        {
+          "text": "实战提示",
+          "id": ""
+        },
+        {
+          "text": "继续查阅",
+          "id": ""
+        },
+        {
+          "text": "资料来源与图片署名",
+          "id": ""
+        },
+        {
+          "text": "火灭了，还能再点。",
+          "id": ""
+        }
+      ],
+      "loadMs": 49,
+      "resources": 29
+    },
+    {
+      "route": "/wiki/pierogi",
+      "status": 200,
+      "title": "波兰水饺｜火堆边百科",
+      "h1": [
+        "波兰水饺"
+      ],
+      "width": 375,
+      "scrollWidth": 375,
+      "height": 4029,
+      "cards": 0,
+      "brokenImages": [],
+      "mainCount": 2,
+      "canonical": null,
+      "ogImage": "/jihuang/images/wiki/pierogi.png",
+      "h2": [
+        {
+          "text": "烹饪锅食谱",
+          "id": "dish-title"
+        },
+        {
+          "text": "怎么获得",
+          "id": "acquisition-title"
+        },
+        {
+          "text": "用途",
+          "id": ""
+        },
+        {
+          "text": "实战提示",
+          "id": ""
+        },
+        {
+          "text": "常见失误",
+          "id": ""
+        },
+        {
+          "text": "继续查阅",
+          "id": ""
+        },
+        {
+          "text": "资料来源与图片署名",
+          "id": ""
+        },
+        {
+          "text": "火灭了，还能再点。",
+          "id": ""
+        }
+      ],
+      "loadMs": 38,
+      "resources": 32
+    },
+    {
+      "route": "/wiki/ancient-fuelweaver",
+      "status": 200,
+      "title": "远古织影者｜火堆边百科",
+      "h1": [
+        "远古织影者"
+      ],
+      "width": 375,
+      "scrollWidth": 375,
+      "height": 4248,
+      "cards": 0,
+      "brokenImages": [],
+      "mainCount": 2,
+      "canonical": null,
+      "ogImage": "/jihuang/images/wiki/ancient-fuelweaver.png",
+      "h2": [
+        {
+          "text": "制作方法",
+          "id": "crafting-title"
+        },
+        {
+          "text": "怎么获得",
+          "id": "acquisition-title"
+        },
+        {
+          "text": "战斗与处理方法",
+          "id": ""
+        },
+        {
+          "text": "用途",
+          "id": ""
+        },
+        {
+          "text": "实战提示",
+          "id": ""
+        },
+        {
+          "text": "常见失误",
+          "id": ""
+        },
+        {
+          "text": "继续查阅",
+          "id": ""
+        },
+        {
+          "text": "资料来源与图片署名",
+          "id": ""
+        },
+        {
+          "text": "火灭了，还能再点。",
+          "id": ""
+        }
+      ],
+      "loadMs": 36,
+      "resources": 30
+    },
+    {
+      "route": "/search",
+      "status": 200,
+      "title": "搜索攻略｜火堆边百科",
+      "h1": [
+        "你要找什么？"
+      ],
+      "width": 375,
+      "scrollWidth": 375,
+      "height": 3415,
+      "cards": 6,
+      "brokenImages": [],
+      "mainCount": 1,
+      "canonical": null,
+      "ogImage": null,
+      "h2": [
+        {
+          "text": "新手最常翻的几页",
+          "id": ""
+        },
+        {
+          "text": "火灭了，还能再点。",
+          "id": ""
+        }
+      ],
+      "loadMs": 33,
+      "resources": 29
+    },
+    {
+      "route": "/tools/progression-checklist",
+      "status": 200,
+      "title": "世界主线任务清单｜火堆边百科",
+      "h1": [
+        "世界主线任务清单"
+      ],
+      "width": 375,
+      "scrollWidth": 375,
+      "height": 4543,
+      "cards": 0,
+      "brokenImages": [],
+      "mainCount": 1,
+      "canonical": null,
+      "ogImage": null,
+      "h2": [
+        {
+          "text": "下一步：收集草、树枝与燧石",
+          "id": ""
+        },
+        {
+          "text": "基础生存线",
+          "id": ""
+        },
+        {
+          "text": "洞穴与遗迹线",
+          "id": ""
+        },
+        {
+          "text": "月岛与天体线",
+          "id": ""
+        },
+        {
+          "text": "火灭了，还能再点。",
+          "id": ""
+        }
+      ],
+      "loadMs": 36,
+      "resources": 23
+    },
+    {
+      "route": "/about",
+      "status": 200,
+      "title": "关于本站与资料来源｜火堆边百科",
+      "h1": [
+        "关于火堆边百科"
+      ],
+      "width": 375,
+      "scrollWidth": 375,
+      "height": 2230,
+      "cards": 0,
+      "brokenImages": [],
+      "mainCount": 1,
+      "canonical": null,
+      "ogImage": null,
+      "h2": [
+        {
+          "text": "本站做什么",
+          "id": ""
+        },
+        {
+          "text": "内容原则",
+          "id": ""
+        },
+        {
+          "text": "资料与外部链接",
+          "id": ""
+        },
+        {
+          "text": "版权声明",
+          "id": ""
+        },
+        {
+          "text": "2026.08",
+          "id": ""
+        },
+        {
+          "text": "火灭了，还能再点。",
+          "id": ""
+        }
+      ],
+      "loadMs": 27,
+      "resources": 23
+    }
+  ],
+  "interactions": {
+    "slashShortcut": {
+      "urlAfterPress": "http://127.0.0.1:4174/jihuang/",
+      "activeElement": "BODY"
+    },
+    "search": [
+      {
+        "query": "巨鹿",
+        "count": 5,
+        "titles": [
+          "独眼巨鹿",
+          "独眼巨鹿",
+          "独眼巨鹿眼球",
+          "第一个冬季准备",
+          "眼球伞"
+        ],
+        "url": "http://127.0.0.1:4174/jihuang/search"
+      },
+      {
+        "query": "dl",
+        "count": 8,
+        "titles": [
+          "独眼巨鹿",
+          "独眼巨鹿",
+          "牛鞍",
+          "鞍具脱卸器",
+          "战争牛鞍",
+          "薄纱牛鞍",
+          "水果圣代",
+          "致命亮茄"
+        ],
+        "url": "http://127.0.0.1:4174/jihuang/search"
+      },
+      {
+        "query": "机器人",
+        "count": 2,
+        "titles": [
+          "WX-78",
+          "科学机器"
+        ],
+        "url": "http://127.0.0.1:4174/jihuang/search"
+      },
+      {
+        "query": "怎么复活",
+        "count": 0,
+        "titles": [],
+        "url": "http://127.0.0.1:4174/jihuang/search"
+      },
+      {
+        "query": "料理",
+        "count": 12,
+        "titles": [
+          "怪物千层饼",
+          "鳗鱼寿司",
+          "培根煎蛋",
+          "火龙果派",
+          "蔬菜杂烩",
+          "果酱",
+          "肉串",
+          "火鸡大餐",
+          "酿茄子",
+          "冰淇淋",
+          "叶肉糕",
+          "波兰水饺"
+        ],
+        "url": "http://127.0.0.1:4174/jihuang/search"
+      },
+      {
+        "query": "保暖",
+        "count": 10,
+        "titles": [
+          "第一个冬季准备",
+          "四季循环进阶路线",
+          "兔耳罩",
+          "暖石",
+          "牛帽",
+          "缝纫包",
+          "冬帽",
+          "厚实背心",
+          "辣椒炖肉",
+          "酿辣椒"
+        ],
+        "url": "http://127.0.0.1:4174/jihuang/search"
+      },
+      {
+        "query": "zzzznomatch",
+        "count": 0,
+        "titles": [],
+        "url": "http://127.0.0.1:4174/jihuang/search"
+      }
+    ],
+    "searchBack": {
+      "value": "",
+      "count": 0
+    },
+    "wikiFilter": {
+      "cards": 50,
+      "stamp": "共 328 份手记",
+      "url": "http://127.0.0.1:4174/jihuang/wiki"
+    },
+    "wikiFilterBack": {
+      "cards": 0,
+      "active": " 全部 "
+    },
+    "progressSaved": {
+      "pressed": "true",
+      "percentage": "8%"
+    },
+    "progressResetCancelled": "true",
+    "progressReset": "false",
+    "mobileSearch": "- link /:\n  - /url: /jihuang/search",
+    "mobileMenuEscape": true,
+    "mobileMenuNavigation": {
+      "url": "http://127.0.0.1:4174/jihuang/wiki",
+      "open": false
+    },
+    "notFound": {
+      "status": 404,
+      "title": "404 - Page not found: /not-a-real-page-audit | Nuxt｜火堆边百科",
+      "text": "404\n\nPage not found: /not-a-real-page-audit\n\nGo back home"
+    }
+  },
+  "errors": [
+    {
+      "url": "http://127.0.0.1:4174/jihuang/not-a-real-page-audit",
+      "type": "console",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    },
+    {
+      "url": "http://127.0.0.1:4174/jihuang/not-a-real-page-audit",
+      "type": "console",
+      "message": "[nuxt] error caught during app initialization ea: Page not found: /not-a-real-page-audit\n    at bp (http://127.0.0.1:4174/jihuang/_nuxt/EJ0KoafW.js:4:74438)\n    at sn (http://127.0.0.1:4174/jihuang/_nuxt/EJ0KoafW.js:4:77622)\n    at http://127.0.0.1:4174/jihuang/_nuxt/EJ0KoafW.js:4:147729\n    at r (http://127.0.0.1:4174/jihuang/_nuxt/EJ0KoafW.js:4:72942)\n    at Object.runWithContext (http://127.0.0.1:4174/jihuang/_nuxt/EJ0KoafW.js:4:15252)\n    at Zi (http://127.0.0.1:4174/jihuang/_nuxt/EJ0KoafW.js:4:72979)\n    at http://127.0.0.1:4174/jihuang/_nuxt/EJ0KoafW.js:4:70947\n    at Wa.run (http://127.0.0.1:4174/jihuang/_nuxt/EJ0KoafW.js:2:4964)\n    at Object.runWithContext (http://127.0.0.1:4174/jihuang/_nuxt/EJ0KoafW.js:4:70939)\n    at http://127.0.0.1:4174/jihuang/_nuxt/EJ0KoafW.js:4:147707"
+    }
+  ],
+  "badLinks": [],
+  "online": {
+    "https://fshfish88-lab.github.io/jihuang/": {
+      "error": "apiRequestContext.get: connect EACCES 2606:50c0:8001::153:443\nCall log:\n\u001b[2m  - → GET https://fshfish88-lab.github.io/jihuang/\u001b[22m\n\u001b[2m    - user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36\u001b[22m\n\u001b[2m    - accept: */*\u001b[22m\n\u001b[2m    - accept-encoding: gzip,deflate,br\u001b[22m\n"
+    },
+    "https://github.com/fshfish88-lab/jihuang": {
+      "error": "apiRequestContext.get: connect EACCES 20.205.243.166:443\nCall log:\n\u001b[2m  - → GET https://github.com/fshfish88-lab/jihuang\u001b[22m\n\u001b[2m    - user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36\u001b[22m\n\u001b[2m    - accept: */*\u001b[22m\n\u001b[2m    - accept-encoding: gzip,deflate,br\u001b[22m\n"
+    }
+  },
+  "linkCount": 361
+}

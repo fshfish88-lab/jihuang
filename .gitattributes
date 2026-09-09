@@ -1,0 +1,2 @@
+# Preserve the bytes recorded in the deployable artifact's SHA-256 manifest.
+成品文件/github-pages/** -text whitespace=cr-at-eol

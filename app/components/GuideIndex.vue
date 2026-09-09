@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { getEntries } from '~/data/content'
+import { getEntries, getBossDirectory, entryPath } from '~/data/content'
 import type { ContentKind } from '~/types/content'
 
 const props = defineProps<{
@@ -10,8 +10,8 @@ const props = defineProps<{
   filters?: string[]
 }>()
 
-const activeFilter = ref('')
-const entries = computed(() => getEntries(props.kind))
+const activeFilter = useQueryValue('category')
+const entries = computed(() => props.kind === 'boss' ? getBossDirectory() : getEntries(props.kind))
 const filtered = computed(() => {
   if (!activeFilter.value) return entries.value
   return entries.value.filter(entry => entry.tags.includes(activeFilter.value))
@@ -30,7 +30,7 @@ useSeoMeta({
         <p class="eyebrow">{{ eyebrow }}</p>
         <h1>{{ title }}</h1>
         <p>{{ description }}</p>
-        <span class="stamp">共 {{ entries.length }} 份手记</span>
+        <span class="stamp">{{ filtered.length }} / {{ entries.length }} 份手记</span>
       </header>
 
       <FilterBar
@@ -41,7 +41,7 @@ useSeoMeta({
       />
 
       <div class="content-grid">
-        <ContentCard v-for="entry in filtered" :key="entry.slug" :entry="entry" />
+        <ContentCard v-for="entry in filtered" :key="entryPath(entry)" :entry="entry" />
         <div v-if="filtered.length === 0" class="empty-state">
           <h2>这组筛选还没有条目</h2>
           <p>换一个标签，或者回到“全部”。</p>

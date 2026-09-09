@@ -653,4 +653,16 @@ export function getEntryBySlug(slug: string): GuideEntry | undefined {
   return guideEntries.find(entry => entry.slug === slug)
 }
 
+export const bossSlugs = ['deerclops', 'bearger', 'bee-queen', 'klaus', 'ancient-guardian', 'moose-goose', 'dragonfly', 'antlion', 'toadstool', 'crab-king', 'malbatross', 'eye-of-terror', 'twins-of-terror', 'ancient-fuelweaver', 'celestial-champion']
+
+export function getBossDirectory(): GuideEntry[] {
+  return bossSlugs.flatMap(slug => {
+    const entry = getEntry('boss', slug) || getEntry('wiki', slug)
+    if (!entry) return []
+    const cave = ['ancient-guardian', 'toadstool', 'ancient-fuelweaver'].includes(slug)
+    const ocean = ['crab-king', 'malbatross'].includes(slug)
+    return [{ ...entry, tags: [...new Set([...entry.tags, cave ? '洞穴' : ocean ? '海洋' : '地表'])] }]
+  })
+}
+
 

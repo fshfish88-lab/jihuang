@@ -27,8 +27,8 @@ describe('site metadata', () => {
     const wikiEntries = getEntries('wiki')
     const dishEntries = wikiEntries.filter(entry => entry.tags.includes('四格食谱'))
 
-    expect(SITE_VERSION).toBe('2026.08')
-    expect(SITE_UPDATED_AT).toBe('2026-08-13')
+    expect(SITE_VERSION).toBe('2026.09')
+    expect(SITE_UPDATED_AT).toBe('2026-09-09')
     expect(siteStats).toEqual({
       totalEntries: guideEntries.length,
       wikiEntries: wikiEntries.length,

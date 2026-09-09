@@ -9,6 +9,8 @@ useSeoMeta({
 
 const store = useProgressStore()
 const showReset = ref(false)
+const selectedRoute = useQueryValue('route')
+const nextNode = computed(() => progressNodes.find(node => (!selectedRoute.value || node.route === selectedRoute.value) && !store.completed.includes(node.id)))
 
 onMounted(() => store.hydrate())
 
@@ -17,6 +19,8 @@ const routes = routeOrder.map(id => ({
   label: routeLabels[id],
   nodes: progressNodes.filter(node => node.route === id)
 }))
+const visibleRoutes = computed(() => routes.filter(route => !selectedRoute.value || route.id === selectedRoute.value))
+const completedInRoute = (id: string) => progressNodes.filter(node => node.route === id && store.completed.includes(node.id)).length
 
 function linkFor(slug: string) {
   const entry = getEntryBySlug(slug)
@@ -43,12 +47,16 @@ function linkFor(slug: string) {
         当前浏览器无法保存进度，本页仍可使用，但刷新后勾选可能丢失。
       </div>
 
-      <section v-if="store.nextNode" class="next-step paper-card">
+      <label class="route-picker">当前推进方向
+        <select v-model="selectedRoute"><option value="">全部路线</option><option v-for="route in routes" :key="route.id" :value="route.id">{{ route.label }}</option></select>
+      </label>
+      <p class="route-help">新增路线会计入总进度，原有勾选继续保留。可选挑战按自己的世界目标决定。</p>
+      <section v-if="nextNode" class="next-step paper-card">
         <span class="stamp">Next Step</span>
         <div>
-          <small>{{ store.nextNode.stage }}</small>
-          <h2>下一步：{{ store.nextNode.title }}</h2>
-          <p>{{ store.nextNode.summary }}</p>
+          <small>{{ nextNode.stage }}</small>
+          <h2>下一步：{{ nextNode.title }}</h2>
+          <p>{{ nextNode.summary }}</p>
         </div>
       </section>
       <section v-else class="next-step paper-card">
@@ -59,10 +67,10 @@ function linkFor(slug: string) {
         </div>
       </section>
 
-      <section v-for="route in routes" :key="route.id" class="route-checklist">
+      <section v-for="route in visibleRoutes" :key="route.id" class="route-checklist">
         <div class="route-checklist__head">
           <span>{{ String(routeOrder.indexOf(route.id) + 1).padStart(2, '0') }}</span>
-          <h2>{{ route.label }}</h2>
+          <h2>{{ route.label }} <small>{{ completedInRoute(route.id) }}/{{ route.nodes.length }}</small></h2>
           <NuxtLink :to="`/progression/${route.id}`">阅读路线总览 →</NuxtLink>
         </div>
 
@@ -82,6 +90,7 @@ function linkFor(slug: string) {
                 <small>{{ node.stage }}</small>
                 <strong>{{ node.title }}</strong>
                 <p>{{ node.summary }}</p>
+                <em>前置准备：{{ node.requires.join('、') }}</em>
                 <em>完成标志：{{ node.completion }}</em>
               </span>
             </button>
@@ -108,6 +117,10 @@ function linkFor(slug: string) {
 
 <style scoped>
 .progress-hero { display: grid; grid-template-columns: 1fr auto; gap: 2rem; align-items: center; padding: 2.5rem 0 3rem; }
+.route-picker { display: grid; gap: .5rem; max-width: 30rem; }
+.route-picker select { min-height: 2.8rem; padding: .5rem; color: var(--ink); background: var(--paper-0); border: 1px solid var(--line); font: inherit; }
+.route-help { color: var(--ash); font-size: .85rem; }
+.route-checklist__head h2 small { font: 700 .85rem var(--font-sans); white-space: nowrap; }
 .progress-hero h1 { margin: .3rem 0 1rem; }
 .progress-hero p { max-width: 48rem; color: var(--ash); }
 .progress-seal {
